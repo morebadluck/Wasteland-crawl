@@ -1,0 +1,369 @@
+############################################################
+# Wasteland Crawl - Post-Apocalyptic Item Descriptions
+# Recontextualized equipment and items for the ruins
+############################################################
+
+%%%%
+# WEAPONS - Recontextualized as scavenged/improvised weapons
+%%%%
+
+%%%%
+club
+
+A crude improvised weapon - likely a piece of rebar or a chair leg.
+Effective for bashing skulls, even if it's not elegant.
+%%%%
+whip
+
+A length of chain or cable, useful for keeping threats at a distance
+and disarming opponents. Raiders favor these for intimidation.
+%%%%
+dagger
+
+A makeshift shiv or combat knife, standard issue for close encounters.
+Quick, quiet, and deadly in skilled hands.
+%%%%
+short sword
+
+A machete or large combat knife. Pre-war military issue or scavenged
+from security forces. Reliable and versatile.
+%%%%
+long sword
+
+A salvaged cavalry saber or extended combat blade. Excellent balance
+and reach make it a prized weapon in the ruins.
+%%%%
+great sword
+
+A massive scavenged blade - possibly from a piece of industrial
+equipment. Requires considerable strength but devastates enemies.
+%%%%
+hand axe
+
+A fire axe or hatchet, common in the ruins. Originally for breaching
+doors and rescue work, now equally effective against skulls.
+%%%%
+war axe
+
+A heavy industrial cutting tool or combat axe. Designed to cleave
+through both obstacles and opponents with brutal efficiency.
+%%%%
+battleaxe
+
+A two-handed monster of an axe, likely from a pre-war lumberjack or
+military demolition unit. Few can wield it, fewer survive facing it.
+%%%%
+spear
+
+A sharpened pole or improvised pike. Simple, effective, and keeping
+your distance from wasteland creatures is always a good idea.
+%%%%
+mace
+
+A length of pipe with one end weighted or studded. Crude but effective
+for smashing armor and bones alike.
+%%%%
+flail
+
+A chain with a weight attached - possibly a bike lock or industrial
+flail. Devastating but hard to control.
+%%%%
+morningstar
+
+A spiked ball on a chain or handle. Brutal and primitive, exactly
+what you need in the wasteland.
+%%%%
+
+%%%%
+# ARMOR - Recontextualized as scavenged protective gear
+%%%%
+
+%%%%
+robe
+
+Tattered pre-war clothing, offering minimal protection but maximum
+mobility. Better than nothing, barely.
+%%%%
+leather armour
+
+Makeshift armor crafted from thick leather, tire rubber, or layered
+fabric. Standard scavenger protection against cuts and bites.
+%%%%
+ring mail
+
+Improvised armor made from metal rings, bottle caps, or linked chains.
+Some clever survivor's attempt at protection. Surprisingly effective.
+%%%%
+scale mail
+
+Overlapping metal plates scavenged from vehicles or machinery. Heavy
+but provides solid protection against blade and claw.
+%%%%
+chain mail
+
+True chain armor, likely scavenged from a museum or security depot.
+Rare and valuable, it's saved many lives in the ruins.
+%%%%
+plate armour
+
+Heavy salvaged armor, possibly riot gear or industrial protective
+equipment. You'll move slowly, but you'll survive what kills others.
+%%%%
+crystal plate armour
+
+Pre-war experimental armor, possibly from a military research facility.
+Lightweight ceramic composite that somehow survived the collapse.
+The technology to make it is long lost.
+%%%%
+helmet
+
+A salvaged hard hat, motorcycle helmet, or military headgear.
+Your brain is your most valuable asset - protect it.
+%%%%
+buckler
+
+A small makeshift shield - trash can lid, car door panel, or actual
+tactical shield. Better to block than to bleed.
+%%%%
+shield
+
+A proper shield crafted from scavenged metal. Possibly a riot shield
+or expertly crafted from a road sign. Invaluable for survival.
+%%%%
+large shield
+
+A massive piece of protective metal - car door, vault door section,
+or military riot shield. Heavy, but you'll be glad you carried it.
+%%%%
+
+%%%%
+# CONSUMABLES - Recontextualized as wasteland supplies
+%%%%
+
+%%%%
+bread ration
+
+Pre-packaged survival rations or salvaged preserved food. Tastes like
+cardboard, but calories are calories in the wasteland.
+%%%%
+meat ration
+
+Dried mutant creature meat or preserved pre-war jerky. Don't ask
+where it came from, just be grateful for the protein.
+%%%%
+potion of curing
+
+A salvaged medical stimpack or antibiotics. Basic wasteland medicine
+that can treat minor wounds and common ailments.
+%%%%
+potion of heal wounds
+
+Advanced pre-war medical technology - probably military grade. These
+autoinjectors can seal wounds and stabilize injuries in seconds.
+Incredibly valuable.
+%%%%
+potion of haste
+
+Adrenaline shots or pre-war combat stimulants. Speeds up your reflexes
+dramatically but leaves you exhausted afterward. Use wisely.
+%%%%
+potion of might
+
+Military-grade enhancement drugs. Temporarily boosts your strength
+and combat effectiveness. The old armies had some powerful chemistry.
+%%%%
+potion of resistance
+
+Anti-radiation meds or broad-spectrum protective pharmaceutical
+cocktail. Provides temporary resistance to environmental hazards.
+%%%%
+potion of magic
+
+Mysterious pre-war nootropics or experimental cognitive enhancers.
+Restores mental focus and energy. The mechanism is poorly understood.
+%%%%
+scroll of identify
+
+A pre-war technical manual or diagnostic device. Helps you understand
+the function of unknown salvaged technology.
+%%%%
+scroll of teleportation
+
+An experimental emergency relocation device. Quantum technology that
+somehow still works. Instantly transports you to a random location.
+One-time use only.
+%%%%
+scroll of blinking
+
+A short-range tactical teleporter. Military tech for quick battlefield
+repositioning. Much more controlled than full teleportation.
+%%%%
+scroll of fog
+
+A smoke grenade or chemical dispersal device. Creates obscuring clouds
+for tactical advantage or emergency escape.
+%%%%
+
+%%%%
+# MAGICAL ITEMS - Recontextualized as pre-war technology
+%%%%
+
+%%%%
+wand
+
+A salvaged energy weapon or experimental device. Limited power
+remaining - each discharge brings it closer to being scrap.
+%%%%
+wand of flame
+
+A pre-war incendiary weapon. Fires concentrated bursts of heat.
+Effective but power cells are nearly depleted.
+%%%%
+wand of iceblast
+
+Cryo-weapon from military research labs. Fires supercooled projectiles
+that can freeze targets solid. Rare and powerful.
+%%%%
+wand of paralysis
+
+Neural disruptor or taser weapon. Overloads nervous systems to
+temporarily paralyze targets. Non-lethal but extremely effective.
+%%%%
+ring
+
+A piece of pre-war personal technology, worn on the finger. Some still
+function, providing passive benefits to the wearer. The old world's
+craftsmanship was remarkable.
+%%%%
+amulet
+
+A neck-worn device, possibly medical, military, or corporate executive
+equipment. Advanced technology packaged in jewelry-like form.
+%%%%
+amulet of faith
+
+A faction identification device. Wearing it shows your allegiance and
+grants benefits from faction technology networks still operating.
+%%%%
+amulet of regeneration
+
+Advanced nano-medical device. Accelerates natural healing by orders of
+magnitude. Military officers and corporate executives had access to
+such technology before the collapse.
+%%%%
+ring of protection
+
+Personal shield generator or protective field emitter. The weak
+energy field it generates can deflect attacks.
+%%%%
+ring of strength
+
+Powered exoskeleton control node. Enhances the wearer's physical
+strength through micro-assists.
+%%%%
+
+%%%%
+# BOOKS - Recontextualized as technical manuals
+%%%%
+
+%%%%
+book
+
+A salvaged technical manual, training guide, or knowledge database.
+The information within could teach you forgotten skills.
+%%%%
+Young Poisoner's Handbook
+
+A pre-war chemistry textbook or black market guide to toxins. Teaches
+methods for creating and using poisons effectively.
+%%%%
+Book of the Tempests
+
+Military weather modification research or atmospheric manipulation
+technology. Somehow this knowledge translates to controlling storms.
+%%%%
+Book of Fire
+
+Industrial thermodynamics or weapons research manual. Understanding
+it grants control over fire and heat.
+%%%%
+Book of Ice
+
+Cryogenics research or cold storage technology documentation. The
+principles within allow manipulation of extreme cold.
+%%%%
+
+%%%%
+# ARTIFACTS - Unique wasteland treasures
+%%%%
+
+%%%%
+# Unique items represent legendary salvaged technology
+%%%%
+
+%%%%
+# GOD/FACTION ITEMS
+%%%%
+
+%%%%
+# Items associated with the various wasteland factions
+# will be described as faction-specific technology
+%%%%
+
+%%%%
+# MISCELLANEOUS
+%%%%
+
+%%%%
+gold
+
+Pre-war currency, jewelry, or valuable metal. Still valuable for
+trade and crafting. Some settlements mint their own coins now.
+%%%%
+rune of Zot
+
+A security keycard or authorization device. Required to access
+the most secure pre-war facilities. Whatever they were guarding
+must have been important.
+%%%%
+Orb of Zot
+
+The legendary core of the most secure pre-war facility. A powerful
+energy source or doomsday device - no one knows for certain. Every
+faction wants it. Recovering it could change the wasteland forever.
+%%%%
+
+############################################################
+# FLAVOR TEXT ADDITIONS
+############################################################
+
+%%%%
+# General wasteland context
+%%%%
+
+%%%%
+salvaged weapon
+
+Scavenged from the ruins and maintained through ingenuity and
+necessity. Every weapon in the wasteland has a history.
+%%%%
+pre-war technology
+
+Relics from before the Great Collapse. The old world had capabilities
+we can barely understand now, let alone replicate.
+%%%%
+makeshift equipment
+
+Improvised gear assembled from whatever materials are available.
+Wasteland survivors are nothing if not resourceful.
+%%%%
+military hardware
+
+Salvaged from old military installations or dead soldiers. This
+equipment was designed for the wars that ended civilization.
+%%%%
+corporate artifact
+
+High-end technology that executives and security forces used before
+the collapse. Rare and valuable.
+%%%%

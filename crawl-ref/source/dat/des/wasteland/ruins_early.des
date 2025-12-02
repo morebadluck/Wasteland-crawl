@@ -1,0 +1,347 @@
+##############################################################################
+# Wasteland Crawl - Early Game Ruins (Depths 1-5)
+# These vaults feature weak enemies suitable for new characters
+##############################################################################
+
+{{
+function wasteland_early_monsters(e)
+    -- Weak monsters appropriate for levels 1-5
+    e.mons("rat / bat / quokka")
+    e.mons("goblin / kobold / hobgoblin")
+    e.mons("jackal / adder / ball python")
+    e.mons("hobgoblin / gnoll / orc")
+end
+}}
+
+##############################################################
+NAME:    ruins_convenience_store
+TAGS:    no_monster_gen transparent
+DEPTH:   D:2-4
+ORIENT:  float
+WEIGHT:  5
+: wasteland_early_monsters(_G)
+KITEM:   d = bread ration / nothing / potion of curing / scroll of identify
+MAP
+xxxxxxxxx
+x.......x
+x.xxxxxx+@
+x.x1d1xxx
+x.x...xxx
+x.x2d2xxx
+x.xxxxxxx
+x.......+@
+xxxxxxxxx
+ENDMAP
+
+##############################################################
+NAME:    ruins_suburban_house
+TAGS:    no_monster_gen transparent
+DEPTH:   D:1-3
+ORIENT:  float
+WEIGHT:  8
+: wasteland_early_monsters(_G)
+MAP
+    xxxxx
+   xx...xx
+  xx.....xx
+ xx.......xx
+xx....1....xx
+x....xxx....x
+x.2.xx.xx.2.x
+x...x...x...x
+xxxx+xxx+xxxx
+   @@@@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_gas_station
+TAGS:    no_monster_gen
+DEPTH:   D:2-5
+ORIENT:  float
+WEIGHT:  5
+: wasteland_early_monsters(_G)
+KITEM:   p = potion of heal wounds / potion of curing
+MAP
+ xxxxxxxxxxx
+ x....1....x
+ x.........x
+ x.xx+++xx.x
+ x.x.p.p.x.x
+ x.x.....x.x
+ x.x.2.2.x.x
+ x.xxxxxxx.x
+ x.........x
+ x....3....x
+ xxxxxxxxxxx
+     @@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_apartment_block
+TAGS:    no_monster_gen transparent
+DEPTH:   D:2-5
+ORIENT:  float
+WEIGHT:  6
+: wasteland_early_monsters(_G)
+MAP
+xxxxxxxxxxxxx
+x.1.x.2.x.1.x
+x...x...x...x
+x...+...+...x
+xxxxx...xxxxx
+x.1.x.3.x.2.x
+x...x...x...x
+x...+...+...x
+xxxxxxxxxxxxx
+    @@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_collapsed_parking
+TAGS:    transparent
+DEPTH:   D:1-4
+ORIENT:  float
+WEIGHT:  7
+: wasteland_early_monsters(_G)
+MAP
+...........
+.xxx.xxx.xx
+.x1x.x2x.xx
+.xxx.xxx.xx
+...........
+.xxx.xxx.xx
+.x3x.x1x.xx
+.xxx.xxx.xx
+...........
+  @@@@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_small_bunker
+TAGS:    no_monster_gen no_item_gen
+DEPTH:   D:3-5
+ORIENT:  float
+WEIGHT:  4
+: wasteland_early_monsters(_G)
+KITEM:   d = bread ration / potion of curing / scroll of teleportation
+MAP
+xxxxxxxxx
+x.......x
+x.xxxxx.x
+x.x.d.x.x
+x.x.4.x.x
+x.x...x.x
+x.x.2.x.x
+x.x...x.x
+x.xx+xx.x
+x.......x
+xxxxxxxxx
+    @
+ENDMAP
+
+##############################################################
+NAME:    ruins_playground
+TAGS:    transparent no_monster_gen
+DEPTH:   D:1-3
+ORIENT:  float
+WEIGHT:  5
+: wasteland_early_monsters(_G)
+MAP
+  .........
+ ...........
+...1.....1...
+.............
+.....xxx.....
+..2..x.x..2..
+.....xxx.....
+.............
+...1.....1...
+ ...........
+  .........
+    @@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_pharmacy
+TAGS:    no_monster_gen
+DEPTH:   D:2-4
+ORIENT:  float
+WEIGHT:  3
+: wasteland_early_monsters(_G)
+KITEM:   p = potion of curing / potion of heal wounds / potion of brilliance
+KITEM:   r = bread ration / nothing
+MAP
+xxxxxxxxxxxx
+x..........x
+x.xxxxxxxx.x
+x.x1p.p.2x.x
+x.x......x.x
+x.x.r..r.x.x
+x.xxxxxxxx.x
+x..........x
+xxxxxxxxxxxx
+    @@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_street_barricade
+TAGS:    transparent
+DEPTH:   D:1-5
+ORIENT:  float
+WEIGHT:  6
+: wasteland_early_monsters(_G)
+MAP
+   .....
+  .......
+ .........
+...xx+xx...
+...x...x...
+...x.2.x...
+...x...x...
+...xxxxx...
+.....1.....
+.....3.....
+ .........
+  @@@@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_school_classroom
+TAGS:    no_monster_gen
+DEPTH:   D:2-5
+ORIENT:  float
+WEIGHT:  5
+: wasteland_early_monsters(_G)
+MAP
+xxxxxxxxxxxxx
+x.1.......2.x
+x...........x
+x.xxx.xxx.x.x
+x.x.x.x.x.x.x
+x.x.x.x.x.x.x
+x.x.x.x.x.x.x
+x...x...x...x
+x...x...x...x
+x.3.......1.x
+xxxxxxxxxxxxx
+     @@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_overturned_bus
+TAGS:    transparent no_monster_gen
+DEPTH:   D:1-4
+ORIENT:  float
+WEIGHT:  7
+: wasteland_early_monsters(_G)
+MAP
+  .......
+ .........
+...xxxxx...
+..xx1.2xx..
+..x.....x..
+..x.....x..
+..x.3...x..
+..xxxxxxx..
+ .........
+  .......
+   @@@@@
+ENDMAP
+
+##############################################################
+# Larger complex vaults for early game
+##############################################################
+
+NAME:    ruins_strip_mall
+TAGS:    no_monster_gen
+DEPTH:   D:3-5
+ORIENT:  float
+WEIGHT:  3
+: wasteland_early_monsters(_G)
+KITEM:   d = bread ration / potion of curing / scroll of identify
+MAP
+xxxxxxxxxxxxxxxxxxx
+x.1.x.2.x.1.x.2.x.x
+x...x...x...x...x.x
+x.d.+.d.+.d.+.d.x.x
+xxxxx.xxx.xxx.xxxxxx
+x.................+@
+x.................+@
+xxxxx.xxx.xxx.xxxxxx
+x.3.+.4.+.3.+.1.x.x
+x...x...x...x...x.x
+x.2.x.1.x.2.x.3.x.x
+xxxxxxxxxxxxxxxxxxx
+ENDMAP
+
+##############################################################
+NAME:    ruins_subway_entrance
+TAGS:    transparent no_monster_gen
+DEPTH:   D:3-5
+ORIENT:  float
+WEIGHT:  4
+: wasteland_early_monsters(_G)
+MAP
+ xxxxxxxxxxxxx
+ x...........x
+ x.xxxxxxxxx.x
+ x.x.......x.x
+ x.x.xxxxx.x.x
+@+.+.x.1.x.+.+@
+ x.x.xxxxx.x.x
+ x.x...2...x.x
+ x.x.......x.x
+ x.xxxxxxxxx.x
+ x...........x
+ xxxxxxxxxxxxx
+ENDMAP
+
+##############################################################
+NAME:    ruins_water_tower
+TAGS:    no_monster_gen
+DEPTH:   D:2-4
+ORIENT:  float
+WEIGHT:  5
+: wasteland_early_monsters(_G)
+KFEAT:   w = shallow_water
+MAP
+     xxx
+     x.x
+    xx.xx
+    x.1.x
+   xx.w.xx
+   x.www.x
+  xx.www.xx
+  x.wwwww.x
+  x.ww2ww.x
+  x.wwwww.x
+  xxxxxxxxx
+  x.......x
+  x...3...x
+  x.......x
+  xxxx+xxxx
+     @@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_fire_station
+TAGS:    no_monster_gen
+DEPTH:   D:3-5
+ORIENT:  float
+WEIGHT:  4
+: wasteland_early_monsters(_G)
+MAP
+ xxxxxxxxxxxxxx
+ x............x
+ x.xxxxxxxxxx.x
+ x.x2......2x.x
+ x.x........x.x
+ x.x...xx...x.x
+ x.x..xxxx..x.x
+ x.x..x..x..x.x
+ x.+..+.1+..+.x
+ x.xxxxxxxxxx.x
+ x.....3......x
+ xxxxxxxxxxxxxx
+   @@@@@@@@@@
+ENDMAP

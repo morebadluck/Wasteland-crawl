@@ -1,0 +1,281 @@
+##############################################################################
+# Wasteland Crawl - Post-Apocalyptic Arrival Vaults
+# Starting locations in the ruins of America
+##############################################################################
+
+NAME:    wasteland_arrival_ruined_house
+TAGS:    arrival no_monster_gen transparent
+ORIENT:  float
+MONS:    rat / nothing
+MAP
+    xxxxx
+   xx...xx
+  xx.....xx
+  x...1...x
+  x..{....+@
+  x...1...x
+  xx.....xx
+   xx...xx
+    xxxxx
+ENDMAP
+
+##############################################################
+NAME:    wasteland_arrival_collapsed_shelter
+TAGS:    arrival transparent
+ORIENT:  float
+MONS:    bat / nothing
+MAP
+xxxxxxxxx@
+x.......xx
+x.x.x.x.+@
+x.......xx
+xx..{..xxx
+ xx.1.xxxx
+  xxxxxxxx
+ENDMAP
+
+##############################################################
+NAME:    wasteland_arrival_bombed_plaza
+TAGS:    arrival transparent
+ORIENT:  float
+MONS:    goblin / hobgoblin / nothing
+MAP
+   @xxx@
+   x...x
+  xx...xx
+ xxx...xxx
+@x.......x@
+xx..{.1..xx
+@x.......x@
+ xxx...xxx
+  xx...xx
+   x...x
+   @xxx@
+ENDMAP
+
+##############################################################
+NAME:    wasteland_arrival_bunker_entrance
+TAGS:    arrival no_monster_gen
+ORIENT:  float
+MAP
+xxxxxxxxxxx
+x.........x
+x.xxxxxxx.x
+x.x.....x.x
+x.x..{..x.x
+x.x.....x.x
+x.xxxxxxx.x
+x.........x
+xxxxxxxxxxx
+     @
+ENDMAP
+
+##############################################################
+NAME:    wasteland_arrival_highway_underpass
+TAGS:    arrival transparent
+ORIENT:  float
+MONS:    rat / bat / nothing
+MAP
+xxxxxxxxxxxxx
+xxxxxxxxxxxxx
+@...........@
+@.1.......1.@
+...1..{..1...
+@.1.......1.@
+@...........@
+xxxxxxxxxxxxx
+xxxxxxxxxxxxx
+ENDMAP
+
+##############################################################
+NAME:    wasteland_arrival_crashed_vehicle
+TAGS:    arrival no_monster_gen transparent
+ORIENT:  float
+MAP
+  @   @
+  .....
+ .......
+...xxx...
+..xx.xx..
+..x.{.x..
+..xx.xx..
+...xxx...
+ .......
+  .....
+  @   @
+ENDMAP
+
+##############################################################
+NAME:    wasteland_arrival_toxic_pool
+TAGS:    arrival transparent
+ORIENT:  float
+MONS:    rat / nothing
+KFEAT:   w = shallow_water
+MAP
+    xxxxx
+   xx...xx
+  xx..w..xx
+ xx..www..xx
+xx..wwwww..xx
+x....www....x
++.1..w.{.1..+
+x....www....x
+xx..wwwww..xx
+ xx..www..xx
+  xx..w..xx
+   xx...xx
+    xxxxx
+ENDMAP
+
+##############################################################
+NAME:    wasteland_arrival_ruined_storefront
+TAGS:    arrival transparent
+ORIENT:  float
+MONS:    rat / nothing
+MAP
+xxxxxxxxx
+x.......x
+x.x.x.x.x
+x.......x
+x.......x
+x...{...+@@
+x.......x
+x.1...1.x
+xxxxxxxxx
+ENDMAP
+
+##############################################################
+NAME:    wasteland_arrival_guard_post
+TAGS:    arrival no_monster_gen
+ORIENT:  float
+MAP
+   xxx
+  xx.xx
+ xx...xx
+xx..x..xx
+x..x.x..x
+x..x{x..x
+@+.....+@
+x.......x
+xxxxxxxxx
+ENDMAP
+
+##############################################################
+NAME:    wasteland_arrival_scavenger_camp
+TAGS:    arrival transparent
+ORIENT:  float
+MONS:    kobold / nothing
+MAP
+  @@@@@
+  .....
+ .......
+@..xxx..@
+...x1x...
+...+{+...
+...x1x...
+@..xxx..@
+ .......
+  .....
+  @@@@@
+ENDMAP
+
+##############################################################
+# Larger, more complex vaults below
+##############################################################
+
+NAME:    wasteland_arrival_fortified_building
+TAGS:    arrival
+ORIENT:  float
+MONS:    hobgoblin / goblin / nothing
+MAP
+xxxxxxxxxxxxx
+x...........x
+x.xxxxxxxxx.x
+x.x.......x.x
+x.x.xxxxx.x.x
+x.x.x...x.x.x
+x.x.x.{.x.x.x
+x.x.x...x.x.x
+x.x.x+xxx.x.x
+x.x.......x.x
+x.x.1.....x.x
+x.xxxxxxxxx.x
+x...........x
+xxxxx+++xxxxx
+    @@@@@
+ENDMAP
+
+##############################################################
+NAME:    wasteland_arrival_metro_station
+TAGS:    arrival no_monster_gen transparent
+ORIENT:  float
+MAP
+xxxxxxxxxxxxxxxxxxxxx
+x...................x
+x.xxxxxxx.x.xxxxxxx.x
+x.x.....x.x.x.....x.x
+x.x.....x.x.x.....x.x
+x.x.....x.x.x.....x.x
+x.+.....+.+.+.....+.x
+x.x.....x.x.x.....x.x
+x.xxxxxxx.{.xxxxxxx.x
+x...................x
+xxxxxxxxxxxxxxxxxxxxx
+        @@@@@
+ENDMAP
+
+##############################################################
+NAME:    wasteland_arrival_radio_tower
+TAGS:    arrival transparent
+ORIENT:  float
+MONS:    bat / nothing
+MAP
+       x
+       x
+      x.x
+      x.x
+     xx.xx
+     x...x
+    xx.{.xx
+   xxx...xxx
+  xxxx.1.xxxx
+ xxxxx...xxxxx
+xxxxxx...xxxxxx
+     x...x
+     x...x
+     x...x
+     x...x
+     x...x
+     x...x
+     xx+xx
+     x...x
+     x...x
+     x...x
+      @@@
+ENDMAP
+
+##############################################################
+NAME:    wasteland_arrival_crossroads
+TAGS:    arrival transparent
+ORIENT:  float
+MONS:    jackal / nothing
+MAP
+      @
+      .
+      .
+   xxx.xxx
+   x.....x
+   x..{..x
+   x.....x
+   xxx.xxx
+@.....1.....@
+ .....1.....
+@.....1.....@
+   xxx.xxx
+   x.....x
+   x.....x
+   xxx.xxx
+      .
+      .
+      @
+ENDMAP
