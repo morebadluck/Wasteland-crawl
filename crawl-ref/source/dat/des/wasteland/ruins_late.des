@@ -1,0 +1,357 @@
+##############################################################################
+# Wasteland Crawl - Late Game Ruins (Depths 13+)
+# These vaults feature strong enemies for experienced characters
+##############################################################################
+
+{{
+function wasteland_late_monsters(e)
+    -- Strong monsters appropriate for levels 13+
+    e.mons("stone giant / fire giant / frost giant")
+    e.mons("fire dragon / ice dragon / storm dragon")
+    e.mons("titan / iron giant / war gargoyle")
+    e.mons("shadow dragon / iron dragon / golden dragon")
+    e.mons("ancient lich / dread lich")
+end
+}}
+
+##############################################################
+NAME:    ruins_military_base
+TAGS:    no_monster_gen
+DEPTH:   D:13-15
+ORIENT:  float
+WEIGHT:  4
+: wasteland_late_monsters(_G)
+KITEM:   w = any weapon good_item / any armour good_item
+KITEM:   $ = gold
+MAP
+xxxxxxxxxxxxxxxxxxxxxxxxx
+x.......................x
+x.xxxxxxxxxxxxxxxxxxxxx.x
+x.x...................x.x
+x.x.xxxxxxxxxxxxxxxxx.x.x
+x.x.x1x...x...x...x2x.x.x
+x.x.x.x...x...x...x.x.x.x
+x.x.xxx...x...x...xxx.x.x
+x.x.......x...x.......x.x
+x.x.xxx+xxx+x+xxx+xxx.x.x
+x.x.x.............x.x.x.x
+x.x.x.xxxxxxxxxxx.x.x.x.x
+x.x.x.x$$$x3x$$$x.x.x.x.x
+x.x.x.x$w.x.x.w$x.x.x.x.x
+x.x.x.x$$$x4x$$$x.x.x.x.x
+x.x.x.xxxxxxxxxxx.x.x.x.x
+x.x.x.............x.x.x.x
+x.x.xxxxxxxxxxxxxxxxx.x.x
+x.x...................x.x
+x.x...................x.x
+x.xxxxxxxxxxxxxxxxxxxxx.x
+x.......................x
+xxxxxxxxxxxxxxxxxxxxxxxxx
+          @@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_corporate_headquarters
+TAGS:    no_monster_gen
+DEPTH:   D:13-15
+ORIENT:  float
+WEIGHT:  3
+: wasteland_late_monsters(_G)
+KITEM:   * = any potion good_item / any scroll good_item / gold
+MAP
+xxxxxxxxxxxxxxxxxxxxx
+x...................x
+x.xxxxxxxxxxxxxxxxx.x
+x.x...............x.x
+x.x.xxxxxxxxxxxxx.x.x
+x.x.x1x2x3x4x5x.x.x.x
+x.x.x.x.x.x.x.x.x.x.x
+x.x.x.+.+.+.+.+.x.x.x
+x.x.xxxxxxxxxxxxx.x.x
+x.x...............x.x
+x.x.xxxxxxxxxxxxx.x.x
+x.x.x...........x.x.x
+x.x.x.xxxxxxxxx.x.x.x
+x.x.x.x.......x.x.x.x
+x.x.x.x.xxxxx.x.x.x.x
+x.x.x.x.x*5*x.x.x.x.x
+x.x.x.x.xxxxx.x.x.x.x
+x.x.x.x.......x.x.x.x
+x.x.x.xxxxxxxxx.x.x.x
+x.x.x...........x.x.x
+x.x.xxxxxxxxxxxxx.x.x
+x.x...............x.x
+x.xxxxxxxxxxxxxxxxx.x
+x...................x
+xxxxxxxxxxxxxxxxxxxxx
+        @@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_underground_bunker
+TAGS:    no_monster_gen no_item_gen
+DEPTH:   D:14-15
+ORIENT:  float
+WEIGHT:  5
+: wasteland_late_monsters(_G)
+KITEM:   $ = gold q:100
+KITEM:   * = any weapon good_item / any armour good_item / any jewellery
+MAP
+xxxxxxxxxxxxxxxxxxxxxxxxx
+x.......................x
+x.xxxxxxxxxxxxxxxxxxxxx.x
+x.x...................x.x
+x.x.xxxxxxxxxxxxxxxxxxx.x
+x.x.x.................x.x
+x.x.x.xxxxxxxxxxxxxxx.x.x
+x.x.x.x1............x.x.x
+x.x.x.x.xxxxxxxxxxxx.x.x.x
+x.x.x.x.x2.........x.x.x.x
+x.x.x.x.x.xxxxxxxx.x.x.x.x
+x.x.x.x.x.x3.....x.x.x.x.x
+x.x.x.x.x.x.xxxx.x.x.x.x.x
+x.x.x.x.x.x.x4*x.x.x.x.x.x
+x.x.x.x.x.x.x$$x.x.x.x.x.x
+x.x.x.x.x.x.x5*x.x.x.x.x.x
+x.x.x.x.x.x.xxxx.x.x.x.x.x
+x.x.x.x.x.x......x.x.x.x.x
+x.x.x.x.x.xxxxxxxx.x.x.x.x
+x.x.x.x.x..........x.x.x.x
+x.x.x.x.xxxxxxxxxxxx.x.x.x
+x.x.x.x..............x.x.x
+x.x.x.xxxxxxxxxxxxxxx.x.x.x
+x.x.x...................x.x
+x.x.xxxxxxxxxxxxxxxxxxxxx.x
+x.x.......................x
+x.xxxxxxxxxxxxxxxxxxxxxxxxx
+x.........................x
+xxxxxxxxxxxxxxxxxxxxxxxxxxx
+            @@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_research_facility
+TAGS:    no_monster_gen
+DEPTH:   D:13-15
+ORIENT:  float
+WEIGHT:  4
+: wasteland_late_monsters(_G)
+KITEM:   p = any potion good_item / potion of experience w:2
+KITEM:   b = any book / manual w:1
+MAP
+xxxxxxxxxxxxxxxxxxx
+x.................x
+x.xxxxxxxxxxxxxxx.x
+x.x.x.x.x.x.x.x.x.x
+x.+.+.+.+.+.+.+.+.x
+x.x1xpx2xpx3xpx4x.x
+x.x.x.x.x.x.x.x.x.x
+x.xxxxxxxxxxxxxxx.x
+x.................x
+x.xxxxxxxxxxxxxxx.x
+x.x.............x.x
+x.x.xxxxxxxxxxx.x.x
+x.x.xb.x.b.x.bx.x.x
+x.x.x..x...x..x.x.x
+x.x.x..+.5.+..x.x.x
+x.x.x..x...x..x.x.x
+x.x.xxxxxxxxxxx.x.x
+x.x.............x.x
+x.xxxxxxxxxxxxxxx.x
+x.................x
+xxxxxxxxxxxxxxxxxxx
+       @@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_nuclear_reactor
+TAGS:    no_monster_gen no_item_gen
+DEPTH:   D:14-15
+ORIENT:  float
+WEIGHT:  2
+: wasteland_late_monsters(_G)
+KFEAT:   l = lava
+KITEM:   * = any jewellery good_item / any weapon good_item
+MAP
+xxxxxxxxxxxxxxxxxxxxx
+x...................x
+x.xxxxxxxxxxxxxxxxx.x
+x.x...............x.x
+x.x.xxxxxxxxxxxxx.x.x
+x.x.x1.........2x.x.x
+x.x.x...........x.x.x
+x.x.x...........x.x.x
+x.x.x..lllllll..x.x.x
+x.x.x..lllllll..x.x.x
+x.x.x..ll5*5ll..x.x.x
+x.x.x..lllllll..x.x.x
+x.x.x..lllllll..x.x.x
+x.x.x...........x.x.x
+x.x.x...........x.x.x
+x.x.x3.........4x.x.x
+x.x.xxxxxxxxxxxxx.x.x
+x.x...............x.x
+x.xxxxxxxxxxxxxxxxx.x
+x...................x
+xxxxxxxxxxxxxxxxxxxxx
+        @@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_missile_silo
+TAGS:    no_monster_gen no_item_gen
+DEPTH:   D:14-15
+ORIENT:  float
+WEIGHT:  3
+: wasteland_late_monsters(_G)
+KITEM:   $ = gold q:150
+MAP
+       xxx
+      xx.xx
+      x...x
+     xx.1.xx
+     x.....x
+    xx.....xx
+   xxx.....xxx
+  xxxx.....xxxx
+ xxxxx.....xxxxx
+xxxxxx.....xxxxxx
+x...............x
+x.xxxxxxxxxxxxx.x
+x.x...........x.x
+x.x.xxxxxxxxx.x.x
+x.x.x.......x.x.x
+x.x.x.xxxxx.x.x.x
+x.x.x.x...x.x.x.x
+x.x.x.x.2.x.x.x.x
+x.x.x.x...x.x.x.x
+x.x.x.xxxxx.x.x.x
+x.x.x.......x.x.x
+x.x.x.......x.x.x
+x.x.xxxxxxxxx.x.x
+x.x.x$$$x$$$x.x.x
+x.x.x$3$x$4$x.x.x
+x.x.x$$$x$$$x.x.x
+x.x.xxxxx+xxxx.x.x
+x.x.x.......x.x.x
+x.x.x...5...x.x.x
+x.x.xxxxxxxxx.x.x
+x.x...........x.x
+x.xxxxxxxxxxxxx.x
+x...............x
+xxxxxxxxx+xxxxxxx
+       @@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_prison_complex
+TAGS:    no_monster_gen
+DEPTH:   D:13-15
+ORIENT:  float
+WEIGHT:  4
+: wasteland_late_monsters(_G)
+MAP
+xxxxxxxxxxxxxxxxxxxxxxxxx
+x.......................x
+x.x.x.x.x.x.x.x.x.x.x.x.x
+x.+.+.+.+.+.+.+.+.+.+.+.x
+x.x1x.x2x.x.x.x3x.x4x.x.x
+x.x.x.x.x.x.x.x.x.x.x.x.x
+xxxxxxxxxxxxxxxxxxxxxxxxx
+x.......................x
+x.xxxxxxxxx+++xxxxxxxxx.x
+x.x...................x.x
+x.x.xxxxxxxxxxxxxxxxx.x.x
+x.x.x...............x.x.x
+x.x.x.xxxxxxxxxxxxx.x.x.x
+x.x.x.x...........x.x.x.x
+x.x.x.x.xxxxxxxxx.x.x.x.x
+x.x.x.x.x.......x.x.x.x.x
+x.x.x.x.x.xxxxx.x.x.x.x.x
+x.x.x.x.x.x...x.x.x.x.x.x
+x.x.x.x.x.x.5.x.x.x.x.x.x
+x.x.x.x.x.x...x.x.x.x.x.x
+x.x.x.x.x.xxxxx.x.x.x.x.x
+x.x.x.x.x.......x.x.x.x.x
+x.x.x.x.xxxxxxxxx.x.x.x.x
+x.x.x.x...........x.x.x.x
+x.x.x.xxxxxxxxxxxxx.x.x.x
+x.x.x...............x.x.x
+x.x.xxxxxxxxxxxxxxxxx.x.x
+x.x...................x.x
+x.xxxxxxxxxxxxxxxxxxxxxxxxx
+x.........................x
+xxxxxxxxxxxxxxxxxxxxxxxxxxx
+           @@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_data_center
+TAGS:    no_monster_gen
+DEPTH:   D:13-15
+ORIENT:  float
+WEIGHT:  4
+: wasteland_late_monsters(_G)
+KITEM:   $ = gold / any scroll good_item
+MAP
+xxxxxxxxxxxxxxxxxxx
+x.................x
+x.xxx.xxx.xxx.xxx.x
+x.x1x.x2x.x3x.x4x.x
+x.xxx.xxx.xxx.xxx.x
+x.................x
+x.xxxxxxxxxxxxxxx.x
+x.x.............x.x
+x.x.xxxxxxxxxxx.x.x
+x.x.x.........x.x.x
+x.x.x.xxxxxxx.x.x.x
+x.x.x.x$$$$$x.x.x.x
+x.x.x.x$$5$$x.x.x.x
+x.x.x.x$$$$$x.x.x.x
+x.x.x.xxxxxxx.x.x.x
+x.x.x.........x.x.x
+x.x.xxxxxxxxxxx.x.x
+x.x.............x.x
+x.xxxxxxxxxxxxxxx.x
+x.................x
+xxxxxxxxxxxxxxxxxxx
+      @@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_skyscraper_base
+TAGS:    no_monster_gen
+DEPTH:   D:14-15
+ORIENT:  float
+WEIGHT:  3
+: wasteland_late_monsters(_G)
+KITEM:   * = any weapon good_item / any armour good_item
+MAP
+xxxxxxxxxxxxxxxxxxxxx
+x...................x
+x.x.x.x.x.x.x.x.x.x.x
+x...................x
+x.x.x.x.x.x.x.x.x.x.x
+x...................x
+x.x.x.x.x.x.x.x.x.x.x
+x...................x
+xxxxxxxxx+++xxxxxxxxx
+x...................x
+x.xxxxxxxxxxxxxxxxx.x
+x.x1.............2x.x
+x.x...............x.x
+x.x...xxxxx+xxxxx.x.x
+x.x...x.........x.x.x
+x.x...x.xxxxxxx.x.x.x
+x.x3..x.x.....x.x.4x.x
+x.x...x.x.*5*.x.x..x.x
+x.x...x.x.....x.x..x.x
+x.x...x.xxxxxxx.x..x.x
+x.x...x.........x..x.x
+x.x...xxxxxxxxxxx..x.x
+x.x................x.x
+x.xxxxxxxxxxxxxxxxx.x
+x...................x
+xxxxxxxxxxxxxxxxxxxxx
+       @@@@@@@
+ENDMAP

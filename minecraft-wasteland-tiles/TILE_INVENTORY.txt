@@ -1,0 +1,32 @@
+Wasteland Crawl - Extracted Tile Inventory
+═══════════════════════════════════════════
+
+Source: Dungeon Crawl Stone Soup (rltiles)
+Format: PNG, 32x32 pixels, RGBA
+Perfect for: Minecraft texture conversion
+
+MONSTERS:
+  dragons/       - Fire, Ice, Shadow, Golden dragons
+  humanoids/     - Ogres, Trolls, Orcs, Goblins, Gnolls, Centaurs
+  animals/       - Wargs, Rats, Bats, Wolves
+  undead/        - Ancient Lich, Liches
+  giants/        - Stone Giants, Titans
+
+TERRAIN:
+  floors/        - Concrete, metal, dirt, rubble floors
+  walls/         - Stone, brick, metal, vault walls
+  doors/         - Open, closed, locked doors
+  features/      - Stairs, teleporters, special features
+
+ITEMS:
+  weapons/       - Swords, axes, maces, etc.
+  armor/         - Leather, chain mail, plate mail
+  potions/       - Healing potions, special potions
+  scrolls/       - Teleportation, enchantment scrolls
+
+USAGE:
+- All tiles are 32x32 PNG with transparency
+- Ready for Minecraft resource pack
+- Can be used directly or scaled to 16x16
+- See MINECRAFT_INTEGRATION.md for full guide
+

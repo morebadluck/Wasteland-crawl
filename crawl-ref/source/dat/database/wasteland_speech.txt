@@ -1,0 +1,447 @@
+############################################################
+# Wasteland Crawl - Post-Apocalyptic Monster Speech
+# Thematic dialogue for the ruins of America
+############################################################
+
+############################################################
+# Word substitutions for wasteland theme
+############################################################
+%%%%
+_wasteland_threats_
+
+"This is our territory!"
+
+"You're trespassing!"
+
+"Should've stayed in your shelter!"
+
+"Fresh meat!"
+
+"Your gear is mine!"
+%%%%
+_wasteland_warnings_
+
+"Turn back while you can!"
+
+"You don't belong here!"
+
+"Leave now or die!"
+
+"This is your last warning!"
+
+"Get out of the ruins!"
+%%%%
+_wasteland_taunts_
+
+"You're already dead!"
+
+"Another corpse for the pile!"
+
+"The wasteland claims another!"
+
+"You won't last the night!"
+
+"Weak fool!"
+%%%%
+_scavenger_greetings_
+
+"What've you got for me?"
+
+"Nice gear you've got there..."
+
+"Hand over your supplies!"
+
+"I'll take that equipment!"
+
+"Drop your pack and run!"
+%%%%
+_raider_threats_
+
+"Kill the wanderer!"
+
+"Take everything!"
+
+"No survivors!"
+
+"Meat for the grinder!"
+
+"Blood for the clan!"
+%%%%
+_mutant_sounds_
+
+"Graaaagh!"
+
+"Hissssss..."
+
+"*guttural growl*"
+
+"*inhuman shriek*"
+
+"*chittering noise*"
+%%%%
+
+############################################################
+# Humanoid enemies (raiders, survivors, etc.)
+############################################################
+%%%%
+goblin
+
+@_wasteland_threats_@
+
+@_scavenger_greetings_@
+
+"Get away from our camp!"
+
+"This ain't a charity!"
+
+"Shoot first, loot later!"
+
+w:5
+__NONE
+%%%%
+hobgoblin
+
+@_wasteland_threats_@
+
+@_raider_threats_@
+
+"The boss wants you dead!"
+
+"You picked the wrong ruin!"
+
+"Should've run when you had the chance!"
+
+"We own these streets!"
+
+w:5
+__NONE
+%%%%
+orc
+
+@_raider_threats_@
+
+"Die, scavenger scum!"
+
+"Your stuff is ours!"
+
+"The wasteland takes all!"
+
+"Blood and salvage!"
+
+"Rip them apart!"
+
+w:5
+__NONE
+%%%%
+orc warrior
+
+@_raider_threats_@
+
+"Fight me, coward!"
+
+"I'll wear your skull!"
+
+"You're outmatched!"
+
+"Face me in battle!"
+
+"Your weapons won't save you!"
+
+w:5
+__NONE
+%%%%
+gnoll
+
+@_mutant_sounds_@
+
+@_wasteland_threats_@
+
+"*snarls menacingly*"
+
+"Fresh prey!"
+
+"Hunt! Kill! Eat!"
+
+"Smells like fear!"
+
+w:10
+__NONE
+%%%%
+ogre
+
+"CRUSH YOU!"
+
+"SMASH TINY HUMAN!"
+
+"YOU LOOK CRUNCHY!"
+
+"ME HUNGRY!"
+
+"GIVE ME SHINY THINGS!"
+
+"STOMP STOMP STOMP!"
+
+w:5
+__NONE
+%%%%
+
+############################################################
+# Undead and ghouls (radiation victims)
+############################################################
+%%%%
+zombie
+
+"Huuuuunger..."
+
+"*groans*"
+
+"Fleeeesh..."
+
+"Braaaaaains..."
+
+"*shambles forward*"
+
+w:15
+__NONE
+%%%%
+skeleton
+
+"*bones rattling*"
+
+"Death comes for all..."
+
+"Join us in the dust..."
+
+"The collapse took everything..."
+
+w:15
+__NONE
+%%%%
+wight
+
+"The radiation never fades..."
+
+"We are what you will become..."
+
+"Death is only the beginning..."
+
+"The wasteland remembers..."
+
+"You cannot escape the fallout..."
+
+w:10
+__NONE
+%%%%
+lich
+
+"Centuries of knowledge, lost to the fire..."
+
+"I witnessed the end of civilization..."
+
+"The old world burns eternal in my memory..."
+
+"You are but a fleeting shadow..."
+
+"I have transcended mortality itself..."
+
+"The bombs were only the beginning..."
+
+w:10
+__NONE
+%%%%
+
+############################################################
+# Beasts and mutants
+############################################################
+%%%%
+rat
+
+"*squeaks*"
+
+"*chittering*"
+
+w:20
+__NONE
+%%%%
+hound
+
+"*growls*"
+
+"*barks aggressively*"
+
+"*snarls and snaps*"
+
+w:15
+__NONE
+%%%%
+wolf
+
+"*howls*"
+
+"*low growl*"
+
+"*bares teeth*"
+
+w:15
+__NONE
+%%%%
+warg
+
+"*menacing growl*"
+
+"*howls eerily*"
+
+"*sniffs the air*"
+
+w:15
+__NONE
+%%%%
+giant cockroach
+
+"*hisses*"
+
+"*chittering sound*"
+
+"*scuttles menacingly*"
+
+w:20
+__NONE
+%%%%
+bat
+
+"*screeches*"
+
+"*high-pitched squeak*"
+
+w:20
+__NONE
+%%%%
+
+############################################################
+# Powerful late-game enemies
+############################################################
+%%%%
+dragon
+
+@_wasteland_threats_@
+
+"You dare disturb my hoard?"
+
+"The old world's apex predator..."
+
+"Bow before true power!"
+
+"Your weapons are toys!"
+
+"I am the wasteland's fury!"
+
+w:10
+__NONE
+%%%%
+ancient lich
+
+"I remember the day the sky burned..."
+
+"I watched civilization crumble to ash..."
+
+"The old gods are dead, only I remain..."
+
+"You seek knowledge? I offer oblivion..."
+
+"The Great Collapse was merely a prelude..."
+
+"I have walked these ruins for over a century..."
+
+w:10
+__NONE
+%%%%
+titan
+
+"Mortal, you are unworthy!"
+
+"The ruins tremble before me!"
+
+"I am eternal destruction!"
+
+"You are an insect beneath my heel!"
+
+"Witness true power!"
+
+w:10
+__NONE
+%%%%
+
+############################################################
+# Faction-specific dialogue
+############################################################
+%%%%
+# Vault guards / military remnants
+vault guard
+
+"Halt! This facility is restricted!"
+
+"Authorization code required!"
+
+"Intruder detected! Engaging!"
+
+"This installation is still operational!"
+
+"Defend the bunker!"
+
+"Protocol: eliminate unauthorized personnel!"
+
+w:5
+__NONE
+%%%%
+
+############################################################
+# Neutral/friendly encounters
+############################################################
+%%%%
+# Rare peaceful encounters
+friendly human
+
+"Stay safe out there, wanderer."
+
+"Got any news from the settlements?"
+
+"Trade? I've got supplies if you've got ammo."
+
+"The raids have been getting worse..."
+
+"Heard there's a safe zone three days north."
+
+"Don't trust anyone wearing red bandanas."
+
+"The Glowing Crater... avoid it. Always."
+
+w:5
+__NONE
+%%%%
+
+############################################################
+# Environmental/ambient messages
+############################################################
+%%%%
+__NONE
+
+You hear distant gunfire.
+
+You hear something howling in the distance.
+
+The wind whistles through broken windows.
+
+Debris crunches under your feet.
+
+You hear the creaking of rusted metal.
+
+Something scurries in the shadows.
+
+You smell smoke on the wind.
+
+Distant thunder... or explosions?
+
+The ruins are eerily quiet.
+
+You hear dripping water echoing.
+%%%%

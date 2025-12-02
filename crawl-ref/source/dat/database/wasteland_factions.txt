@@ -1,0 +1,375 @@
+############################################################
+# Wasteland Crawl - Faction Messages
+# Replace god/deity messages with wasteland faction communications
+############################################################
+
+############################################################
+# THE REMNANTS - Preservers of technology and knowledge
+# (Replaces: Elyvilon, Zin - lawful/good factions)
+############################################################
+%%%%
+Remnants welcome
+
+"Welcome, seeker of knowledge. The Remnants preserve what was lost."
+
+"You carry the spark of the old world. We will help you kindle it."
+
+"The library is open to you. Learn what humanity once knew."
+
+"Technology and wisdom are our weapons against chaos."
+%%%%
+Remnants praise minor
+
+"Your progress is noted. Knowledge is power."
+
+"Well done. The old ways survive in you."
+
+"Good work, operative. Continue your mission."
+
+"The database is pleased with your performance."
+%%%%
+Remnants praise major
+
+"Excellent work! You honor the memory of civilization."
+
+"Outstanding! This is exactly what the Remnants stand for."
+
+"The council commends your achievements. You are a beacon of hope."
+
+"Remarkable! You've unlocked technology we thought lost forever."
+%%%%
+Remnants gift
+
+"We've authorized a supply drop at your location."
+
+"Access granted: Advanced equipment cache unlocked."
+
+"Database query successful. Technology transfer initiated."
+
+"Your clearance level has been upgraded. New equipment available."
+%%%%
+Remnants displeasure
+
+"That action contradicts Remnant protocols..."
+
+"Disappointing. We expected better judgment."
+
+"Warning: Your actions are being reviewed."
+
+"Such behavior does not align with our principles."
+%%%%
+
+############################################################
+# THE RADIANT HOST - Worshippers of radiation as divine power
+# (Replaces: Makhleb, Lugonu - chaos/destruction factions)
+############################################################
+%%%%
+Radiant Host welcome
+
+"EMBRACE THE GLOW! You are blessed by the Radiant Host!"
+
+"The atomic fire calls to you! Join us in glorious mutation!"
+
+"The fallout has chosen you. Rise, Radiant One!"
+
+"Feel the power of unleashed atoms! You are reborn!"
+%%%%
+Radiant Host praise minor
+
+"YES! The radiation flows through you!"
+
+"The glow approves! More!"
+
+"Radiant energy surges! You are ascending!"
+
+"The atomic fire hungers for more!"
+%%%%
+Radiant Host praise major
+
+"MAGNIFICENT! You are becoming pure energy!"
+
+"THE GLOW TRIUMPHS! All will be radiant!"
+
+"You are transcending flesh! Embrace the atom!"
+
+"GLORIOUS! The world burns with holy radiation!"
+%%%%
+Radiant Host gift
+
+"The glow bestows power upon you!"
+
+"Radiation crystallizes into matter! A gift!"
+
+"The atom splits in your honor! Take this!"
+
+"You are bathed in empowering energy!"
+%%%%
+Radiant Host displeasure
+
+"The glow dims... You disappoint us."
+
+"Coward! The radiation demands boldness!"
+
+"You shy from the atomic fire! Shameful!"
+
+"The Host questions your faith in the glow..."
+%%%%
+
+############################################################
+# THE IRON COVENANT - Masters of machines and augmentation
+# (Replaces: Nemelex, Okawaru - tactical/combat factions)
+############################################################
+%%%%
+Iron Covenant welcome
+
+"[UPLINK ESTABLISHED] Welcome to the Covenant network, user."
+
+"Biometric scan complete. Augmentation protocols initiated."
+
+"You have been registered. The Iron Covenant enhances the worthy."
+
+"[AUTHENTICATION SUCCESS] Mechanical superiority awaits you."
+%%%%
+Iron Covenant praise minor
+
+"[PERFORMANCE: ADEQUATE] Continue current protocols."
+
+"Systems nominal. Efficiency within acceptable parameters."
+
+"[POSITIVE FEEDBACK] Combat data logged and analyzed."
+
+"Augmentation synchronization: 12% improvement detected."
+%%%%
+Iron Covenant praise major
+
+"[EXCEPTIONAL PERFORMANCE] Upgrading authorization level."
+
+"Combat efficiency: 95th percentile. Recommendation: hardware upgrade."
+
+"[OUTSTANDING] You exemplify human-machine synergy."
+
+"Peak performance detected. Advanced systems unlocked."
+%%%%
+Iron Covenant gift
+
+"[REQUISITION APPROVED] Equipment deployment initiated."
+
+"Fabrication complete. Prototype weaponry authorized."
+
+"[SUPPLY DROP INCOMING] Coordinates locked."
+
+"Augmentation package delivered. Install immediately."
+%%%%
+Iron Covenant displeasure
+
+"[WARNING] Suboptimal decision detected."
+
+"Performance below expected parameters. Recalibrating."
+
+"[ERROR] Action contradicts tactical algorithms."
+
+"Disappointing. Organic impulsiveness detected."
+%%%%
+
+############################################################
+# THE VERDANT CIRCLE - Commune with mutated nature
+# (Replaces: Fedhas, Yred - nature/death factions)
+############################################################
+%%%%
+Verdant Circle welcome
+
+"The new nature accepts you, child. All life is changed now."
+
+"Welcome to the Circle. Even mutated, life finds a way."
+
+"The wasteland has its own beauty. We will teach you to see it."
+
+"You walk between old humanity and new nature. Good."
+%%%%
+Verdant Circle praise minor
+
+"The Circle acknowledges your respect for life."
+
+"Well done. You understand the balance."
+
+"Good. Even here, harmony can exist."
+
+"The mutated wilderness approves of you."
+%%%%
+Verdant Circle praise major
+
+"Magnificent! You are one with the new nature!"
+
+"The Circle celebrates your understanding! Life persists!"
+
+"Beautiful! You've achieved true harmony with the wasteland!"
+
+"Excellent! Both plant and beast call you friend!"
+%%%%
+Verdant Circle gift
+
+"Nature provides. Accept this gift from the living wasteland."
+
+"The mutated flora bears fruit for you."
+
+"Creatures of the new world offer their blessing."
+
+"The Circle's bounty is yours."
+%%%%
+Verdant Circle displeasure
+
+"Unnecessary destruction saddens the Circle..."
+
+"Why such violence? Even mutants deserve respect."
+
+"The balance suffers from your actions."
+
+"Disappointing. Life is precious, even in the wasteland."
+%%%%
+
+############################################################
+# THE VOID WALKERS - Explorers of dimensional rifts
+# (Replaces: Cheibriados, Ashenzari - time/knowledge factions)
+############################################################
+%%%%
+Void Walkers welcome
+
+"Reality's fabric is thin here. You sense it too. Welcome."
+
+"The spaces between... you can see them. Join us."
+
+"You've walked through rifts unknowing. We will teach you to navigate."
+
+"The bombs tore holes in space itself. We've learned to use them."
+%%%%
+Void Walkers praise minor
+
+"Your perception deepens. Good."
+
+"You're learning to see what others cannot."
+
+"The void acknowledges your progress."
+
+"Interesting. The rifts respond to you."
+%%%%
+Void Walkers praise major
+
+"Remarkable! You're traversing dimensions naturally!"
+
+"Incredible! You've glimpsed beyond the veil!"
+
+"Exceptional! Reality bends to your will!"
+
+"Astounding! You walk between worlds effortlessly!"
+%%%%
+Void Walkers gift
+
+"This... drifted from another dimension. It's yours."
+
+"The void yields treasures. Take this."
+
+"Something slipped through a rift. For you."
+
+"Reality fluctuates in your favor."
+%%%%
+Void Walkers displeasure
+
+"Crude. Such lack of subtlety."
+
+"You've misunderstood the nature of the void."
+
+"Disappointing. You act without thought."
+
+"The rifts close to you. Consider your actions."
+%%%%
+
+############################################################
+# THE WARLORDS - Brutal raiders and survivors
+# (Replaces: Trog, Beogh - combat/conquest factions)
+############################################################
+%%%%
+Warlords welcome
+
+"You're strong. The Warlords respect strength. Fight for us!"
+
+"Good! Another warrior joins our ranks!"
+
+"You've got guts coming here. We like guts. And violence!"
+
+"Prove your worth in blood and you'll rise in our ranks!"
+%%%%
+Warlords praise minor
+
+"Good kill! Keep the bodies piling up!"
+
+"YES! Blood and salvage!"
+
+"The clan is pleased! More violence!"
+
+"Strong! Do it again!"
+%%%%
+Warlords praise major
+
+"INCREDIBLE! You're a true warrior of the wasteland!"
+
+"LEGENDARY! Songs will be sung of this slaughter!"
+
+"MAGNIFICENT BRUTALITY! The Warlords are impressed!"
+
+"You've earned your place as a champion! GLORY!"
+%%%%
+Warlords gift
+
+"Take this! You've earned it through blood!"
+
+"Spoils of war! They're yours now!"
+
+"Here! Ripped it off a corpse for you!"
+
+"Looted this from our enemies. Use it well!"
+%%%%
+Warlords displeasure
+
+"COWARD! Where's your fighting spirit?!"
+
+"Weak! The clan doesn't tolerate weakness!"
+
+"Pathetic! Fight harder or get out!"
+
+"You shame us with such cowardice!"
+%%%%
+
+############################################################
+# Generic faction messages
+############################################################
+%%%%
+faction abandonment
+
+"Your connection to the faction network has been severed."
+
+"Access revoked. You are on your own now."
+
+"The faction has withdrawn its support."
+
+"You are no longer recognized. Their technology abandons you."
+%%%%
+faction penance
+
+"The faction demands restitution for your transgressions."
+
+"Your authorization has been downgraded. Amends must be made."
+
+"You have violated protocol. Penalties are in effect."
+
+"The faction is... displeased. Correct your course."
+%%%%
+faction forgiveness
+
+"Probation complete. Full access restored."
+
+"Your debt is paid. Welcome back, operative."
+
+"The faction accepts your amends. Proceed."
+
+"Forgiveness granted. Don't make us regret this."
+%%%%

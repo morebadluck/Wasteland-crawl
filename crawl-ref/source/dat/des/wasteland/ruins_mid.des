@@ -1,0 +1,354 @@
+##############################################################################
+# Wasteland Crawl - Mid Game Ruins (Depths 6-12)
+# These vaults feature moderate enemies for developing characters
+##############################################################################
+
+{{
+function wasteland_mid_monsters(e)
+    -- Medium strength monsters appropriate for levels 6-12
+    e.mons("orc warrior / gnoll sergeant / ogre")
+    e.mons("warg / hound / wolf")
+    e.mons("orc priest / orc wizard / centaur")
+    e.mons("two-headed ogre / troll / cyclops")
+    e.mons("stone giant / ettin / deep troll")
+end
+}}
+
+##############################################################
+NAME:    ruins_military_checkpoint
+TAGS:    no_monster_gen
+DEPTH:   D:6-10
+ORIENT:  float
+WEIGHT:  5
+: wasteland_mid_monsters(_G)
+KITEM:   $ = gold / nothing
+MAP
+xxxxxxxxxxxxxxxxxxxxx
+x...................x
+x.xxx.xxx.xxx.xxx.x.x
+x.x1x.x2x.x1x.x3x.x.x
+x.xxx.xxx.xxx.xxx.x.x
+x...................x
+x.xxxxxxxxxxxxxxxxx.x
+x.x...............x.x
+x.x..xxxxxxxxxxx..x.x
+x.x..x$$xxxxx$$x..x.x
+x.x..x$.x.4.x.$x..x.x
+x.+..x$.x...x.$x..+.x
+x.x..xxx+++++xxx..x.x
+x.x...............x.x
+x.xxxxxxxxxxxxxxxxx.x
+x...................x
+xxxxxxxxxxxxxxxxxxxxx
+       @@@@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_hospital
+TAGS:    no_monster_gen
+DEPTH:   D:7-11
+ORIENT:  float
+WEIGHT:  4
+: wasteland_mid_monsters(_G)
+KITEM:   p = potion of heal wounds / potion of curing
+KITEM:   s = scroll of teleportation / scroll of blinking
+MAP
+xxxxxxxxxxxxxxxxx
+x.1.x.2.x.3.x.2.x
+x...x...x...x...x
+x...+...+...+...x
+xxxxxxxxx+xxxxxxx
+x...............x
+x.xxx+xxx+xxx.x.x
+x.xp.x.s.xp.x.x.x
+x.x..x...x..x.x.x
+x.x.4x.5.x4.x.x.x
+x.xxxxxxxxxxx.x.x
+x.............x.x
+x.............x.x
+xxxxx+++++xxxxxxx
+    @@@@@@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_police_station
+TAGS:    no_monster_gen
+DEPTH:   D:6-10
+ORIENT:  float
+WEIGHT:  5
+: wasteland_mid_monsters(_G)
+KITEM:   w = any weapon / any armour
+MAP
+xxxxxxxxxxxxxxx
+x.............x
+x.xxxxxxxxxxx.x
+x.x..x..x..x..x
+x.+.1+.2+.3+..x
+x.x..x..x..x..x
+x.xxxxxxxxxxx.x
+x......x......x
+x.xxxx.x.xxxx.x
+x.xw.x.x.xw.x.x
+x.x..+4+..x.x.x
+x.x..xxxxx.x.x.x
+x.x........x...x
+x.xxxxxxxxxxx.xx
+x.............xx
+xxxxxxxxxxxxxxxx
+     @@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_office_building
+TAGS:    no_monster_gen transparent
+DEPTH:   D:7-12
+ORIENT:  float
+WEIGHT:  6
+: wasteland_mid_monsters(_G)
+MAP
+xxxxxxxxxxxxxxxxx
+x1..x2..x3..x2..x
+x...x...x...x...x
+x...+...+...+...x
+xxxxx+xxx+xxx+xxx
+x...............x
+x.xxxxxxxxxxxxx.x
+x.x.x.x.x.x.x.x.x
+x.+.+.+.+.+.+.+.x
+x.x.x.x4x.x.x.x.x
+x.x.x.xxx.x.x.x.x
+x.+.+.x.x.+.+.+.x
+x.x.x.x5x.x.x.x.x
+x.xxxxxxxxxxxxx.x
+x...............x
+xxxxx++++++xxxxxx
+    @@@@@@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_supermarket
+TAGS:    no_monster_gen
+DEPTH:   D:8-12
+ORIENT:  float
+WEIGHT:  4
+: wasteland_mid_monsters(_G)
+KITEM:   f = bread ration / royal jelly / nothing
+MAP
+xxxxxxxxxxxxxxxxxxxxx
+x...................x
+x.xxxxxxxxxxxxxxxxx.x
+x.x.x.x.x.x.x.x.x.x.x
+x.+.+.+.+.+.+.+.+.+.x
+x.x.x.x.x.x.x.x.x.x.x
+x.x.x.x.x.x.x.x.x.x.x
+x.+.+.+.+.+.+.+.+.+.x
+x.x.x.x.x.x.x.x.x.x.x
+x.x.x.x.x.x.x.x.x.x.x
+x.+f+f+f+f+f+f+f+f+.x
+x.x.x.x.x.x.x.x.x.x.x
+x.xxxxxxxxxxxxxxxxx.x
+x.....1.....2.......x
+x.3.................x
+xxxx+++++++++xxxxxxxx
+    @@@@@@@@@@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_fortified_compound
+TAGS:    no_monster_gen
+DEPTH:   D:8-12
+ORIENT:  float
+WEIGHT:  5
+: wasteland_mid_monsters(_G)
+KITEM:   $ = gold
+MAP
+xxxxxxxxxxxxxxxxxxxxx
+x...................x
+x.xxxxxxxxxxxxxxxx..x
+x.x..............x..x
+x.x.xxxxxxxxxxxx.x..x
+x.x.x1.x...x..2x.x..x
+x.x.x..x...x...x.x..x
+x.x.xxxx+x+xxxxx.x..x
+x.x.x3.........x.x..x
+x.x.x....5.....x.+..+
+x.x.x.$$xxxxx$.x.x..x
+x.x.x.$.x4..x$.x.x..x
+x.x.xxxxxxxxxxxx.x..x
+x.x..............x..x
+x.xxxxxxxxxxxxxxxx..x
+x...................x
+xxxxxxxxxxxxxxxxxxxxx
+         @@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_warehouse
+TAGS:    no_monster_gen transparent
+DEPTH:   D:6-10
+ORIENT:  float
+WEIGHT:  6
+: wasteland_mid_monsters(_G)
+KITEM:   i = any weapon / any armour / any wand w:5
+MAP
+xxxxxxxxxxxxxxxxxxxxxx
+x....................x
+x..xxx....xxx....xxx.x
+x..x1x....x2x....x3x.x
+x..xxx....xxx....xxx.x
+x....................x
+x..xxx....xxx....xxx.x
+x..x.x....x4x....x.x.x
+x..xxx....xxx....xxx.x
+x....................x
+x..xxx....xxx....xxx.x
+x..x.x....x.x....x.x.x
+x..xxx....xxx....xxx.x
+x...i................x
+xxxxxxxxxxxxxxxxxxxxxx
+       @@@@@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_radio_station
+TAGS:    no_monster_gen
+DEPTH:   D:7-11
+ORIENT:  float
+WEIGHT:  4
+: wasteland_mid_monsters(_G)
+MAP
+      xxx
+      x.x
+     xx.xx
+     x...x
+    xx.1.xx
+   xxx...xxx
+  xxxx...xxxx
+ xxxxx...xxxxx
+xxxxxx...xxxxxx
+x.............x
+x.xxxxxxxxxxx.x
+x.x.........x.x
+x.x.xxx+xxx.x.x
+x.x.x.....x.x.x
+x.x.x.2.3.x.x.x
+x.x.x.....x.x.x
+x.x.x.4.5.x.x.x
+x.x.xxxxxxx.x.x
+x.x.........x.x
+x.xxxxxxxxxxx.x
+x.............x
+xxxxxxx+++xxxxx
+      @@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_sewage_treatment
+TAGS:    no_monster_gen
+DEPTH:   D:8-12
+ORIENT:  float
+WEIGHT:  5
+: wasteland_mid_monsters(_G)
+KFEAT:   w = shallow_water
+KFEAT:   W = deep_water
+MAP
+xxxxxxxxxxxxxxxxxxx
+x.................x
+x.wwwwww.wwwwww.x.x
+x.wWWWWw.wWWWWw.x.x
+x.wW1.Ww.wW2.Ww.x.x
+x.wWWWWw.wWWWWw.x.x
+x.wwwwww.wwwwww.x.x
+x...............x.x
+x.wwwwww.wwwwww.x.x
+x.wWWWWw.wWWWWw.x.x
+x.wW3.Ww.wW4.Ww.x.x
+x.wWWWWw.wWWWWw.x.x
+x.wwwwww.wwwwww.x.x
+x.................x
+x.x.xxxxxxxxxxxx..x
+x...x.....5......xx
+xxxxxx+++++xxxxxxxx
+     @@@@@@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_power_substation
+TAGS:    no_monster_gen
+DEPTH:   D:9-12
+ORIENT:  float
+WEIGHT:  3
+: wasteland_mid_monsters(_G)
+MAP
+xxxxxxxxxxxxxxxxxxx
+x.................x
+x.xxxxxxxxxxxxxxx.x
+x.x.............x.x
+x.x.xxxxxxxxxxx.x.x
+x.x.x1x2x3x4x5x.x.x
+x.x.x.x.x.x.x.x.x.x
+x.x.x.x.x.x.x.x.x.x
+x.x.xxxxxxxxxxx.x.x
+x.x.............x.x
+x.x.............x.x
+x.xxxxxxxxxxxxxxx.x
+x.................x
+xxxxxxxxxxxxxxxxxxx
+       @@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_apartment_complex
+TAGS:    no_monster_gen
+DEPTH:   D:7-11
+ORIENT:  float
+WEIGHT:  5
+: wasteland_mid_monsters(_G)
+MAP
+xxxxxxxxxxxxxxxxxxxxx
+x1x.....x2x.....x3x.x
+x.x.....x.x.....x.x.x
+x.+.....+.+.....+.+.x
+xxx.....xxx.....xxx.x
+x.................x.x
+x.................x.x
+xxx.....xxx.....xxx.x
+x4x.....x5x.....x1x.x
+x.x.....x.x.....x.x.x
+x.+.....+.+.....+.+.x
+xxx.....xxx.....xxx.x
+x.................x.x
+x.................x.x
+xxxxxxxxxxxxxxxxxxxxx
+      @@@@@@@
+ENDMAP
+
+##############################################################
+NAME:    ruins_library
+TAGS:    no_monster_gen
+DEPTH:   D:8-12
+ORIENT:  float
+WEIGHT:  3
+: wasteland_mid_monsters(_G)
+KITEM:   b = any book / scroll of identify
+MAP
+xxxxxxxxxxxxxxxxxxx
+x.................x
+x.x.x.x.x.x.x.x.x.x
+x.................x
+x.x.x.x.x.x.x.x.x.x
+x.................x
+x.x.x.x.x.x.x.x.x.x
+x.................x
+x.xxxxxxx+xxxxxxx.x
+x.x.............x.x
+x.x.xxx.xxx.xxx.x.x
+x.x.xbx.xbx.xbx.x.x
+x.+.x1x.x2x.x3x.x.x
+x.x.xxx.xxx.xxx.x.x
+x.x.............x.x
+x.xxxxxxxxxxxxxxx.x
+x.......4.........x
+xxxxxxxxxxxxxxxxxxx
+      @@@@@@@
+ENDMAP

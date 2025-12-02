@@ -1,0 +1,12 @@
+# Auto-play configuration for demonstration
+name = TestSurvivor
+species = Minotaur
+background = Berserker
+weapon = hand axe
+
+# Auto-explore settings
+explore_delay = -1
+travel_delay = -1
+
+# Disable morgue confirmation
+dump_message_count = 0

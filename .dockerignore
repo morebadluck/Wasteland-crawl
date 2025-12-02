@@ -1,0 +1,40 @@
+# Git files
+.git/
+.gitignore
+.gitmodules
+
+# Build artifacts
+*.o
+*.a
+crawl-ref/source/crawl
+crawl-ref/source/crawl.exe
+crawl-ref/source/*.d
+
+# Save files
+saves/
+*.sav
+*.chr
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Documentation (keep essential ones)
+*.md
+!README.md
+!WASTELAND.md
+
+# macOS files
+.DS_Store
+
+# Test files
+crawl-ref/source/catch2-tests/
+
+# Webtiles server
+crawl-ref/source/webserver/
+
+# Android builds
+crawl-ref/source/android/
