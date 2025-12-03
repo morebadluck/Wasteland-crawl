@@ -59,4 +59,13 @@ public class KeyBindings {
             GLFW.GLFW_KEY_A,
             CATEGORY
     );
+
+    // Combat keybinds
+    public static final KeyMapping TOGGLE_AUTO_COMBAT = new KeyMapping(
+            "key.wasteland.toggle_auto_combat",
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_C, // C for Combat mode
+            CATEGORY
+    );
 }

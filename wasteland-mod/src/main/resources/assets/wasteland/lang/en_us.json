@@ -5,5 +5,6 @@
   "key.wasteland.spell_memorize": "Memorize Spells (M)",
   "key.wasteland.spell_cast": "Cast Spell (z)",
   "key.wasteland.spell_list": "Spell List (Z)",
-  "key.wasteland.abilities": "Abilities (a)"
+  "key.wasteland.abilities": "Abilities (a)",
+  "key.wasteland.toggle_auto_combat": "Toggle Auto-Combat Mode"
 }

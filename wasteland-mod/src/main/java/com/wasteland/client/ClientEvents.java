@@ -6,6 +6,7 @@ import com.wasteland.character.PlayerCharacter;
 import com.wasteland.client.gui.CharacterSheetScreen;
 import com.wasteland.client.gui.SkillsScreen;
 import com.wasteland.client.gui.SpellsScreen;
+import com.wasteland.combat.CombatDetection;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -57,6 +58,11 @@ public class ClientEvents {
                 );
             }
         }
+
+        // Check for 'C' key (toggle auto-combat mode)
+        if (KeyBindings.TOGGLE_AUTO_COMBAT.consumeClick()) {
+            CombatDetection.toggleAutoCombatMode();
+        }
     }
 
     /**
@@ -72,6 +78,7 @@ public class ClientEvents {
             event.register(KeyBindings.SPELL_CAST);
             event.register(KeyBindings.SPELL_LIST);
             event.register(KeyBindings.ABILITIES);
+            event.register(KeyBindings.TOGGLE_AUTO_COMBAT);
         }
     }
 }
