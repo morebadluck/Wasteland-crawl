@@ -1,0 +1,96 @@
+{
+  "name": "ruins_collapsed_parking",
+  "version": "1.0",
+  "description": "DCSS wasteland vault: ruins_collapsed_parking",
+  "width": 11,
+  "depth": 10,
+  "height": 3,
+  "map": [
+    "...........",
+    ".xxx.xxx.xx",
+    ".x1x.x2x.xx",
+    ".xxx.xxx.xx",
+    "...........",
+    ".xxx.xxx.xx",
+    ".x3x.x1x.xx",
+    ".xxx.xxx.xx",
+    "...........",
+    "  @@@@@@@  "
+  ],
+  "legend": {
+    "2": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 2"
+    },
+    ".": {
+      "type": "floor",
+      "block": "minecraft:gray_concrete",
+      "description": "Gray concrete floor (wasteland ground)"
+    },
+    "1": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 1"
+    },
+    " ": {
+      "type": "void",
+      "block": "minecraft:air",
+      "description": "Air (outside vault boundaries)"
+    },
+    "3": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 3"
+    },
+    "@": {
+      "type": "entry",
+      "block": "minecraft:gray_concrete",
+      "description": "Entry point (floor)"
+    },
+    "x": {
+      "type": "wall",
+      "block": "minecraft:stone_bricks",
+      "description": "Stone brick walls (wasteland ruins)"
+    }
+  },
+  "features": [
+    {
+      "type": "monster_spawn",
+      "x": 2,
+      "y": 1,
+      "z": 2,
+      "block": "minecraft:red_wool",
+      "monster_tier": "1"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 6,
+      "y": 1,
+      "z": 2,
+      "block": "minecraft:red_wool",
+      "monster_tier": "2"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 2,
+      "y": 1,
+      "z": 6,
+      "block": "minecraft:red_wool",
+      "monster_tier": "3"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 6,
+      "y": 1,
+      "z": 6,
+      "block": "minecraft:red_wool",
+      "monster_tier": "1"
+    }
+  ],
+  "spawn_point": {
+    "x": 0,
+    "y": 1,
+    "z": 0
+  }
+}

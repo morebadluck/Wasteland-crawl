@@ -1,0 +1,75 @@
+{
+  "name": "basic_room",
+  "version": "1.0",
+  "description": "13x13 DCSS-style stone brick room with gray concrete floor",
+  "width": 13,
+  "depth": 13,
+  "height": 3,
+  "map": [
+    "xxxxxxxxxxxxx",
+    "x...........x",
+    "x...........x",
+    "x...........x",
+    "x...........x",
+    "x...........x",
+    "x.....@.....x",
+    "x...........x",
+    "x...........x",
+    "x...........x",
+    "x...........x",
+    "x...........x",
+    "xxxxxxxxxxxxx"
+  ],
+  "legend": {
+    "x": {
+      "type": "wall",
+      "block": "minecraft:stone_bricks",
+      "description": "Stone brick walls"
+    },
+    ".": {
+      "type": "floor",
+      "block": "minecraft:gray_concrete",
+      "description": "Gray concrete floor"
+    },
+    "@": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Player spawn point (floor)"
+    }
+  },
+  "features": [
+    {
+      "type": "torch",
+      "x": 2,
+      "z": 1,
+      "y": 1,
+      "block": "minecraft:torch"
+    },
+    {
+      "type": "torch",
+      "x": 10,
+      "z": 1,
+      "y": 1,
+      "block": "minecraft:torch"
+    },
+    {
+      "type": "torch",
+      "x": 2,
+      "z": 11,
+      "y": 1,
+      "block": "minecraft:torch"
+    },
+    {
+      "type": "torch",
+      "x": 10,
+      "z": 11,
+      "y": 1,
+      "block": "minecraft:torch"
+    }
+  ],
+  "spawn_point": {
+    "x": 6,
+    "y": 1,
+    "z": 6
+  }
+}

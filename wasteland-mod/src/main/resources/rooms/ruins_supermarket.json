@@ -1,0 +1,413 @@
+{
+  "name": "ruins_supermarket",
+  "version": "1.0",
+  "description": "DCSS wasteland vault: ruins_supermarket",
+  "width": 21,
+  "depth": 17,
+  "height": 3,
+  "map": [
+    "xxxxxxxxxxxxxxxxxxxxx",
+    "x...................x",
+    "x.xxxxxxxxxxxxxxxxx.x",
+    "x.x.x.x.x.x.x.x.x.x.x",
+    "x.+.+.+.+.+.+.+.+.+.x",
+    "x.x.x.x.x.x.x.x.x.x.x",
+    "x.x.x.x.x.x.x.x.x.x.x",
+    "x.+.+.+.+.+.+.+.+.+.x",
+    "x.x.x.x.x.x.x.x.x.x.x",
+    "x.x.x.x.x.x.x.x.x.x.x",
+    "x.+f+f+f+f+f+f+f+f+.x",
+    "x.x.x.x.x.x.x.x.x.x.x",
+    "x.xxxxxxxxxxxxxxxxx.x",
+    "x.....1.....2.......x",
+    "x.3.................x",
+    "xxxx+++++++++xxxxxxxx",
+    "    @@@@@@@@@@@@@    "
+  ],
+  "legend": {
+    " ": {
+      "type": "void",
+      "block": "minecraft:air",
+      "description": "Air (outside vault boundaries)"
+    },
+    "3": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 3"
+    },
+    ".": {
+      "type": "floor",
+      "block": "minecraft:gray_concrete",
+      "description": "Gray concrete floor (wasteland ground)"
+    },
+    "f": {
+      "type": "item",
+      "block": "minecraft:gray_concrete",
+      "description": "Item spawn"
+    },
+    "2": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 2"
+    },
+    "@": {
+      "type": "entry",
+      "block": "minecraft:gray_concrete",
+      "description": "Entry point (floor)"
+    },
+    "x": {
+      "type": "wall",
+      "block": "minecraft:stone_bricks",
+      "description": "Stone brick walls (wasteland ruins)"
+    },
+    "1": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 1"
+    },
+    "+": {
+      "type": "door",
+      "block": "minecraft:oak_door",
+      "description": "Wooden door (ruined entrance)"
+    }
+  },
+  "features": [
+    {
+      "type": "door",
+      "x": 2,
+      "y": 0,
+      "z": 4,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 4,
+      "y": 0,
+      "z": 4,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 6,
+      "y": 0,
+      "z": 4,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 8,
+      "y": 0,
+      "z": 4,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 10,
+      "y": 0,
+      "z": 4,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 12,
+      "y": 0,
+      "z": 4,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 14,
+      "y": 0,
+      "z": 4,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 16,
+      "y": 0,
+      "z": 4,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 18,
+      "y": 0,
+      "z": 4,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 2,
+      "y": 0,
+      "z": 7,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 4,
+      "y": 0,
+      "z": 7,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 6,
+      "y": 0,
+      "z": 7,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 8,
+      "y": 0,
+      "z": 7,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 10,
+      "y": 0,
+      "z": 7,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 12,
+      "y": 0,
+      "z": 7,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 14,
+      "y": 0,
+      "z": 7,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 16,
+      "y": 0,
+      "z": 7,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 18,
+      "y": 0,
+      "z": 7,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 2,
+      "y": 0,
+      "z": 10,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "item_spawn",
+      "x": 3,
+      "y": 1,
+      "z": 10,
+      "block": "minecraft:chest"
+    },
+    {
+      "type": "door",
+      "x": 4,
+      "y": 0,
+      "z": 10,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "item_spawn",
+      "x": 5,
+      "y": 1,
+      "z": 10,
+      "block": "minecraft:chest"
+    },
+    {
+      "type": "door",
+      "x": 6,
+      "y": 0,
+      "z": 10,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "item_spawn",
+      "x": 7,
+      "y": 1,
+      "z": 10,
+      "block": "minecraft:chest"
+    },
+    {
+      "type": "door",
+      "x": 8,
+      "y": 0,
+      "z": 10,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "item_spawn",
+      "x": 9,
+      "y": 1,
+      "z": 10,
+      "block": "minecraft:chest"
+    },
+    {
+      "type": "door",
+      "x": 10,
+      "y": 0,
+      "z": 10,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "item_spawn",
+      "x": 11,
+      "y": 1,
+      "z": 10,
+      "block": "minecraft:chest"
+    },
+    {
+      "type": "door",
+      "x": 12,
+      "y": 0,
+      "z": 10,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "item_spawn",
+      "x": 13,
+      "y": 1,
+      "z": 10,
+      "block": "minecraft:chest"
+    },
+    {
+      "type": "door",
+      "x": 14,
+      "y": 0,
+      "z": 10,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "item_spawn",
+      "x": 15,
+      "y": 1,
+      "z": 10,
+      "block": "minecraft:chest"
+    },
+    {
+      "type": "door",
+      "x": 16,
+      "y": 0,
+      "z": 10,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "item_spawn",
+      "x": 17,
+      "y": 1,
+      "z": 10,
+      "block": "minecraft:chest"
+    },
+    {
+      "type": "door",
+      "x": 18,
+      "y": 0,
+      "z": 10,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 6,
+      "y": 1,
+      "z": 13,
+      "block": "minecraft:red_wool",
+      "monster_tier": "1"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 12,
+      "y": 1,
+      "z": 13,
+      "block": "minecraft:red_wool",
+      "monster_tier": "2"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 2,
+      "y": 1,
+      "z": 14,
+      "block": "minecraft:red_wool",
+      "monster_tier": "3"
+    },
+    {
+      "type": "door",
+      "x": 4,
+      "y": 0,
+      "z": 15,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 5,
+      "y": 0,
+      "z": 15,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 6,
+      "y": 0,
+      "z": 15,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 7,
+      "y": 0,
+      "z": 15,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 8,
+      "y": 0,
+      "z": 15,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 9,
+      "y": 0,
+      "z": 15,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 10,
+      "y": 0,
+      "z": 15,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 11,
+      "y": 0,
+      "z": 15,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 12,
+      "y": 0,
+      "z": 15,
+      "block": "minecraft:oak_door"
+    }
+  ],
+  "spawn_point": {
+    "x": 1,
+    "y": 1,
+    "z": 1
+  }
+}

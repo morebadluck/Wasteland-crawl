@@ -1,0 +1,144 @@
+{
+  "name": "ruins_underground_bunker",
+  "version": "1.0",
+  "description": "DCSS wasteland vault: ruins_underground_bunker",
+  "width": 27,
+  "depth": 30,
+  "height": 3,
+  "map": [
+    "xxxxxxxxxxxxxxxxxxxxxxxxx  ",
+    "x.......................x  ",
+    "x.xxxxxxxxxxxxxxxxxxxxx.x  ",
+    "x.x...................x.x  ",
+    "x.x.xxxxxxxxxxxxxxxxxxx.x  ",
+    "x.x.x.................x.x  ",
+    "x.x.x.xxxxxxxxxxxxxxx.x.x  ",
+    "x.x.x.x1............x.x.x  ",
+    "x.x.x.x.xxxxxxxxxxxx.x.x.x ",
+    "x.x.x.x.x2.........x.x.x.x ",
+    "x.x.x.x.x.xxxxxxxx.x.x.x.x ",
+    "x.x.x.x.x.x3.....x.x.x.x.x ",
+    "x.x.x.x.x.x.xxxx.x.x.x.x.x ",
+    "x.x.x.x.x.x.x4*x.x.x.x.x.x ",
+    "x.x.x.x.x.x.x$$x.x.x.x.x.x ",
+    "x.x.x.x.x.x.x5*x.x.x.x.x.x ",
+    "x.x.x.x.x.x.xxxx.x.x.x.x.x ",
+    "x.x.x.x.x.x......x.x.x.x.x ",
+    "x.x.x.x.x.xxxxxxxx.x.x.x.x ",
+    "x.x.x.x.x..........x.x.x.x ",
+    "x.x.x.x.xxxxxxxxxxxx.x.x.x ",
+    "x.x.x.x..............x.x.x ",
+    "x.x.x.xxxxxxxxxxxxxxx.x.x.x",
+    "x.x.x...................x.x",
+    "x.x.xxxxxxxxxxxxxxxxxxxxx.x",
+    "x.x.......................x",
+    "x.xxxxxxxxxxxxxxxxxxxxxxxxx",
+    "x.........................x",
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "            @@@            "
+  ],
+  "legend": {
+    "2": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 2"
+    },
+    "1": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 1"
+    },
+    ".": {
+      "type": "floor",
+      "block": "minecraft:gray_concrete",
+      "description": "Gray concrete floor (wasteland ground)"
+    },
+    "*": {
+      "type": "floor",
+      "block": "minecraft:gray_concrete",
+      "description": "Unknown tile: *"
+    },
+    "4": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 4"
+    },
+    "$": {
+      "type": "floor",
+      "block": "minecraft:gray_concrete",
+      "description": "Unknown tile: $"
+    },
+    "3": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 3"
+    },
+    "5": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 5"
+    },
+    "@": {
+      "type": "entry",
+      "block": "minecraft:gray_concrete",
+      "description": "Entry point (floor)"
+    },
+    " ": {
+      "type": "void",
+      "block": "minecraft:air",
+      "description": "Air (outside vault boundaries)"
+    },
+    "x": {
+      "type": "wall",
+      "block": "minecraft:stone_bricks",
+      "description": "Stone brick walls (wasteland ruins)"
+    }
+  },
+  "features": [
+    {
+      "type": "monster_spawn",
+      "x": 7,
+      "y": 1,
+      "z": 7,
+      "block": "minecraft:red_wool",
+      "monster_tier": "1"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 9,
+      "y": 1,
+      "z": 9,
+      "block": "minecraft:red_wool",
+      "monster_tier": "2"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 11,
+      "y": 1,
+      "z": 11,
+      "block": "minecraft:red_wool",
+      "monster_tier": "3"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 13,
+      "y": 1,
+      "z": 13,
+      "block": "minecraft:red_wool",
+      "monster_tier": "4"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 13,
+      "y": 1,
+      "z": 15,
+      "block": "minecraft:red_wool",
+      "monster_tier": "5"
+    }
+  ],
+  "spawn_point": {
+    "x": 13,
+    "y": 1,
+    "z": 15
+  }
+}
