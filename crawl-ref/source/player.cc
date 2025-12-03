@@ -717,7 +717,7 @@ void player::finalise_movement(const actor* /*to_blame*/)
     {
         if (feat_is_water(new_grid))
         {
-            const bool stepped = (last_move_pos == pos() || !(last_move_flags & MV_TRANSLOCATION));
+            const bool stepped = (last_move_pos != pos() && !(last_move_flags & MV_TRANSLOCATION));
             _enter_water(old_grid, new_grid, stepped);
         }
         else if (props.exists(TEMP_WATERWALK_KEY))
@@ -5232,7 +5232,7 @@ bool invis_allowed(bool quiet, string *fail_reason, bool temp)
             sources.push_back("crown");
 
         if (temp && you.wearing_ego(OBJ_ARMOUR, SPARM_LIGHT))
-            sources.push_back("orb");
+            sources.push_back("armour");
 
         if (temp && you.props.exists(WU_JIAN_HEAVENLY_STORM_KEY)
             || you.religion == GOD_SHINING_ONE) // non-temp
@@ -5367,7 +5367,8 @@ bool land_player(bool quiet)
         mpr("You float gracefully downwards.");
 
     // Re-enter the terrain.
-    you.trigger_movement_effects();
+    // Interrupt travel, but not other delays.
+    you.trigger_movement_effects(you.running ? MV_DEFAULT : MV_NO_TRAVEL_STOP);
     return true;
 }
 

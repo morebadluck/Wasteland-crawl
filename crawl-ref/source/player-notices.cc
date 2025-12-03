@@ -55,6 +55,10 @@ static bool _try_seen_interrupt(monster& mons, seen_context_type sc)
 
 static bool _check_monster_alert(const monster& mon)
 {
+    // Beogh-converted orcs may have left the floor on the turn they were encountered.
+    if (!mon.alive())
+        return false;
+
     if (Options.monster_alert[mon.type]
         || Options.monster_alert_uniques && mons_is_unique(mon.type)
         || Options.monster_alert_min_threat < MTHRT_UNDEF
@@ -215,7 +219,7 @@ static void _monster_headsup(const vector<monster*> &monsters,
                                const unordered_set<const monster*> &single,
                                ostringstream& out)
 {
-    bool did_linebreak = false;
+    int listed = 0;
     for (const monster* mon : monsters)
     {
         monster_info mi(mon);
@@ -228,8 +232,12 @@ static void _monster_headsup(const vector<monster*> &monsters,
             continue;
 
         // Put equipment messages on a new line if there's more than one monster.
-        if (!did_linebreak && monsters.size() > 1)
-            out << "\n";
+        if (listed == 0)
+            out << (monsters.size() > 1 ? "\n" : " ");
+        else
+            out << " ";
+
+        ++listed;
 
         string monname;
         if (monsters.size() == 1)
@@ -251,7 +259,7 @@ static void _monster_headsup(const vector<monster*> &monsters,
             out << " ";
         out << get_monster_equipment_desc(mi, monsters.size() > 1 ? DESC_NOTEWORTHY
                                                                   : DESC_NOTEWORTHY_AND_WEAPON,
-                                          DESC_NONE) << ". ";
+                                          DESC_NONE) << ".";
     }
 }
 
@@ -412,13 +420,13 @@ static void _handle_encounter_messages(const vector<monster*> monsters,
     }
     else if (sc == SC_ORBRUN)
     {
-        out << _describe_monsters_from_species(species).c_str() << "appear";
+        out << _describe_monsters_from_species(species).c_str() << " appear";
         if (monsters.size() == 1)
             out << "s";
         out << " in pursuit of the Orb! ";
     }
     else
-        out << "You encounter " << _describe_monsters_from_species(species) << ". ";
+        out << "You encounter " << _describe_monsters_from_species(species) << ".";
 
     _monster_headsup(monsters, single, out);
 

@@ -474,6 +474,7 @@ const vector<GameOption*> game_options::build_options_list()
         new BoolGameOption(SIMPLE_NAME(easy_door), true),
         new BoolGameOption(SIMPLE_NAME(warn_hatches), false),
         new BoolGameOption(SIMPLE_NAME(warn_contam_cost), true),
+        new BoolGameOption(SIMPLE_NAME(show_invis_targeter), true),
         new BoolGameOption(SIMPLE_NAME(show_resist_percent), true),
         new BoolGameOption(SIMPLE_NAME(always_show_doom_contam), false),
         new BoolGameOption(SIMPLE_NAME(enable_recast_spell), true),
@@ -550,7 +551,7 @@ const vector<GameOption*> game_options::build_options_list()
                         set_menu_sort(frag);
             }),
         new BoolGameOption(SIMPLE_NAME(bad_item_prompt), true),
-        new BoolGameOption(SIMPLE_NAME(show_paged_inventory), false),
+        new BoolGameOption(SIMPLE_NAME(show_paged_inventory), true),
         new MultipleChoiceGameOption<slot_select_mode>(
             SIMPLE_NAME(assign_item_slot),
             SS_FORWARD,
@@ -1657,6 +1658,10 @@ void game_options::reset_options()
           ABIL_WATERY_GRAVE };
     always_use_static_ability_targeters = false;
 
+    force_scroll_targeter =
+        { SCR_FEAR, SCR_SILENCE, SCR_VULNERABILITY, SCR_IMMOLATION, SCR_TORMENT };
+    always_use_static_scroll_targeters = false;
+
 #ifdef DGAMELAUNCH
     // not settable via rc on DGL, so no Options object to initialize them
     restart_after_game = false;
@@ -1926,6 +1931,48 @@ void game_options::remove_force_ability_targeter(const string &s)
         report_error("Unknown ability '%s'\n", s.c_str());
     else
         force_ability_targeter.erase(abil);
+}
+
+void game_options::add_force_scroll_targeter(const string &s, bool)
+{
+    if (lowercase_string(s) == "all")
+    {
+        always_use_static_scroll_targeters = true;
+        return;
+    }
+
+    string name;
+    if (starts_with(s, "scroll of"))
+        name = s;
+    else
+        name = "scroll of " + s;
+    item_kind kind = item_kind_by_name(name);
+
+    if (kind.base_type == OBJ_SCROLLS)
+        force_scroll_targeter.insert(kind.sub_type);
+    else
+        report_error("Unknown scroll '%s'\n", s.c_str());
+}
+
+void game_options::remove_force_scroll_targeter(const string &s)
+{
+    if (lowercase_string(s) == "all")
+    {
+        always_use_static_scroll_targeters = false;
+        return;
+    }
+
+    string name;
+    if (starts_with(s, "scroll of"))
+        name = s;
+    else
+        name = "scroll of " + s;
+    item_kind kind = item_kind_by_name(name);
+
+    if (kind.base_type == OBJ_SCROLLS)
+        force_scroll_targeter.erase(kind.sub_type);
+    else
+        report_error("Unknown scroll '%s'\n", s.c_str());
 }
 
 static monster_type _mons_class_by_string(const string &name)
@@ -4223,6 +4270,21 @@ bool game_options::read_custom_option(opt_parse_state &state, bool runscripts)
         split_parse(state, ",",
             &game_options::add_force_ability_targeter,
             &game_options::remove_force_ability_targeter,
+            false);
+        return true;
+    }
+    else if (key == "force_scroll_targeter")
+    {
+        if (state.plain())
+        {
+            always_use_static_ability_targeters = false;
+            force_scroll_targeter.clear();
+        }
+
+        state.ignore_prepend();
+        split_parse(state, ",",
+            &game_options::add_force_scroll_targeter,
+            &game_options::remove_force_scroll_targeter,
             false);
         return true;
     }
