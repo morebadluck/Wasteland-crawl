@@ -1,0 +1,101 @@
+{
+  "name": "ruins_small_bunker",
+  "version": "1.0",
+  "description": "DCSS wasteland vault: ruins_small_bunker",
+  "width": 9,
+  "depth": 12,
+  "height": 3,
+  "map": [
+    "xxxxxxxxx",
+    "x.......x",
+    "x.xxxxx.x",
+    "x.x.d.x.x",
+    "x.x.4.x.x",
+    "x.x...x.x",
+    "x.x.2.x.x",
+    "x.x...x.x",
+    "x.xx+xx.x",
+    "x.......x",
+    "xxxxxxxxx",
+    "    @    "
+  ],
+  "legend": {
+    "4": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 4"
+    },
+    "2": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 2"
+    },
+    "+": {
+      "type": "door",
+      "block": "minecraft:oak_door",
+      "description": "Wooden door (ruined entrance)"
+    },
+    ".": {
+      "type": "floor",
+      "block": "minecraft:gray_concrete",
+      "description": "Gray concrete floor (wasteland ground)"
+    },
+    " ": {
+      "type": "void",
+      "block": "minecraft:air",
+      "description": "Air (outside vault boundaries)"
+    },
+    "@": {
+      "type": "entry",
+      "block": "minecraft:gray_concrete",
+      "description": "Entry point (floor)"
+    },
+    "x": {
+      "type": "wall",
+      "block": "minecraft:stone_bricks",
+      "description": "Stone brick walls (wasteland ruins)"
+    },
+    "d": {
+      "type": "item",
+      "block": "minecraft:gray_concrete",
+      "description": "Item spawn"
+    }
+  },
+  "features": [
+    {
+      "type": "item_spawn",
+      "x": 4,
+      "y": 1,
+      "z": 3,
+      "block": "minecraft:chest"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 4,
+      "y": 1,
+      "z": 4,
+      "block": "minecraft:red_wool",
+      "monster_tier": "4"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 4,
+      "y": 1,
+      "z": 6,
+      "block": "minecraft:red_wool",
+      "monster_tier": "2"
+    },
+    {
+      "type": "door",
+      "x": 4,
+      "y": 0,
+      "z": 8,
+      "block": "minecraft:oak_door"
+    }
+  ],
+  "spawn_point": {
+    "x": 4,
+    "y": 1,
+    "z": 6
+  }
+}

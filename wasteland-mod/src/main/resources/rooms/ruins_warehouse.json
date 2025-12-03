@@ -1,0 +1,112 @@
+{
+  "name": "ruins_warehouse",
+  "version": "1.0",
+  "description": "DCSS wasteland vault: ruins_warehouse",
+  "width": 22,
+  "depth": 16,
+  "height": 3,
+  "map": [
+    "xxxxxxxxxxxxxxxxxxxxxx",
+    "x....................x",
+    "x..xxx....xxx....xxx.x",
+    "x..x1x....x2x....x3x.x",
+    "x..xxx....xxx....xxx.x",
+    "x....................x",
+    "x..xxx....xxx....xxx.x",
+    "x..x.x....x4x....x.x.x",
+    "x..xxx....xxx....xxx.x",
+    "x....................x",
+    "x..xxx....xxx....xxx.x",
+    "x..x.x....x.x....x.x.x",
+    "x..xxx....xxx....xxx.x",
+    "x...i................x",
+    "xxxxxxxxxxxxxxxxxxxxxx",
+    "       @@@@@@@@       "
+  ],
+  "legend": {
+    " ": {
+      "type": "void",
+      "block": "minecraft:air",
+      "description": "Air (outside vault boundaries)"
+    },
+    "3": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 3"
+    },
+    ".": {
+      "type": "floor",
+      "block": "minecraft:gray_concrete",
+      "description": "Gray concrete floor (wasteland ground)"
+    },
+    "4": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 4"
+    },
+    "2": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 2"
+    },
+    "@": {
+      "type": "entry",
+      "block": "minecraft:gray_concrete",
+      "description": "Entry point (floor)"
+    },
+    "x": {
+      "type": "wall",
+      "block": "minecraft:stone_bricks",
+      "description": "Stone brick walls (wasteland ruins)"
+    },
+    "1": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 1"
+    },
+    "i": {
+      "type": "floor",
+      "block": "minecraft:gray_concrete",
+      "description": "Unknown tile: i"
+    }
+  },
+  "features": [
+    {
+      "type": "monster_spawn",
+      "x": 4,
+      "y": 1,
+      "z": 3,
+      "block": "minecraft:red_wool",
+      "monster_tier": "1"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 11,
+      "y": 1,
+      "z": 3,
+      "block": "minecraft:red_wool",
+      "monster_tier": "2"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 18,
+      "y": 1,
+      "z": 3,
+      "block": "minecraft:red_wool",
+      "monster_tier": "3"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 11,
+      "y": 1,
+      "z": 7,
+      "block": "minecraft:red_wool",
+      "monster_tier": "4"
+    }
+  ],
+  "spawn_point": {
+    "x": 1,
+    "y": 1,
+    "z": 1
+  }
+}

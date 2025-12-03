@@ -1,0 +1,227 @@
+{
+  "name": "ruins_hospital",
+  "version": "1.0",
+  "description": "DCSS wasteland vault: ruins_hospital",
+  "width": 17,
+  "depth": 15,
+  "height": 3,
+  "map": [
+    "xxxxxxxxxxxxxxxxx",
+    "x.1.x.2.x.3.x.2.x",
+    "x...x...x...x...x",
+    "x...+...+...+...x",
+    "xxxxxxxxx+xxxxxxx",
+    "x...............x",
+    "x.xxx+xxx+xxx.x.x",
+    "x.xp.x.s.xp.x.x.x",
+    "x.x..x...x..x.x.x",
+    "x.x.4x.5.x4.x.x.x",
+    "x.xxxxxxxxxxx.x.x",
+    "x.............x.x",
+    "x.............x.x",
+    "xxxxx+++++xxxxxxx",
+    "    @@@@@@@@@    "
+  ],
+  "legend": {
+    "p": {
+      "type": "floor",
+      "block": "minecraft:gray_concrete",
+      "description": "Unknown tile: p"
+    },
+    "s": {
+      "type": "floor",
+      "block": "minecraft:gray_concrete",
+      "description": "Unknown tile: s"
+    },
+    " ": {
+      "type": "void",
+      "block": "minecraft:air",
+      "description": "Air (outside vault boundaries)"
+    },
+    "3": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 3"
+    },
+    ".": {
+      "type": "floor",
+      "block": "minecraft:gray_concrete",
+      "description": "Gray concrete floor (wasteland ground)"
+    },
+    "4": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 4"
+    },
+    "5": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 5"
+    },
+    "2": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 2"
+    },
+    "@": {
+      "type": "entry",
+      "block": "minecraft:gray_concrete",
+      "description": "Entry point (floor)"
+    },
+    "x": {
+      "type": "wall",
+      "block": "minecraft:stone_bricks",
+      "description": "Stone brick walls (wasteland ruins)"
+    },
+    "1": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 1"
+    },
+    "+": {
+      "type": "door",
+      "block": "minecraft:oak_door",
+      "description": "Wooden door (ruined entrance)"
+    }
+  },
+  "features": [
+    {
+      "type": "monster_spawn",
+      "x": 2,
+      "y": 1,
+      "z": 1,
+      "block": "minecraft:red_wool",
+      "monster_tier": "1"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 6,
+      "y": 1,
+      "z": 1,
+      "block": "minecraft:red_wool",
+      "monster_tier": "2"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 10,
+      "y": 1,
+      "z": 1,
+      "block": "minecraft:red_wool",
+      "monster_tier": "3"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 14,
+      "y": 1,
+      "z": 1,
+      "block": "minecraft:red_wool",
+      "monster_tier": "2"
+    },
+    {
+      "type": "door",
+      "x": 4,
+      "y": 0,
+      "z": 3,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 8,
+      "y": 0,
+      "z": 3,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 12,
+      "y": 0,
+      "z": 3,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 9,
+      "y": 0,
+      "z": 4,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 5,
+      "y": 0,
+      "z": 6,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 9,
+      "y": 0,
+      "z": 6,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 4,
+      "y": 1,
+      "z": 9,
+      "block": "minecraft:red_wool",
+      "monster_tier": "4"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 7,
+      "y": 1,
+      "z": 9,
+      "block": "minecraft:red_wool",
+      "monster_tier": "5"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 10,
+      "y": 1,
+      "z": 9,
+      "block": "minecraft:red_wool",
+      "monster_tier": "4"
+    },
+    {
+      "type": "door",
+      "x": 5,
+      "y": 0,
+      "z": 13,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 6,
+      "y": 0,
+      "z": 13,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 7,
+      "y": 0,
+      "z": 13,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 8,
+      "y": 0,
+      "z": 13,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 9,
+      "y": 0,
+      "z": 13,
+      "block": "minecraft:oak_door"
+    }
+  ],
+  "spawn_point": {
+    "x": 8,
+    "y": 1,
+    "z": 7
+  }
+}

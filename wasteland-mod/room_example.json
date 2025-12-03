@@ -1,0 +1,52 @@
+{
+  "room": {
+    "name": "basic_room",
+    "width": 13,
+    "depth": 13,
+    "height": 3,
+    "description": "13x13 DCSS-style dungeon room with stone walls",
+    "tiles": [
+      {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "type": "wall",
+        "block": "minecraft:stone_bricks"
+      },
+      {
+        "x": 1,
+        "y": 0,
+        "z": 1,
+        "type": "floor",
+        "block": "minecraft:gray_concrete"
+      },
+      {
+        "x": 6,
+        "y": 1,
+        "z": 6,
+        "type": "spawn",
+        "block": "minecraft:air"
+      },
+      {
+        "x": 2,
+        "y": 1,
+        "z": 1,
+        "type": "torch",
+        "block": "minecraft:torch"
+      }
+    ],
+    "tile_types": {
+      "wall": "minecraft:stone_bricks",
+      "floor": "minecraft:gray_concrete",
+      "air": "minecraft:air",
+      "torch": "minecraft:torch",
+      "door": "minecraft:oak_door",
+      "chest": "minecraft:chest"
+    },
+    "spawn_point": {
+      "x": 6,
+      "y": 1,
+      "z": 6
+    }
+  }
+}

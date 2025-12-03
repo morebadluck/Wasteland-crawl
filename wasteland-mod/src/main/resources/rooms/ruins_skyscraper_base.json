@@ -1,0 +1,169 @@
+{
+  "name": "ruins_skyscraper_base",
+  "version": "1.0",
+  "description": "DCSS wasteland vault: ruins_skyscraper_base",
+  "width": 22,
+  "depth": 27,
+  "height": 3,
+  "map": [
+    "xxxxxxxxxxxxxxxxxxxxx ",
+    "x...................x ",
+    "x.x.x.x.x.x.x.x.x.x.x ",
+    "x...................x ",
+    "x.x.x.x.x.x.x.x.x.x.x ",
+    "x...................x ",
+    "x.x.x.x.x.x.x.x.x.x.x ",
+    "x...................x ",
+    "xxxxxxxxx+++xxxxxxxxx ",
+    "x...................x ",
+    "x.xxxxxxxxxxxxxxxxx.x ",
+    "x.x1.............2x.x ",
+    "x.x...............x.x ",
+    "x.x...xxxxx+xxxxx.x.x ",
+    "x.x...x.........x.x.x ",
+    "x.x...x.xxxxxxx.x.x.x ",
+    "x.x3..x.x.....x.x.4x.x",
+    "x.x...x.x.*5*.x.x..x.x",
+    "x.x...x.x.....x.x..x.x",
+    "x.x...x.xxxxxxx.x..x.x",
+    "x.x...x.........x..x.x",
+    "x.x...xxxxxxxxxxx..x.x",
+    "x.x................x.x",
+    "x.xxxxxxxxxxxxxxxxx.x ",
+    "x...................x ",
+    "xxxxxxxxxxxxxxxxxxxxx ",
+    "       @@@@@@@        "
+  ],
+  "legend": {
+    "2": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 2"
+    },
+    "1": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 1"
+    },
+    ".": {
+      "type": "floor",
+      "block": "minecraft:gray_concrete",
+      "description": "Gray concrete floor (wasteland ground)"
+    },
+    "*": {
+      "type": "floor",
+      "block": "minecraft:gray_concrete",
+      "description": "Unknown tile: *"
+    },
+    "+": {
+      "type": "door",
+      "block": "minecraft:oak_door",
+      "description": "Wooden door (ruined entrance)"
+    },
+    "4": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 4"
+    },
+    "3": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 3"
+    },
+    "5": {
+      "type": "spawn",
+      "block": "minecraft:gray_concrete",
+      "description": "Monster spawn 5"
+    },
+    "@": {
+      "type": "entry",
+      "block": "minecraft:gray_concrete",
+      "description": "Entry point (floor)"
+    },
+    " ": {
+      "type": "void",
+      "block": "minecraft:air",
+      "description": "Air (outside vault boundaries)"
+    },
+    "x": {
+      "type": "wall",
+      "block": "minecraft:stone_bricks",
+      "description": "Stone brick walls (wasteland ruins)"
+    }
+  },
+  "features": [
+    {
+      "type": "door",
+      "x": 9,
+      "y": 0,
+      "z": 8,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 10,
+      "y": 0,
+      "z": 8,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "door",
+      "x": 11,
+      "y": 0,
+      "z": 8,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 3,
+      "y": 1,
+      "z": 11,
+      "block": "minecraft:red_wool",
+      "monster_tier": "1"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 17,
+      "y": 1,
+      "z": 11,
+      "block": "minecraft:red_wool",
+      "monster_tier": "2"
+    },
+    {
+      "type": "door",
+      "x": 11,
+      "y": 0,
+      "z": 13,
+      "block": "minecraft:oak_door"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 3,
+      "y": 1,
+      "z": 16,
+      "block": "minecraft:red_wool",
+      "monster_tier": "3"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 18,
+      "y": 1,
+      "z": 16,
+      "block": "minecraft:red_wool",
+      "monster_tier": "4"
+    },
+    {
+      "type": "monster_spawn",
+      "x": 11,
+      "y": 1,
+      "z": 17,
+      "block": "minecraft:red_wool",
+      "monster_tier": "5"
+    }
+  ],
+  "spawn_point": {
+    "x": 1,
+    "y": 1,
+    "z": 1
+  }
+}
