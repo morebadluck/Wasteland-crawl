@@ -3,6 +3,7 @@ package com.wasteland;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -38,22 +39,41 @@ public class WastelandMod {
         @SubscribeEvent
         public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
             if (event.getEntity().level() instanceof ServerLevel level) {
-                // Select a random DCSS wasteland vault!
-                String vaultPath = VaultSelector.getRandomVault();
+                // Initialize player progression (starts at depth 0 = surface)
+                DungeonProgression.setDepth(event.getEntity().getUUID(), 0);
 
                 LOGGER.info("═══════════════════════════════════════════════════════");
-                LOGGER.info("  Wasteland Crawl - Random Vault Selection");
-                LOGGER.info("  Vault: {}", vaultPath);
+                LOGGER.info("  Wasteland Crawl - Player Spawned in Overworld");
+                LOGGER.info("  Find a dungeon entrance to begin your adventure!");
                 LOGGER.info("═══════════════════════════════════════════════════════");
 
-                // Render the vault
-                BlockPos playerPos = event.getEntity().blockPosition();
-                BlockPos safePos = DungeonRenderer.renderRoomFromJson(level, playerPos, vaultPath);
+                // Place a dungeon entrance structure near spawn
+                BlockPos spawnPos = event.getEntity().blockPosition();
+                BlockPos entrancePos = spawnPos.offset(20, 0, 20);
 
-                // Teleport player to center of room
-                event.getEntity().teleportTo(safePos.getX() + 0.5, safePos.getY(), safePos.getZ() + 0.5);
+                // Find ground level
+                BlockPos groundPos = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, entrancePos);
 
-                LOGGER.info("Player teleported to DCSS vault: {}", safePos);
+                LOGGER.info("Placing initial dungeon entrance at: {}", groundPos);
+                DungeonEntrance.placeRandomEntrance(level, groundPos);
+            }
+        }
+
+        @SubscribeEvent
+        public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+            // Only run on server, once per tick (END phase)
+            if (event.phase != TickEvent.Phase.END) return;
+            if (!(event.player.level() instanceof ServerLevel level)) return;
+
+            // Check if player is standing on a portal block (wool markers)
+            BlockPos playerPos = event.player.blockPosition();
+            BlockPos belowPos = playerPos.below();
+
+            // Check if there's a portal registered at this position
+            PortalManager.PortalDestination portal = PortalManager.getPortal(belowPos);
+            if (portal != null) {
+                // Player is standing on a portal! Try to use it
+                PortalManager.usePortal(level, belowPos, event.player);
             }
         }
     }
