@@ -1,5 +1,7 @@
 package com.wasteland;
 
+import com.wasteland.worldgen.DungeonType;
+import com.wasteland.worldgen.USARegion;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -15,8 +17,9 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- * Handles world generation for wasteland features
- * - Spawns dungeon entrance structures naturally
+ * Handles world generation for wasteland features in a USA-styled map
+ * - Spawns dungeon entrance structures in biome-appropriate locations
+ * - Places 7-11 stores as safe zones
  * - Adds wasteland decorations (ruins, debris)
  */
 @Mod.EventBusSubscriber(modid = WastelandMod.MOD_ID)
@@ -27,17 +30,19 @@ public class WastelandWorldGen {
     // Track which chunks have been processed (prevent duplicates)
     private static final Set<String> PROCESSED_CHUNKS = new HashSet<>();
 
-    // Entrance spawning configuration
-    private static final int ENTRANCE_SPACING = 16; // Chunks between entrances (16 chunks = 256 blocks)
-    private static final double ENTRANCE_CHANCE = 0.15; // 15% chance per valid chunk
+    // Structure spawning configuration
+    private static final int DUNGEON_SPACING = 32; // Chunks between dungeon entrances (512 blocks)
+    private static final double DUNGEON_CHANCE = 0.20; // 20% chance per valid chunk
+
+    private static final int SEVEN_ELEVEN_SPACING = 24; // Chunks between 7-11 stores (384 blocks)
+    private static final double SEVEN_ELEVEN_CHANCE = 0.15; // 15% chance per valid chunk
 
     /**
      * Generate wasteland features when chunks load
-     * TEMPORARILY DISABLED - causing hang during world generation
-     * TODO: Re-enable with proper async handling
+     * Uses USA region system to place biome-appropriate structures
      */
-    // @SubscribeEvent
-    public static void onChunkLoad_DISABLED(ChunkEvent.Load event) {
+    @SubscribeEvent
+    public static void onChunkLoad(ChunkEvent.Load event) {
         // Only run on server side, only for overworld
         if (!(event.getLevel() instanceof ServerLevel level)) return;
         if (level.dimension() != Level.OVERWORLD) return;
@@ -53,25 +58,37 @@ public class WastelandWorldGen {
         if (PROCESSED_CHUNKS.contains(chunkKey)) return;
         PROCESSED_CHUNKS.add(chunkKey);
 
-        // Check if this chunk should have an entrance
-        // Only consider chunks on a grid (for spacing)
-        if (chunkX % ENTRANCE_SPACING == 0 && chunkZ % ENTRANCE_SPACING == 0) {
-            // Random chance to spawn entrance
-            if (RANDOM.nextDouble() < ENTRANCE_CHANCE) {
-                generateDungeonEntrance(level, chunkX, chunkZ);
+        // Convert chunk coords to block coords (center of chunk)
+        int blockX = (chunkX << 4) + 8;
+        int blockZ = (chunkZ << 4) + 8;
+
+        // Get the USA region for this location
+        USARegion region = USARegion.getRegion(blockX, blockZ);
+
+        // Check for dungeon entrance spawning (grid-based)
+        if (chunkX % DUNGEON_SPACING == 0 && chunkZ % DUNGEON_SPACING == 0) {
+            if (RANDOM.nextDouble() < DUNGEON_CHANCE) {
+                generateDungeonEntrance(level, chunkX, chunkZ, region);
+            }
+        }
+
+        // Check for 7-11 store spawning (different grid)
+        if ((chunkX + 12) % SEVEN_ELEVEN_SPACING == 0 && (chunkZ + 12) % SEVEN_ELEVEN_SPACING == 0) {
+            if (RANDOM.nextDouble() < SEVEN_ELEVEN_CHANCE) {
+                generateSevenEleven(level, chunkX, chunkZ);
             }
         }
 
         // Small chance for wasteland decorations in any chunk
-        if (RANDOM.nextDouble() < 0.05) { // 5% chance
+        if (RANDOM.nextDouble() < 0.03) { // 3% chance
             generateWastelandDecoration(level, chunkX, chunkZ);
         }
     }
 
     /**
-     * Generate a dungeon entrance structure in the chunk
+     * Generate a biome-appropriate dungeon entrance structure
      */
-    private static void generateDungeonEntrance(ServerLevel level, int chunkX, int chunkZ) {
+    private static void generateDungeonEntrance(ServerLevel level, int chunkX, int chunkZ, USARegion region) {
         // Convert chunk coordinates to world coordinates
         int worldX = (chunkX << 4) + RANDOM.nextInt(16);
         int worldZ = (chunkZ << 4) + RANDOM.nextInt(16);
@@ -84,7 +101,7 @@ public class WastelandWorldGen {
         );
 
         // Don't place in water or very high/low locations
-        if (groundPos.getY() < 60 || groundPos.getY() > 100) {
+        if (groundPos.getY() < 60 || groundPos.getY() > 120) {
             return;
         }
 
@@ -93,11 +110,110 @@ public class WastelandWorldGen {
             return;
         }
 
-        LOGGER.info("Generating dungeon entrance at chunk ({}, {}) - world pos {}",
-                    chunkX, chunkZ, groundPos);
+        // Select appropriate dungeon type for this region
+        DungeonType dungeonType = DungeonType.getRandomForRegion(region, RANDOM);
+
+        LOGGER.info("Generating {} entrance at chunk ({}, {}) in {} region - world pos {}",
+                    dungeonType.getDisplayName(), chunkX, chunkZ, region.getName(), groundPos);
 
         // Place entrance structure
+        // TODO: Pass dungeon type to entrance generator
         DungeonEntrance.placeRandomEntrance(level, groundPos);
+    }
+
+    /**
+     * Generate a 7-11 convenience store (safe zone)
+     */
+    private static void generateSevenEleven(ServerLevel level, int chunkX, int chunkZ) {
+        // Convert chunk coordinates to world coordinates
+        int worldX = (chunkX << 4) + RANDOM.nextInt(16);
+        int worldZ = (chunkZ << 4) + RANDOM.nextInt(16);
+
+        // Find ground level
+        BlockPos searchPos = new BlockPos(worldX, 64, worldZ);
+        BlockPos groundPos = level.getHeightmapPos(
+            net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE,
+            searchPos
+        );
+
+        // Don't place in water or extreme elevations
+        if (groundPos.getY() < 62 || groundPos.getY() > 100) {
+            return;
+        }
+
+        // Check if there's solid ground
+        if (!level.getBlockState(groundPos.below()).isSolidRender(level, groundPos.below())) {
+            return;
+        }
+
+        LOGGER.info("Generating 7-11 store at chunk ({}, {}) - world pos {}", chunkX, chunkZ, groundPos);
+
+        // Place 7-11 structure
+        placeSevenElevenStructure(level, groundPos);
+    }
+
+    /**
+     * Place a simple 7-11 store structure
+     * TODO: Replace with proper structure file
+     */
+    private static void placeSevenElevenStructure(ServerLevel level, BlockPos pos) {
+        // Simple 7x7 structure for now
+        // Floor
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                level.setBlock(pos.offset(x, -1, z),
+                    net.minecraft.world.level.block.Blocks.STONE_BRICKS.defaultBlockState(), 3);
+            }
+        }
+
+        // Walls
+        for (int x = -3; x <= 3; x++) {
+            for (int y = 0; y < 3; y++) {
+                // North and south walls
+                level.setBlock(pos.offset(x, y, -3),
+                    net.minecraft.world.level.block.Blocks.BRICKS.defaultBlockState(), 3);
+                level.setBlock(pos.offset(x, y, 3),
+                    net.minecraft.world.level.block.Blocks.BRICKS.defaultBlockState(), 3);
+            }
+        }
+
+        for (int z = -3; z <= 3; z++) {
+            for (int y = 0; y < 3; y++) {
+                // East and west walls
+                level.setBlock(pos.offset(-3, y, z),
+                    net.minecraft.world.level.block.Blocks.BRICKS.defaultBlockState(), 3);
+                level.setBlock(pos.offset(3, y, z),
+                    net.minecraft.world.level.block.Blocks.BRICKS.defaultBlockState(), 3);
+            }
+        }
+
+        // Doorway (south side)
+        level.setBlock(pos.offset(0, 0, 3), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
+        level.setBlock(pos.offset(0, 1, 3), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
+
+        // Roof
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                level.setBlock(pos.offset(x, 3, z),
+                    net.minecraft.world.level.block.Blocks.QUARTZ_BLOCK.defaultBlockState(), 3);
+            }
+        }
+
+        // Interior - some barrels and chests for loot
+        level.setBlock(pos.offset(-2, 0, -2),
+            net.minecraft.world.level.block.Blocks.BARREL.defaultBlockState(), 3);
+        level.setBlock(pos.offset(2, 0, -2),
+            net.minecraft.world.level.block.Blocks.BARREL.defaultBlockState(), 3);
+        level.setBlock(pos.offset(0, 0, -2),
+            net.minecraft.world.level.block.Blocks.CHEST.defaultBlockState(), 3);
+
+        // Glowstone for lighting
+        level.setBlock(pos.offset(0, 2, 0),
+            net.minecraft.world.level.block.Blocks.GLOWSTONE.defaultBlockState(), 3);
+
+        // Sign outside
+        level.setBlock(pos.offset(1, 0, 4),
+            net.minecraft.world.level.block.Blocks.OAK_SIGN.defaultBlockState(), 3);
     }
 
     /**
