@@ -30,6 +30,8 @@ public class RoomData {
         public int y;
         public int z;
         public String block;
+        public String monster_tier;  // DCSS monster tier (1-9) for monster_spawn features
+        public String portal_type;   // Portal type for portal features
     }
 
     public static class SpawnPoint {

@@ -47,6 +47,11 @@ TILE_MAPPING = {
     'd': {'type': 'item', 'block': 'minecraft:gray_concrete', 'description': 'Item spawn'},
     'e': {'type': 'item', 'block': 'minecraft:gray_concrete', 'description': 'Item spawn'},
     'f': {'type': 'item', 'block': 'minecraft:gray_concrete', 'description': 'Item spawn'},
+    # Stairs/Portals
+    '<': {'type': 'stairs_up', 'block': 'minecraft:gray_concrete', 'description': 'Stairs up (portal)'},
+    '>': {'type': 'stairs_down', 'block': 'minecraft:gray_concrete', 'description': 'Stairs down (portal)'},
+    '{': {'type': 'dungeon_entrance', 'block': 'minecraft:gray_concrete', 'description': 'Dungeon entrance (portal)'},
+    '}': {'type': 'dungeon_exit', 'block': 'minecraft:gray_concrete', 'description': 'Dungeon exit (portal)'},
 }
 
 def parse_des_file(file_path):
@@ -149,6 +154,46 @@ def find_features(map_lines):
                     'y': 1,
                     'z': z,
                     'block': 'minecraft:chest'
+                })
+            elif tile == '<':
+                # Stairs up - purple nether portal frame
+                features.append({
+                    'type': 'portal_up',
+                    'x': x,
+                    'y': 1,
+                    'z': z,
+                    'block': 'minecraft:purple_wool',  # Marker for now
+                    'portal_type': 'stairs_up'
+                })
+            elif tile == '>':
+                # Stairs down - orange end portal frame
+                features.append({
+                    'type': 'portal_down',
+                    'x': x,
+                    'y': 1,
+                    'z': z,
+                    'block': 'minecraft:orange_wool',  # Marker for now
+                    'portal_type': 'stairs_down'
+                })
+            elif tile == '{':
+                # Dungeon entrance - blue portal
+                features.append({
+                    'type': 'portal_entrance',
+                    'x': x,
+                    'y': 1,
+                    'z': z,
+                    'block': 'minecraft:blue_wool',  # Marker for now
+                    'portal_type': 'dungeon_entrance'
+                })
+            elif tile == '}':
+                # Dungeon exit - green portal
+                features.append({
+                    'type': 'portal_exit',
+                    'x': x,
+                    'y': 1,
+                    'z': z,
+                    'block': 'minecraft:green_wool',  # Marker for now
+                    'portal_type': 'dungeon_exit'
                 })
 
     return features

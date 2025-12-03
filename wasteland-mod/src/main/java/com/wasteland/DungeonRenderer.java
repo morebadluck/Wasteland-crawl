@@ -151,6 +151,14 @@ public class DungeonRenderer {
             LOGGER.info("  Description: {}", roomData.description);
             LOGGER.info("  Size: {}x{} (height: {})", roomData.width, roomData.depth, roomData.height);
 
+            // Enforce minimum height of 5 (floor + 3 air blocks + ceiling)
+            int minHeight = 5;
+            if (roomData.height < minHeight) {
+                LOGGER.info("  Adjusting height from {} to {} (minimum 3 blocks of walkable space)",
+                           roomData.height, minHeight);
+                roomData.height = minHeight;
+            }
+
             // Calculate room origin (build below player)
             int halfWidth = roomData.width / 2;
             int halfDepth = roomData.depth / 2;
@@ -165,8 +173,8 @@ public class DungeonRenderer {
                         if (y == 0) {
                             // Floor level - will be set by map
                         } else if (y == roomData.height - 1) {
-                            // Ceiling - air by default
-                            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+                            // Ceiling - solid stone bricks for underground dungeons
+                            level.setBlock(pos, Blocks.STONE_BRICKS.defaultBlockState(), 3);
                         } else {
                             // Middle layers - air by default
                             level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
@@ -197,18 +205,45 @@ public class DungeonRenderer {
                                 level.setBlock(wallPos, block.defaultBlockState(), 3);
                             }
                         }
+                        // If it's a door, place floor and leave opening for door
+                        else if (tileType.type.equals("door")) {
+                            // Place floor at y=0, air at y=1 and y=2 for door opening
+                            level.setBlock(origin.offset(x, 1, z), Blocks.AIR.defaultBlockState(), 3);
+                            level.setBlock(origin.offset(x, 2, z), Blocks.AIR.defaultBlockState(), 3);
+                        }
                     }
                 }
             }
 
-            // Render features (torches, chests, etc.)
+            // Render features (torches, chests, portals, monsters, etc.)
             if (roomData.features != null) {
                 for (RoomData.Feature feature : roomData.features) {
                     BlockPos featurePos = origin.offset(feature.x, feature.y, feature.z);
+
+                    // Handle monster spawns (spawn mob, don't place marker block)
+                    if (feature.type.equals("monster_spawn")) {
+                        // Spawn monster at this position
+                        if (feature.monster_tier != null) {
+                            MonsterSpawner.spawnMonster(level, featurePos, feature.monster_tier);
+                            LOGGER.debug("Spawned tier {} monster at {}", feature.monster_tier, featurePos);
+                        }
+                        // Don't place the red wool marker block in-game
+                        continue;
+                    }
+
+                    // Place block for all other features
                     Block block = getBlockFromString(feature.block);
                     level.setBlock(featurePos, block.defaultBlockState(), 3);
+
+                    // Register portals
+                    if (feature.type.startsWith("portal_")) {
+                        registerPortalFeature(featurePos, feature);
+                    }
                 }
             }
+
+            // Add automatic lighting throughout the dungeon
+            addDungeonLighting(level, origin, roomData.width, roomData.depth, roomData.height);
 
             LOGGER.info("  Room rendered successfully from JSON!");
             LOGGER.info("  Total tiles in map: {}", roomData.map.size() * roomData.width);
@@ -246,5 +281,85 @@ public class DungeonRenderer {
             LOGGER.warn("Failed to parse block: {}, using stone as fallback", blockString);
             return Blocks.STONE;
         }
+    }
+
+    /**
+     * Add automatic lighting throughout the dungeon
+     * Places torches on floors at regular intervals to ensure good visibility
+     */
+    private static void addDungeonLighting(ServerLevel level, BlockPos origin, int width, int depth, int height) {
+        int lightsPlaced = 0;
+        int spacing = 5; // Place lights every 5 blocks
+
+        LOGGER.debug("Adding automatic dungeon lighting (spacing: {} blocks)", spacing);
+
+        // Place torches on the floor in a grid pattern
+        for (int x = 2; x < width - 2; x += spacing) {
+            for (int z = 2; z < depth - 2; z += spacing) {
+                BlockPos floorPos = origin.offset(x, 0, z);
+                BlockPos torchPos = origin.offset(x, 1, z);
+
+                // Check if floor is solid and torch position is air
+                if (level.getBlockState(floorPos).isSolidRender(level, floorPos) &&
+                    level.getBlockState(torchPos).isAir()) {
+
+                    // Place torch on the floor
+                    level.setBlock(torchPos, Blocks.TORCH.defaultBlockState(), 3);
+                    lightsPlaced++;
+                }
+            }
+        }
+
+        // Add corner lighting for better coverage
+        placeCornerLight(level, origin, 2, 2, lightsPlaced);
+        placeCornerLight(level, origin, width - 3, 2, lightsPlaced);
+        placeCornerLight(level, origin, 2, depth - 3, lightsPlaced);
+        placeCornerLight(level, origin, width - 3, depth - 3, lightsPlaced);
+        lightsPlaced += 4;
+
+        LOGGER.debug("Placed {} automatic light sources in dungeon", lightsPlaced);
+    }
+
+    /**
+     * Place a light in a corner if possible
+     */
+    private static void placeCornerLight(ServerLevel level, BlockPos origin, int x, int z, int lightsPlaced) {
+        BlockPos floorPos = origin.offset(x, 0, z);
+        BlockPos torchPos = origin.offset(x, 1, z);
+
+        if (level.getBlockState(floorPos).isSolidRender(level, floorPos) &&
+            level.getBlockState(torchPos).isAir()) {
+            level.setBlock(torchPos, Blocks.TORCH.defaultBlockState(), 3);
+        }
+    }
+
+    /**
+     * Register a portal feature with the PortalManager
+     * Note: Destination vault is determined dynamically when portal is used
+     */
+    private static void registerPortalFeature(BlockPos pos, RoomData.Feature feature) {
+        PortalManager.PortalType portalType;
+
+        switch (feature.type) {
+            case "portal_up":
+                portalType = PortalManager.PortalType.STAIRS_UP;
+                break;
+            case "portal_down":
+                portalType = PortalManager.PortalType.STAIRS_DOWN;
+                break;
+            case "portal_entrance":
+                portalType = PortalManager.PortalType.DUNGEON_ENTRANCE;
+                break;
+            case "portal_exit":
+                portalType = PortalManager.PortalType.DUNGEON_EXIT;
+                break;
+            default:
+                LOGGER.warn("Unknown portal type: {}", feature.type);
+                return;
+        }
+
+        // Register portal (destination determined dynamically based on player depth)
+        PortalManager.registerPortal(pos, portalType, null);
+        LOGGER.debug("Registered {} portal at {}", portalType, pos);
     }
 }
