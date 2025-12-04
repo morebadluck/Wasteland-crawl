@@ -29,7 +29,17 @@ public class PlayerCharacter {
     private int experienceLevel; // Character level (1-27)
     private int totalXP;
 
-    // Stats (affected by race)
+    // Primary stats (DCSS-style)
+    private int baseStrength;      // Base STR (affected by level-ups)
+    private int baseDexterity;     // Base DEX
+    private int baseIntelligence;  // Base INT
+
+    // Equipment bonuses (will be populated by equipment system)
+    private int equipmentStrength = 0;
+    private int equipmentDexterity = 0;
+    private int equipmentIntelligence = 0;
+
+    // Secondary stats (affected by race and primary stats)
     private int maxHP;
     private int currentHP;
     private int maxMP;
@@ -54,16 +64,24 @@ public class PlayerCharacter {
             skillProgress.put(skill, 0.0);
         }
 
-        // Starting stats
+        // Starting stats (base values before race modifiers)
         this.experienceLevel = 1;
         this.totalXP = 0;
+
+        // Base primary stats (all races start at 8)
+        this.baseStrength = 8;
+        this.baseDexterity = 8;
+        this.baseIntelligence = 8;
+
+        // Calculate derived stats
         this.maxHP = 15 + race.getHpModifier() * 2;
         this.currentHP = maxHP;
         this.maxMP = 5 + race.getMpModifier() * 2;
         this.currentMP = maxMP;
 
-        LOGGER.info("Created new character: {} ({}) for player {}",
-                   characterName, race.getDisplayName(), playerId);
+        LOGGER.info("Created new character: {} ({}) for player {} | STR: {}, DEX: {}, INT: {}",
+                   characterName, race.getDisplayName(), playerId,
+                   getStrength(), getDexterity(), getIntelligence());
     }
 
     // ===== Getters =====
@@ -118,6 +136,79 @@ public class PlayerCharacter {
 
     public List<Spell> getMemorizedSpells() {
         return new ArrayList<>(memorizedSpells);
+    }
+
+    /**
+     * Get total strength (base + race + equipment)
+     */
+    public int getStrength() {
+        return baseStrength + race.getStrengthModifier() + equipmentStrength;
+    }
+
+    /**
+     * Get total dexterity (base + race + equipment)
+     */
+    public int getDexterity() {
+        return baseDexterity + race.getDexterityModifier() + equipmentDexterity;
+    }
+
+    /**
+     * Get total intelligence (base + race + equipment)
+     */
+    public int getIntelligence() {
+        return baseIntelligence + race.getIntelligenceModifier() + equipmentIntelligence;
+    }
+
+    /**
+     * Get base strength (before modifiers)
+     */
+    public int getBaseStrength() {
+        return baseStrength;
+    }
+
+    /**
+     * Get base dexterity (before modifiers)
+     */
+    public int getBaseDexterity() {
+        return baseDexterity;
+    }
+
+    /**
+     * Get base intelligence (before modifiers)
+     */
+    public int getBaseIntelligence() {
+        return baseIntelligence;
+    }
+
+    /**
+     * Increase a base stat (from level-up choices or potions)
+     */
+    public void increaseStrength(int amount) {
+        baseStrength += amount;
+        updateDerivedStats();
+        LOGGER.info("Strength increased by {}! Now: {}", amount, getStrength());
+    }
+
+    public void increaseDexterity(int amount) {
+        baseDexterity += amount;
+        updateDerivedStats();
+        LOGGER.info("Dexterity increased by {}! Now: {}", amount, getDexterity());
+    }
+
+    public void increaseIntelligence(int amount) {
+        baseIntelligence += amount;
+        updateDerivedStats();
+        LOGGER.info("Intelligence increased by {}! Now: {}", amount, getIntelligence());
+    }
+
+    /**
+     * Update equipment stat bonuses (called by equipment system)
+     */
+    public void updateEquipmentBonuses(int str, int dex, int intel) {
+        this.equipmentStrength = str;
+        this.equipmentDexterity = dex;
+        this.equipmentIntelligence = intel;
+        updateDerivedStats();
     }
 
     // ===== Skill Training =====

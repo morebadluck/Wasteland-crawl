@@ -416,13 +416,27 @@ public class CombatManager {
             return false;
         }
 
-        // Calculate damage (basic formula for now)
-        // TODO: Get from equipped weapon and skill level
-        int baseDamage = 5; // Base unarmed/basic weapon damage
+        // Get character stats
+        com.wasteland.character.PlayerCharacter character =
+            com.wasteland.character.CharacterManager.getCharacter(player.getUUID());
 
-        // Add some randomness (80-120% of base damage)
+        // Calculate damage based on strength and skills
+        int baseDamage = 3; // Base unarmed damage
+
+        // Strength bonus: +1 damage per 2 STR above 8
+        int strength = character.getStrength();
+        int strBonus = Math.max(0, (strength - 8) / 2);
+
+        // Fighting skill bonus: +1 damage per 3 levels
+        int fightingSkill = character.getSkillLevel(com.wasteland.character.Skill.FIGHTING);
+        int skillBonus = fightingSkill / 3;
+
+        // TODO: Add weapon damage when weapon system is implemented
+        int totalDamage = baseDamage + strBonus + skillBonus;
+
+        // Add variance (80-120%)
         double variance = 0.8 + (Math.random() * 0.4);
-        int finalDamage = Math.max(1, (int)(baseDamage * variance)); // At least 1 damage
+        int finalDamage = Math.max(1, (int)(totalDamage * variance));
 
         // Apply damage
         LivingEntity targetEntity = target.getEntity();
@@ -430,12 +444,18 @@ public class CombatManager {
         targetEntity.hurt(player.level().damageSources().playerAttack(player), finalDamage);
         float newHP = targetEntity.getHealth();
 
-        System.out.println("You attack " + target.getName() + " for " + finalDamage + " damage!");
+        System.out.println(String.format("You attack %s for %d damage! (STR: %d, Fighting: %d)",
+            target.getName(), finalDamage, strength, fightingSkill));
         System.out.println(target.getName() + ": " + oldHP + " -> " + newHP + " HP");
 
         // Check if target died
         if (!target.isAlive()) {
             System.out.println(target.getName() + " has been defeated!");
+
+            // Grant fighting skill XP for killing an enemy
+            int xpGain = 5 + ((int)targetEntity.getMaxHealth() / 2); // Scale with enemy HP
+            character.trainSkill(com.wasteland.character.Skill.FIGHTING, xpGain);
+
             selectedTarget = null; // Clear dead target
 
             // Check for victory immediately
