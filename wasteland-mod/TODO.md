@@ -2,13 +2,38 @@
 
 ## HIGH PRIORITY
 
-### Loot System Integration
-- [ ] **Update loot system to use new wasteland weapons**
-  - Current: `loot/WeaponType.java` uses old DCSS weapons (daggers, swords)
-  - Needed: Integrate `equipment/WeaponType.java` (40+ wasteland weapons + guns)
-  - Replace or merge the two WeaponType classes
-  - Update `LootGenerator.java` to spawn guns and wasteland weapons
-  - Add gun ammo to loot drops
+### Robot Enemy Types
+- [ ] **Create robot monster system**
+  - Robot base class/interface with shared behavior
+  - Armor/damage resistance mechanics (resistant to bleed/poison, vulnerable to EMP)
+  - Power source mechanics (can be shut down vs destroyed)
+  - Detect living/heat signature AI behavior
+
+- [ ] **Early Game Robots (Tier 1-2)**
+  - **Eyebot**: Floating surveillance drone, weak, calls for help
+  - **Protectron**: Basic security robot, slow, moderate damage
+  - **Mr. Handy**: Utility robot, multiple arms, fire damage
+  - **Damaged Sentry**: Malfunctioning heavy robot, erratic behavior
+
+- [ ] **Mid Game Robots (Tier 3-4)**
+  - **Security Bot**: Advanced protectron, faster, better armor
+  - **Sentry Bot**: Heavy combat robot, minigun/missile attacks
+  - **Assaultron**: Fast melee robot with laser head weapon
+  - **Gutsy (Mr. Gutsy)**: Military Mr. Handy with plasma weapons
+  - **Robobrain**: Brain in robot body, psionic/energy attacks
+
+- [ ] **Late Game Robots (Tier 5+)**
+  - **Annihilator Sentry Bot**: Upgraded sentry with dual miniguns
+  - **Quantum Assaultron**: Elite assaultron with stealth capabilities
+  - **Overlord (Robot Boss)**: Massive security mainframe robot
+  - **Experimental Bot**: Pre-war prototype with unknown weapons
+
+- [ ] **Robot Special Mechanics**
+  - EMP vulnerability (extra damage from electrical attacks)
+  - Self-repair protocols (regeneration over time)
+  - Alarm systems (summons other robots when damaged)
+  - Targeting systems (high accuracy vs low evasion targets)
+  - Overload/self-destruct on death (explosion damage)
 
 ### Artifact Weapons System
 - [ ] **Implement unique artifact guns**
@@ -120,3 +145,8 @@
 - [x] Status effect system for buffs/debuffs
 - [x] Divine ability invocation system
 - [x] Mutation effects integration
+- [x] **Loot system integration with wasteland weapons**
+  - Integrated equipment/WeaponType.java with loot system
+  - Updated LootGenerator with wasteland starting weapons
+  - Updated unique artifacts to use wasteland weapons
+  - All 40+ weapons now spawn in loot tables
