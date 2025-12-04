@@ -150,3 +150,37 @@
   - Updated LootGenerator with wasteland starting weapons
   - Updated unique artifacts to use wasteland weapons
   - All 40+ weapons now spawn in loot tables
+- [x] **Robot Enemy System (Complete - 12 Robot Types)**
+  - Base RobotEntity class with armor/resistance mechanics
+  - LIGHT armor: Eyebot, Mr. Handy (0% deflection, 25% physical resistance)
+  - MEDIUM armor: Protectron, Security Bot, Assaultron, Mr. Gusty, Robobrain (30% deflection, 35% resistance)
+  - HEAVY armor: Sentry Bot, Annihilator, Overlord (60% deflection, 50% resistance)
+  - Bullet deflection system (0-60% based on armor class)
+  - Self-destruct mechanics (Sentry Bots only)
+  - Electrical vulnerability (150-200% damage)
+  - Fire resistance (25% reduction)
+  - Tier 1-3: Eyebot, Protectron, Mr. Handy, Security Bot
+  - Tier 4-6: Assaultron, Mr. Gusty, Robobrain, Sentry Bot, Experimental Bot
+  - Tier 7-9: Annihilator Sentry Bot, Quantum Assaultron, Overlord Bot (Boss)
+- [x] **Robot Loot Tables**
+  - 6-tier loot system (LIGHT, MEDIUM, COMBAT, HEAVY, ELITE, BOSS)
+  - Scrap metal, energy cells, circuits for all robots
+  - Tier-specific drops: armor plating, power cores, quantum cores
+  - Boss loot: Nether stars, beacons, netherite, legendary schematics
+- [x] **Artifact Weapon System**
+  - 15 legendary firearms with unique abilities
+  - Gun-specific properties: Armor-Piercing, Burst Fire, Infinite Ammo, etc.
+  - Energy weapon properties: Overcharge, Beam Spread
+  - 9 regular legendary guns (Last Ranger, Liberty's Roar, Star Killer, etc.)
+  - 6 god-blessed firearms (Shining Gun, Vehumet's Fury, Okawaru's Warmonger, etc.)
+  - Depth-based spawning (tier 3-18)
+  - Curse mechanics for balanced artifacts
+- [x] **God-Weapon Piety System**
+  - Automatic piety tracking based on weapon usage
+  - Trog: +2 melee, -3 ranged/magic
+  - Okawaru: +1 all combat weapons
+  - Vehumet: +3 magic/energy, -1 physical
+  - TSO: +3 vs undead
+  - Kikubaaqudgha: +2 necrotic/poison
+  - Makhleb: +2 all kills
+  - Full integration with all 12 gods
