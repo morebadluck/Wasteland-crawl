@@ -26,11 +26,18 @@ public class PortalManager {
      * Register a portal with its destination
      */
     public static void registerPortal(BlockPos portalPos, PortalType type, String destinationVault) {
+        registerPortal(portalPos, type, destinationVault, null);
+    }
+
+    /**
+     * Register a portal with its destination and optional dungeon ID
+     */
+    public static void registerPortal(BlockPos portalPos, PortalType type, String destinationVault, UUID dungeonId) {
         String key = posToKey(portalPos);
-        PortalDestination dest = new PortalDestination(type, destinationVault);
+        PortalDestination dest = new PortalDestination(type, destinationVault, dungeonId);
         PORTAL_REGISTRY.put(key, dest);
 
-        LOGGER.debug("Registered portal at {} -> {} ({})", portalPos, destinationVault, type);
+        LOGGER.debug("Registered portal at {} -> {} ({}) dungeon={}", portalPos, destinationVault, type, dungeonId);
     }
 
     /**
@@ -80,6 +87,9 @@ public class PortalManager {
 
         switch (dest.type) {
             case STAIRS_DOWN:
+                // Handle dungeon instance tracking and rune drops
+                DungeonProgression.descendDungeonFloor(player);
+
                 newDepth = DungeonProgression.goDeeper(player.getUUID());
                 vaultPath = DungeonProgression.getVaultForDepth(player.getUUID());
                 LOGGER.info("═══════════════════════════════════════════════════════");
@@ -122,17 +132,22 @@ public class PortalManager {
                 break;
 
             case DUNGEON_ENTRANCE:
+                // Track which dungeon instance the player is entering
+                if (dest.dungeonId != null) {
+                    DungeonProgression.enterDungeon(player.getUUID(), dest.dungeonId);
+                }
+
                 DungeonProgression.setDepth(player.getUUID(), 1);
                 vaultPath = DungeonProgression.getVaultForDepth(player.getUUID());
                 LOGGER.info("═══════════════════════════════════════════════════════");
-                LOGGER.info("  Player entering dungeon at depth 1");
+                LOGGER.info("  Player entering dungeon {} at depth 1", dest.dungeonId);
                 LOGGER.info("  Selected vault: {}", vaultPath);
                 LOGGER.info("═══════════════════════════════════════════════════════");
                 break;
 
             case DUNGEON_EXIT:
                 // Return player to overworld spawn
-                DungeonProgression.resetToSurface(player.getUUID());
+                DungeonProgression.exitDungeon(player.getUUID());
                 LOGGER.info("═══════════════════════════════════════════════════════");
                 LOGGER.info("  Player exiting to surface (depth 0)");
                 LOGGER.info("═══════════════════════════════════════════════════════");
@@ -193,10 +208,16 @@ public class PortalManager {
     public static class PortalDestination {
         public final PortalType type;
         public final String vaultName;
+        public final UUID dungeonId; // For DUNGEON_ENTRANCE portals
 
         public PortalDestination(PortalType type, String vaultName) {
+            this(type, vaultName, null);
+        }
+
+        public PortalDestination(PortalType type, String vaultName, UUID dungeonId) {
             this.type = type;
             this.vaultName = vaultName;
+            this.dungeonId = dungeonId;
         }
     }
 
@@ -207,6 +228,7 @@ public class PortalManager {
         STAIRS_UP,          // < - Go to previous level
         STAIRS_DOWN,        // > - Go to next level
         DUNGEON_ENTRANCE,   // { - Enter dungeon from surface
-        DUNGEON_EXIT        // } - Exit dungeon to surface
+        DUNGEON_EXIT,       // } - Exit dungeon to surface
+        ZOT_GATE            // Final level gate (requires 3+ runes)
     }
 }

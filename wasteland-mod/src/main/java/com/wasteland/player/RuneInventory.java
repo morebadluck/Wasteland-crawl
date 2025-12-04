@@ -148,4 +148,47 @@ public class RuneInventory {
         PLAYER_RUNES.clear();
         LOGGER.info("Cleared all rune inventory data");
     }
+
+    /**
+     * Save all players' runes to NBT
+     */
+    public static CompoundTag save(CompoundTag tag) {
+        CompoundTag playersTag = new CompoundTag();
+
+        for (Map.Entry<UUID, Set<RuneType>> entry : PLAYER_RUNES.entrySet()) {
+            if (!entry.getValue().isEmpty()) {
+                CompoundTag playerTag = new CompoundTag();
+                save(entry.getKey(), playerTag);
+                playersTag.put(entry.getKey().toString(), playerTag);
+            }
+        }
+
+        tag.put("Players", playersTag);
+        tag.putInt("PlayerCount", playersTag.size());
+        LOGGER.debug("Saved rune data for {} players", playersTag.size());
+        return tag;
+    }
+
+    /**
+     * Load all players' runes from NBT
+     */
+    public static void load(CompoundTag tag) {
+        clearAll();
+
+        if (tag.contains("Players")) {
+            CompoundTag playersTag = tag.getCompound("Players");
+
+            for (String key : playersTag.getAllKeys()) {
+                try {
+                    UUID playerId = UUID.fromString(key);
+                    CompoundTag playerTag = playersTag.getCompound(key);
+                    load(playerId, playerTag);
+                } catch (IllegalArgumentException e) {
+                    LOGGER.warn("Invalid player UUID in rune save data: {}", key);
+                }
+            }
+
+            LOGGER.info("Loaded rune data for {} players", PLAYER_RUNES.size());
+        }
+    }
 }

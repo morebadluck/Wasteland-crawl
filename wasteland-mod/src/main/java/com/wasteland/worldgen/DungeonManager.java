@@ -1,9 +1,11 @@
 package com.wasteland.worldgen;
 
+import com.wasteland.DungeonEntrance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerLevel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -87,7 +89,7 @@ public class DungeonManager {
     /**
      * Generate dungeons across the overworld based on regions
      */
-    public static void generateDungeons(long worldSeed) {
+    public static void generateDungeons(ServerLevel level, long worldSeed) {
         LOGGER.info("=== Generating dungeons for world seed {} ===", worldSeed);
         Random random = new Random(worldSeed);
 
@@ -100,9 +102,12 @@ public class DungeonManager {
                 int x = region.getCenterX() + (random.nextInt(DUNGEON_SPACING * 2) - DUNGEON_SPACING);
                 int z = region.getCenterZ() + (random.nextInt(DUNGEON_SPACING * 2) - DUNGEON_SPACING);
 
+                // Find ground level for dungeon entrance
+                BlockPos searchPos = new BlockPos(x, 64, z);
+                BlockPos groundPos = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, searchPos);
+
                 // Check spacing from existing dungeons
-                BlockPos pos = new BlockPos(x, 64, z);  // Y will be adjusted by terrain
-                if (!isValidDungeonLocation(pos)) {
+                if (!isValidDungeonLocation(groundPos)) {
                     continue;
                 }
 
@@ -110,7 +115,12 @@ public class DungeonManager {
                 DungeonType type = DungeonType.getRandomForRegion(region, random);
 
                 // Register the dungeon
-                registerDungeon(type, pos);
+                DungeonInstance dungeon = registerDungeon(type, groundPos);
+
+                // Place the physical entrance structure in the world
+                DungeonEntrance.placeRandomEntrance(level, groundPos, dungeon.getId());
+
+                LOGGER.debug("Placed {} entrance at {}", type.getDisplayName(), groundPos);
             }
         }
 

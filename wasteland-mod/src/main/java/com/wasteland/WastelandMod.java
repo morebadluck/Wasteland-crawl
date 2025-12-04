@@ -1,6 +1,7 @@
 package com.wasteland;
 
 import com.wasteland.entity.ModEntities;
+import com.wasteland.item.ModItems;
 import com.wasteland.magic.Spells;
 import com.wasteland.religion.AltarManager;
 import com.wasteland.religion.GodAbilities;
@@ -28,6 +29,9 @@ public class WastelandMod {
         // Register entities
         ModEntities.register(modEventBus);
 
+        // Register items
+        ModItems.register(modEventBus);
+
         modEventBus.addListener(this::setup);
 
         LOGGER.info("═══════════════════════════════════════════════════════");
@@ -54,6 +58,9 @@ public class WastelandMod {
         @SubscribeEvent
         public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
             if (event.getEntity().level() instanceof ServerLevel level) {
+                // Load or initialize world data
+                com.wasteland.worldgen.WastelandSavedData.get(level);
+
                 // Initialize player progression (starts at depth 0 = surface)
                 DungeonProgression.setDepth(event.getEntity().getUUID(), 0);
 
@@ -62,17 +69,18 @@ public class WastelandMod {
                 LOGGER.info("  Find a dungeon entrance to begin your adventure!");
                 LOGGER.info("═══════════════════════════════════════════════════════");
 
-                // Place a dungeon entrance structure near spawn
-                BlockPos spawnPos = event.getEntity().blockPosition();
-                BlockPos entrancePos = spawnPos.offset(20, 0, 20);
+                // Generate all dungeons across the world if they don't exist yet
+                if (com.wasteland.worldgen.DungeonManager.getAllDungeons().isEmpty()) {
+                    long worldSeed = level.getSeed();
+                    LOGGER.info("Generating dungeons across the wasteland...");
+                    com.wasteland.worldgen.DungeonManager.generateDungeons(level, worldSeed);
 
-                // Find ground level
-                BlockPos groundPos = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, entrancePos);
-
-                LOGGER.info("Placing initial dungeon entrance at: {}", groundPos);
-                DungeonEntrance.placeRandomEntrance(level, groundPos);
+                    // Mark data as dirty to save the newly generated dungeons
+                    com.wasteland.worldgen.WastelandSavedData.markDirty(level);
+                }
 
                 // Place test temple with altars for testing
+                BlockPos spawnPos = event.getEntity().blockPosition();
                 BlockPos templePos = spawnPos.offset(-20, 0, 0);
                 BlockPos templeGroundPos = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, templePos);
                 LOGGER.info("Placing test temple at: {}", templeGroundPos);
