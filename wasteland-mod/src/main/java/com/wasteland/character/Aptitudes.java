@@ -260,7 +260,7 @@ public class Aptitudes {
     private static void initKoboldAptitudes() {
         Map<Skill, Integer> apt = new HashMap<>();
         apt.put(Skill.SHORT_BLADES, 2);
-        apt.put(Skill.SLINGS, 2);
+        apt.put(Skill.GUNS, 2);
         apt.put(Skill.DODGING, 2);
         apt.put(Skill.STEALTH, 3);
         apt.put(Skill.SHIELDS, -1);

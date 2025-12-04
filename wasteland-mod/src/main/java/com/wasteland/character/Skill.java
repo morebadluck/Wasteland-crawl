@@ -16,10 +16,10 @@ public enum Skill {
     UNARMED_COMBAT("Unarmed Combat", SkillCategory.COMBAT, "Fighting with fists and claws"),
 
     // Ranged combat
-    THROWING("Throwing", SkillCategory.RANGED, "Thrown weapons like javelins"),
+    THROWING("Throwing", SkillCategory.RANGED, "Thrown weapons and explosives"),
     BOWS("Bows", SkillCategory.RANGED, "Bows and arrows"),
     CROSSBOWS("Crossbows", SkillCategory.RANGED, "Crossbows and bolts"),
-    SLINGS("Slings", SkillCategory.RANGED, "Slings and stones"),
+    GUNS("Guns", SkillCategory.RANGED, "Firearms and energy weapons"),
 
     // Defense skills
     ARMOUR("Armour", SkillCategory.DEFENSE, "Wearing heavy armor effectively"),
