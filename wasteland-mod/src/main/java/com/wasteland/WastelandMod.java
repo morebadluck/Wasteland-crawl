@@ -1,5 +1,6 @@
 package com.wasteland;
 
+import com.wasteland.commands.StructureTestCommand;
 import com.wasteland.entity.ModEntities;
 import com.wasteland.item.ModItems;
 import com.wasteland.magic.Spells;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -65,6 +67,12 @@ public class WastelandMod {
 
         private static boolean worldInitialized = false;
         private static final java.util.Set<Long> corruptedChunks = new java.util.HashSet<>();
+
+        @SubscribeEvent
+        public static void onCommandsRegister(RegisterCommandsEvent event) {
+            StructureTestCommand.register(event.getDispatcher());
+            LOGGER.info("Registered structure test commands");
+        }
 
         @SubscribeEvent
         public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
