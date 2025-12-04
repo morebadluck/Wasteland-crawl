@@ -77,6 +77,9 @@ public class CombatManager {
         this.currentTurnIndex = 0;
         this.gridCenter = player.blockPosition();
 
+        // Clear combat log for new combat
+        CombatLog.clear();
+
         // Create combatants list
         combatants.clear();
 
@@ -96,6 +99,14 @@ public class CombatManager {
 
         // Calculate valid moves for player
         updateValidMoves();
+
+        // Log combat start
+        CombatLog.addMessage("═════════════════════════");
+        CombatLog.addMessage("Combat started!");
+        for (LivingEntity enemy : enemies) {
+            CombatLog.addMessage("  • " + enemy.getName().getString());
+        }
+        CombatLog.addMessage("═════════════════════════");
 
         System.out.println("Combat started! Turn 1, Player's turn");
     }
@@ -255,12 +266,16 @@ public class CombatManager {
      * Execute enemy AI for their turn
      */
     private void executeEnemyTurn(Combatant enemy) {
-        // TODO: Implement proper AI
-        // For now, just end turn immediately
-        System.out.println("Enemy " + enemy.getEntity().getName().getString() + " passes their turn");
+        System.out.println("=== Enemy Turn: " + enemy.getName() + " ===");
 
-        // End enemy turn after a delay (so it's visible)
-        endTurn();
+        // Execute AI and get delay
+        int delayTicks = EnemyAI.executeTurn(enemy, player, combatants, player.level());
+
+        // Schedule next turn after delay
+        CombatScheduler.scheduleAfterDelay(() -> {
+            System.out.println("Enemy turn complete, advancing");
+            endTurn();
+        }, delayTicks);
     }
 
     /**
@@ -273,6 +288,9 @@ public class CombatManager {
 
         System.out.println("Combat ended!");
 
+        // Cancel any pending scheduled actions
+        CombatScheduler.cancelAll();
+
         unfreezeWorld(level);
 
         state = CombatState.EXPLORATION;
@@ -281,6 +299,9 @@ public class CombatManager {
         currentTurnIndex = 0;
         turnCounter = 0;
         player = null;
+
+        // Note: Don't clear combat log here - let player read final messages
+        // Log will be cleared when next combat starts
 
         // Set cooldown to prevent immediate re-trigger
         com.wasteland.combat.CombatDetection.setCombatCooldown();
@@ -455,9 +476,14 @@ public class CombatManager {
         targetEntity.hurt(player.level().damageSources().playerAttack(player), finalDamage);
         float newHP = targetEntity.getHealth();
 
-        System.out.println(String.format("You attack %s with %s for %d damage!",
-            target.getName(), weaponName, finalDamage));
-        System.out.println(target.getName() + ": " + oldHP + " -> " + newHP + " HP");
+        String attackMsg = String.format("You attack %s with %s for %d damage!",
+            target.getName(), weaponName, finalDamage);
+        System.out.println(attackMsg);
+        CombatLog.addMessage(attackMsg);
+
+        String hpMsg = String.format("%s: %.1f -> %.1f HP", target.getName(), oldHP, newHP);
+        System.out.println(hpMsg);
+        CombatLog.addMessage(hpMsg);
 
         // Check if target died
         if (!target.isAlive()) {

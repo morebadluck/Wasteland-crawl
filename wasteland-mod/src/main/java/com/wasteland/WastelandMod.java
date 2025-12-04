@@ -55,6 +55,8 @@ public class WastelandMod {
     @Mod.EventBusSubscriber(modid = MOD_ID)
     public static class Events {
 
+        private static boolean worldInitialized = false;
+
         @SubscribeEvent
         public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
             if (event.getEntity().level() instanceof ServerLevel level) {
@@ -69,19 +71,36 @@ public class WastelandMod {
                 LOGGER.info("  Find a dungeon entrance to begin your adventure!");
                 LOGGER.info("═══════════════════════════════════════════════════════");
 
-                // Generate all dungeons across the world if they don't exist yet
-                if (com.wasteland.worldgen.DungeonManager.getAllDungeons().isEmpty()) {
+                // One-time world initialization
+                if (!worldInitialized) {
                     long worldSeed = level.getSeed();
-                    LOGGER.info("Generating dungeons across the wasteland...");
-                    com.wasteland.worldgen.DungeonManager.generateDungeons(level, worldSeed);
 
-                    // Mark data as dirty to save the newly generated dungeons
-                    com.wasteland.worldgen.WastelandSavedData.markDirty(level);
+                    // Generate all dungeons across the world if they don't exist yet
+                    if (com.wasteland.worldgen.DungeonManager.getAllDungeons().isEmpty()) {
+                        LOGGER.info("Generating dungeons across the wasteland...");
+                        com.wasteland.worldgen.DungeonManager.generateDungeons(level, worldSeed);
+
+                        // Generate roads between nearby dungeons
+                        LOGGER.info("Generating wasteland roads...");
+                        com.wasteland.worldgen.RoadGenerator.generateRoads(level, worldSeed);
+
+                        // Mark data as dirty to save the newly generated dungeons
+                        com.wasteland.worldgen.WastelandSavedData.markDirty(level);
+                    }
+
+                    worldInitialized = true;
                 }
 
-                // Place test temple with altars for testing
-                BlockPos spawnPos = event.getEntity().blockPosition();
-                BlockPos templePos = spawnPos.offset(-20, 0, 0);
+                // Find and teleport player to a safe spawn location
+                BlockPos currentPos = event.getEntity().blockPosition();
+                BlockPos safeSpawn = com.wasteland.worldgen.SafeSpawnFinder.findSafeSpawn(level, currentPos);
+                if (!safeSpawn.equals(currentPos)) {
+                    event.getEntity().teleportTo(safeSpawn.getX() + 0.5, safeSpawn.getY(), safeSpawn.getZ() + 0.5);
+                    LOGGER.info("Moved player to safe spawn: {}", safeSpawn);
+                }
+
+                // Place test temple with altars for testing (near spawn)
+                BlockPos templePos = safeSpawn.offset(-20, 0, 0);
                 BlockPos templeGroundPos = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, templePos);
                 LOGGER.info("Placing test temple at: {}", templeGroundPos);
                 AltarManager.placeTemple(level, templeGroundPos, 6);
