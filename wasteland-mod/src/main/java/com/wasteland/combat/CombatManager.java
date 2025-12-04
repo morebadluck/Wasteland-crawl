@@ -30,9 +30,7 @@ public class CombatManager {
     // Target selection
     private Combatant selectedTarget = null;
 
-    // Frozen world state (for resuming after combat)
-    private final Map<UUID, Vec3> frozenEntityVelocities = new HashMap<>();
-    private final Map<UUID, Boolean> frozenEntityAI = new HashMap<>();
+    // World freezing is now handled by WorldFreezingHandler (no state needed here)
 
     // Configuration
     public static final double DETECTION_RADIUS = 15.0;
@@ -77,6 +75,9 @@ public class CombatManager {
         this.currentTurnIndex = 0;
         this.gridCenter = player.blockPosition();
 
+        // Clear combat log for new combat
+        CombatLog.clear();
+
         // Create combatants list
         combatants.clear();
 
@@ -97,60 +98,36 @@ public class CombatManager {
         // Calculate valid moves for player
         updateValidMoves();
 
+        // Log combat start
+        CombatLog.addMessage("═════════════════════════");
+        CombatLog.addMessage("Combat started!");
+        for (LivingEntity enemy : enemies) {
+            CombatLog.addMessage("  • " + enemy.getName().getString());
+        }
+        CombatLog.addMessage("═════════════════════════");
+
         System.out.println("Combat started! Turn 1, Player's turn");
     }
 
     /**
-     * Freeze all non-combatant entities
+     * Freeze all non-combatant entities using event interception
      */
     private void freezeWorld(Level level) {
-        frozenEntityVelocities.clear();
-        frozenEntityAI.clear();
-
-        // Get all entities in combat
+        // Get all combatant UUIDs
         Set<UUID> combatantUUIDs = new HashSet<>();
         for (Combatant c : combatants) {
             combatantUUIDs.add(c.getEntity().getUUID());
         }
 
-        // Freeze all entities except combatants
-        level.getEntities((net.minecraft.world.entity.Entity) null, player.getBoundingBox().inflate(50.0)).forEach(entity -> {
-            if (entity instanceof net.minecraft.world.entity.Mob && !combatantUUIDs.contains(entity.getUUID())) {
-                net.minecraft.world.entity.Mob mob = (net.minecraft.world.entity.Mob) entity;
-
-                // Store current state
-                frozenEntityVelocities.put(entity.getUUID(), entity.getDeltaMovement());
-                frozenEntityAI.put(entity.getUUID(), mob.isNoAi());
-
-                // Freeze entity
-                entity.setDeltaMovement(Vec3.ZERO);
-                mob.setNoAi(true);
-            }
-        });
-
-        System.out.println("World frozen. " + frozenEntityVelocities.size() + " entities paused.");
+        // Activate world freezing via event handler
+        WorldFreezingHandler.freeze(combatantUUIDs);
     }
 
     /**
-     * Unfreeze the world and restore entity states
+     * Unfreeze the world
      */
     private void unfreezeWorld(Level level) {
-        level.getEntities((net.minecraft.world.entity.Entity) null, player.getBoundingBox().inflate(50.0)).forEach(entity -> {
-            UUID uuid = entity.getUUID();
-
-            if (frozenEntityVelocities.containsKey(uuid)) {
-                entity.setDeltaMovement(frozenEntityVelocities.get(uuid));
-            }
-
-            if (entity instanceof net.minecraft.world.entity.Mob && frozenEntityAI.containsKey(uuid)) {
-                ((net.minecraft.world.entity.Mob)entity).setNoAi(frozenEntityAI.get(uuid));
-            }
-        });
-
-        frozenEntityVelocities.clear();
-        frozenEntityAI.clear();
-
-        System.out.println("World unfrozen.");
+        WorldFreezingHandler.unfreeze();
     }
 
     /**
@@ -255,12 +232,16 @@ public class CombatManager {
      * Execute enemy AI for their turn
      */
     private void executeEnemyTurn(Combatant enemy) {
-        // TODO: Implement proper AI
-        // For now, just end turn immediately
-        System.out.println("Enemy " + enemy.getEntity().getName().getString() + " passes their turn");
+        System.out.println("=== Enemy Turn: " + enemy.getName() + " ===");
 
-        // End enemy turn after a delay (so it's visible)
-        endTurn();
+        // Execute AI and get delay
+        int delayTicks = EnemyAI.executeTurn(enemy, player, combatants, player.level());
+
+        // Schedule next turn after delay
+        CombatScheduler.scheduleAfterDelay(() -> {
+            System.out.println("Enemy turn complete, advancing");
+            endTurn();
+        }, delayTicks);
     }
 
     /**
@@ -273,6 +254,9 @@ public class CombatManager {
 
         System.out.println("Combat ended!");
 
+        // Cancel any pending scheduled actions
+        CombatScheduler.cancelAll();
+
         unfreezeWorld(level);
 
         state = CombatState.EXPLORATION;
@@ -281,6 +265,9 @@ public class CombatManager {
         currentTurnIndex = 0;
         turnCounter = 0;
         player = null;
+
+        // Note: Don't clear combat log here - let player read final messages
+        // Log will be cleared when next combat starts
 
         // Set cooldown to prevent immediate re-trigger
         com.wasteland.combat.CombatDetection.setCombatCooldown();
@@ -455,9 +442,14 @@ public class CombatManager {
         targetEntity.hurt(player.level().damageSources().playerAttack(player), finalDamage);
         float newHP = targetEntity.getHealth();
 
-        System.out.println(String.format("You attack %s with %s for %d damage!",
-            target.getName(), weaponName, finalDamage));
-        System.out.println(target.getName() + ": " + oldHP + " -> " + newHP + " HP");
+        String attackMsg = String.format("You attack %s with %s for %d damage!",
+            target.getName(), weaponName, finalDamage);
+        System.out.println(attackMsg);
+        CombatLog.addMessage(attackMsg);
+
+        String hpMsg = String.format("%s: %.1f -> %.1f HP", target.getName(), oldHP, newHP);
+        System.out.println(hpMsg);
+        CombatLog.addMessage(hpMsg);
 
         // Check if target died
         if (!target.isAlive()) {
