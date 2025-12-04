@@ -4507,7 +4507,8 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_WARP_BODY, "Warp Body",
     spschool::hexes,
-    spflag::dir_or_target | spflag::needs_tracer | spflag::monster,
+    spflag::dir_or_target | spflag::needs_tracer | spflag::monster
+    | spflag::chaotic,
     4,
     200,
     LOS_RADIUS, LOS_RADIUS,
@@ -4521,7 +4522,7 @@ static const struct spell_desc spelldata[] =
     spflag::monster | spflag::target,
     7,
     200,
-    1, 1,
+    3, 3,
     0,
     TILEG_OSTRACISE,
 },
@@ -4529,7 +4530,7 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_MUTAGENIC_GAZE, "Mutagenic Gaze",
     spschool::hexes,
-    spflag::target | spflag::monster,
+    spflag::target | spflag::monster | spflag::chaotic,
     5,
     200,
     LOS_RADIUS, LOS_RADIUS,

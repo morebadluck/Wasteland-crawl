@@ -60,6 +60,7 @@
 #include "random.h"
 #include "religion.h"
 #include "showsymb.h"
+#include "skills.h"
 #include "species.h"
 #include "spl-util.h"
 #include "state.h"
@@ -678,6 +679,7 @@ bool mons_gives_xp(const monster& victim, const actor& agent)
             && (!testbits(victim.flags, MF_WAS_NEUTRAL) // no neutral monsters
                 || victim.has_ench(ENCH_MAD))           // ...except frenzied ones
             && !testbits(victim.flags, MF_NO_REWARD)    // no reward for no_reward
+            && !testbits(victim.flags, MF_TESSERACT_SPAWN)
             && !mon_killed_friend;
 }
 
@@ -3990,6 +3992,12 @@ static string _replace_god_name(god_type god, bool need_verb = false,
     return result;
 }
 
+static bool _is_any_god(god_type god)
+{
+    UNUSED(god);
+    return true;
+}
+
 static string _random_class_of_god_name(bool (*class_of_god)(god_type god))
 {
     string result;
@@ -4003,6 +4011,29 @@ static string _random_class_of_god_name(bool (*class_of_god)(god_type god))
 
     const string godname = god_name(some_god, false);
     result = godname;
+
+    return result;
+}
+
+static bool _is_any_skill(skill_type skill)
+{
+    UNUSED(skill);
+    return true;
+}
+
+static string _random_class_of_skill_name(bool (*class_of_skill)(skill_type skill))
+{
+    string result;
+    skill_type some_skill;
+
+    do
+    {
+        some_skill = random_skill();
+    }
+    while (!class_of_skill(some_skill));
+
+    const string skillname = skill_name(some_skill);
+    result = skillname;
 
     return result;
 }
@@ -4516,14 +4547,29 @@ string do_mon_str_replacements(const string& in_msg, const monster& mons,
         msg = replace_all(msg, "@My_God@", godcap);
     }
 
-    if (msg.find("@random_god_") != string::npos)
+    // For randomly generated names.
+    msg = replace_all_func(msg, "@RANDGEN@", make_name_randgen);
+
+    if (msg.find("@random_god") != string::npos)
     {
+        msg = replace_all(msg, "@random_god@",
+                          _random_class_of_god_name(_is_any_god));
         msg = replace_all(msg, "@random_god_chaotic@",
                           _random_class_of_god_name(is_chaotic_god));
         msg = replace_all(msg, "@random_god_evil@",
                           _random_class_of_god_name(is_evil_god));
         msg = replace_all(msg, "@random_god_good@",
                           _random_class_of_god_name(is_good_god));
+    }
+
+    if (msg.find("@random_skill") != string::npos)
+    {
+        msg = replace_all(msg, "@random_skill@",
+                          _random_class_of_skill_name(_is_any_skill));
+        msg = replace_all(msg, "@random_skill_magic@",
+                          _random_class_of_skill_name(is_magic_skill));
+        msg = replace_all(msg, "@random_skill_mundane@",
+                          _random_class_of_skill_name(is_mundane_skill));
     }
 
     if (msg.find("@random_body_part") != string::npos)
@@ -4604,11 +4650,35 @@ string do_mon_str_replacements(const string& in_msg, const monster& mons,
     return msg;
 }
 
+// This should take a small subset of what do_mon_str_replacements() does.
 string do_mon_name_replacements(const string& in_name)
 {
     string name = in_name;
 
+    // For randomly generated names.
     name = replace_all_func(name, "@RANDGEN@", make_name_randgen);
+
+    if (name.find("@random_god") != string::npos)
+    {
+        name = replace_all(name, "@random_god@",
+                           _random_class_of_god_name(_is_any_god));
+        name = replace_all(name, "@random_god_chaotic@",
+                           _random_class_of_god_name(is_chaotic_god));
+        name = replace_all(name, "@random_god_evil@",
+                           _random_class_of_god_name(is_evil_god));
+        name = replace_all(name, "@random_god_good@",
+                           _random_class_of_god_name(is_good_god));
+    }
+
+    if (name.find("@random_skill") != string::npos)
+    {
+        name = replace_all(name, "@random_skill@",
+                           _random_class_of_skill_name(_is_any_skill));
+        name = replace_all(name, "@random_skill_magic@",
+                           _random_class_of_skill_name(is_magic_skill));
+        name = replace_all(name, "@random_skill_mundane@",
+                           _random_class_of_skill_name(is_mundane_skill));
+    }
 
     return name;
 }

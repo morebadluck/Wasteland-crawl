@@ -2624,25 +2624,6 @@ public:
     }
 };
 
-class targeter_silence : public targeter_maybe_radius
-{
-    targeter_radius inner_rad;
-public:
-    targeter_silence(int r1, int r2)
-        : targeter_maybe_radius(&you, LOS_DEFAULT, r2),
-          inner_rad(&you, LOS_DEFAULT, r1)
-    {
-    }
-
-    aff_type is_affected(coord_def loc) override
-    {
-        if (inner_rad.is_affected(loc) == AFF_YES)
-            return AFF_YES;
-        else
-            return targeter_maybe_radius::is_affected(loc);
-    }
-};
-
 class targeter_poison_scroll : public targeter_radius
 {
 public:
@@ -2688,16 +2669,18 @@ static unique_ptr<targeter> _get_scroll_targeter(scroll_type which_scroll)
     {
     case SCR_FEAR:
         return find_spell_targeter(SPELL_CAUSE_FEAR, 1000, LOS_RADIUS);
-    case SCR_BUTTERFLIES: // close enough...
+    // Indicate the knockback radius differently than the butterfly radius.
+    case SCR_BUTTERFLIES:
+        return make_unique<targeter_radius>(&you, LOS_NO_TRANS, 5, 0, 0, 2);
     case SCR_SUMMONING:
         // TODO: shadow creatures targeter doesn't handle band placement very
-        // well, and this is more obvious with the scroll
-        return find_spell_targeter(SPELL_SHADOW_CREATURES, 1000, LOS_RADIUS);
+        //       well, so this is an overestimate.
+        return make_unique<targeter_maybe_radius>(&you, LOS_NO_TRANS, 5, 0, 1);
     case SCR_VULNERABILITY:
     case SCR_IMMOLATION:
         return make_unique<targeter_finite_will>();
     case SCR_SILENCE:
-        return make_unique<targeter_silence>(2, 4); // TODO: calculate from power (or simplify the calc)
+        return find_spell_targeter(SPELL_SILENCE, 30, LOS_RADIUS);
     case SCR_TORMENT:
         return make_unique<targeter_torment>();
     case SCR_POISON:
@@ -2810,6 +2793,12 @@ bool scroll_hostile_check(scroll_type which_scroll)
     return false;
 }
 
+static bool _scroll_has_forced_targeter(scroll_type scroll)
+{
+    return Options.always_use_static_scroll_targeters
+            || Options.force_scroll_targeter.count(scroll) > 0;
+}
+
 /**
  * Read the provided scroll.
  *
@@ -2847,7 +2836,9 @@ bool read(item_def* scroll, dist *target)
 
         const bool bad_item = (is_dangerous_item(*scroll, true)
                                     || is_bad_item(*scroll))
-                            && Options.bad_item_prompt;
+                            && Options.bad_item_prompt
+                            // Don't double-prompt if we're already asking for confirmation.
+                            && !_scroll_has_forced_targeter(static_cast<scroll_type>(scroll->sub_type));
 
         if (stop_attack_prompt(hitfunc, verb_object.c_str(),
                                [which_scroll] (const actor* m)
@@ -2913,13 +2904,19 @@ bool read(item_def* scroll, dist *target)
 
     if (alreadyknown
         && scroll_has_targeter(which_scroll)
-        && which_scroll != SCR_BLINKING // blinking calls its own targeter
-        && !_scroll_targeting_check(which_scroll, target))
+        && which_scroll != SCR_BLINKING) // blinking calls its own targeter
     {
-        // a targeter can't be used for unid'd or uncancellable scrolls, so
-        // we can skip the rest of the function
-        you.turn_is_over = false;
-        return false;
+        dist force_target;
+        if (alreadyknown && !target && _scroll_has_forced_targeter(which_scroll))
+            target = &force_target;
+
+        if (!_scroll_targeting_check(which_scroll, target))
+        {
+            // a targeter can't be used for unid'd or uncancellable scrolls, so
+            // we can skip the rest of the function
+            you.turn_is_over = false;
+            return false;
+        }
     }
 
     const bool is_loud = you.has_mutation(MUT_BOOMING_VOICE)
@@ -3248,6 +3245,72 @@ bool read(item_def* scroll, dist *target)
     if (!alreadyknown)
         auto_assign_item_slot(*scroll);
     return true;
+}
+
+class targeter_invisibility : public targeter_multimonster
+{
+public:
+    targeter_invisibility();
+    bool affects_monster(const monster_info& mon) override;
+};
+
+targeter_invisibility::targeter_invisibility()
+    : targeter_multimonster(&you)
+{
+}
+
+bool targeter_invisibility::affects_monster(const monster_info& mon)
+{
+    return !mon.is(MB_FIREWOOD) && !mon.can_see_invisible();
+}
+
+static vector<string> _desc_see_invis(const monster_info& mi)
+{
+    vector<string> r;
+    if (mi.can_see_invisible())
+        r.push_back("can see invisible");
+    return r;
+}
+
+// Show a targeter indicating what monsters would lose sight of the player if
+// they went invisible right now, and return false if the player wishes to cancel.
+bool invisibility_target_check()
+{
+    bool found_any = false;
+    bool found_susceptible = false;
+    for (monster_near_iterator mi(&you); mi; ++mi)
+    {
+        if (!mi->wont_attack() && !mi->is_firewood())
+        {
+            found_any = true;
+            if (!mi->can_see_invisible())
+            {
+                found_susceptible = true;
+                break;
+            }
+        }
+    }
+
+    // Allow the player to go invisible outside of LoS of enemies with no prompt.
+    // However, going invisible in LoS of only enemies with sInv is more likely
+    // to be a mistake.
+    if (!found_any)
+        return true;
+    if (!found_susceptible)
+        return yesno("You can't see any enemy this would conceal you from. Use anyway?", true, 'n');
+
+    direction_chooser_args args;
+    unique_ptr<targeter> hitfunc = make_unique<targeter_invisibility>();
+    args.get_desc_func = _desc_see_invis;
+    args.mode = TARG_ANY;
+    args.self = confirm_prompt_type::cancel;
+    args.hitfunc = hitfunc.get();
+    scroll_targeting_behaviour beh;
+    args.behaviour = &beh;
+
+    dist target;
+    direction(target, args);
+    return target.isValid && !target.isCancel;
 }
 
 string cannot_put_on_talisman_reason(const item_def& talisman, bool temp)

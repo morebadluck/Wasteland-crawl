@@ -35,6 +35,9 @@ You see @coloured_graffiti@ on the fountain.
 default fountain_blue
 
 The fountain briefly ripples from your approaching presence.
+
+w:1
+You see @coloured_graffiti@ on the fountain.
 %%%%
 default peaceful fountain_sparkling
 
@@ -73,6 +76,9 @@ Your emotions uncomfortably twist.
 default fountain_sparkling
 
 The sparkling fountain shimmers a faint @any_colour@.
+
+w:1
+You see @coloured_graffiti@ on the fountain.
 %%%%
 default fountain_blood
 
@@ -105,8 +111,16 @@ The fountain's eyes stare blankly through you.
 The fountain's eyes stare idly in all directions.
 
 The fountain's eyes stare into nothing.
+%%%%
+default peaceful dry_fountain
 
-# nothing for default dry_fountain, they don't exactly do anything inherently.
+w:1
+You see @coloured_graffiti@ on the fountain.
+%%%%
+default dry_fountain
+
+w:1
+You see @coloured_graffiti@ on the fountain.
 %%%%
 Ashenzari peaceful fountain_blue
 
@@ -178,11 +192,11 @@ Hepliaklqana fountain_blue
 
 The fountain's ripples stir distant, transient memories.
 %%%%
-Hepliakqana dry_fountain
+Hepliaklqana dry_fountain
 
 You swear to never forget your legacy as this fountain's builders were forgotten.
 %%%%
-Hepliakqana peaceful fountain_blood
+Hepliaklqana peaceful fountain_blood
 
 You observe a moment of silence for whomever's blood flows through this fountain.
 %%%%

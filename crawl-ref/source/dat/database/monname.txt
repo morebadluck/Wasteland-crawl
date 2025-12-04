@@ -18,11 +18,10 @@
 # apostle warrior name" or "orc apostle wizard name". An apostle can get
 # a name unique to its specific type or an ordinary orc name.
 #
-# To generate a random name, the game looks for @RANDGEN@. Every
-# instance of it gets replaced with a newly generated random name, even
-# within the same line. This is so that "an argument between @RANDGEN@
-# and @RANDGEN@" won't produce e.g. "an argument between Liranlobol and
-# Liranlobol" every time.
+# Monster names support a small subset of what monster speech does:
+# @RANDGEN@, @random_god@, @random_god_chaotic@, @random_god_evil@,
+# @random_god_good@, @random_skill@, @random_skill_magic@, and
+# @random_skill_mundane@.
 #
 # Feel free to add to this list. Like for the other database lists,
 # you may add weights (defaults to w:10) to make certain names more
@@ -150,7 +149,7 @@ Pellinorc
 Urtork
 %%%%
 # Other
-# (54 at last count)
+# (60 at last count)
 _other_orcish_name_
 
 Agrik
@@ -228,6 +227,8 @@ Morguth
 Morun
 
 Murdo
+
+Myglar
 
 Norbak
 
@@ -1007,25 +1008,45 @@ bland name
 %%%%
 _bland_female_name_
 
+Abby
+
 Babs
 
 Betsy
 
+Carrie
+
 Deb
 
-Carrie
+Izzy
+
+Jen
+
+Mia
+
+Sue
 
 Vera
 %%%%
 _bland_male_name_
 
+Bill
+
 Bob
 
+Cal
+
 Dave
+
+Doug
 
 Jeff
 
 Jim
+
+Mack
+
+Ned
 
 Pete
 %%%%
@@ -1822,6 +1843,69 @@ bland graffiti author name
 w:2
 @bland name@ ([not that one|the other one|yes, that one])
 %%%%
+rare graffiti author name
+
+# Kilroy was here!
+Kilroy
+
+# Not just in the documentation!
+Durwent the kobold
+
+Zlaz the goblin
+
+# Funny option for rumours that "Woog the god" worships another god or
+# is secretly an atheist.
+Woog the god
+
+Fneeb the oni
+
+# Norby and the Terrified Taxi
+Garc the Great
+
+# A reference to ploggifying in make_name().
+Plog the Peerless
+
+# Funny option for rumours that "Dead [deliberately not Undead] Wendell"
+# deserves life, death, or undeath; or worships the Shining One.
+Dead Wendell
+%%%%
+# Same as @graffiti author name@ below, but without orc names.
+non-orc graffiti author name
+
+w:50
+@ancestor name@
+
+w:2
+@bland graffiti author name@
+
+w:2
+@RANDGEN@
+
+w:1
+@rare graffiti author name@
+%%%%
+# Same as @graffiti author name@ below, but without orc names or rare names.
+changeable graffiti author name
+
+w:50
+@ancestor name@
+
+w:2
+@bland graffiti author name@
+
+w:2
+@RANDGEN@
+%%%%
+# Same as @graffiti author name@ below, but without orc names, randomly
+# generated names, or rare names.
+changeable non-randgen graffiti author name
+
+w:50
+@ancestor name@
+
+w:2
+@bland graffiti author name@
+%%%%
 graffiti author name
 
 w:50
@@ -1837,4 +1921,4 @@ w:2
 @RANDGEN@
 
 w:1
-Kilroy
+@rare graffiti author name@

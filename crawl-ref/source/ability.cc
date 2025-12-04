@@ -908,9 +908,9 @@ string print_abilities()
     {
         for (unsigned int i = 0; i < talents.size(); ++i)
         {
-            if (i)
-                text += ", ";
-            text += ability_name(talents[i].which);
+            text += make_stringf("%s%s (%s)", i ? ", " : "",
+                        ability_name(talents[i].which).c_str(),
+                        failure_rate_to_string(talents[i].fail).c_str());
         }
     }
 
@@ -2064,6 +2064,8 @@ static bool _check_ability_possible(const ability_def& abil, bool quiet = false)
             && !you.duration[DUR_SLOW]
             && !you.attribute[ATTR_HELD]
             && !you.petrifying()
+            && !you.beheld()
+            && !you.afraid()
             && !you.is_constricted())
         {
             if (!quiet)
@@ -3375,6 +3377,8 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
     case ABIL_EVOKE_TURN_INVISIBLE:     // cloaks, randarts
         if (!invis_allowed())
             return spret::abort;
+        if (Options.show_invis_targeter && !invisibility_target_check())
+            return spret::abort;
         if (_invis_causes_drain())
             drain_player(40, false, true); // yes, before the fail check!
         fail_check();
@@ -3627,8 +3631,11 @@ static spret _do_ability(const ability_def& abil, bool fail, dist *target,
         //      monster and one that does both, though at higher invo it stops
         //      being possible to get one wthout rPois, so the warning is only
         //      *almost* correct.
-        if (!player_summon_check({MONS_ORANGE_DEMON, MONS_BLIZZARD_DEMON}))
+        if (!you.has_mutation(MUT_MAKHLEB_MARK_CARNAGE)
+            && !player_summon_check({MONS_ORANGE_DEMON, MONS_BLIZZARD_DEMON}))
+        {
             return spret::abort;
+        }
 
         fail_check();
         makhleb_infernal_servant();
