@@ -3,13 +3,21 @@ package com.wasteland;
 import com.wasteland.entity.ModEntities;
 import com.wasteland.item.ModItems;
 import com.wasteland.magic.Spells;
+import com.wasteland.monsters.MonsterScalingSystem;
 import com.wasteland.religion.AltarManager;
 import com.wasteland.religion.GodAbilities;
+import com.wasteland.worldgen.AreaDifficultyManager;
+import com.wasteland.worldgen.VisualDangerCues;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -56,6 +64,7 @@ public class WastelandMod {
     public static class Events {
 
         private static boolean worldInitialized = false;
+        private static final java.util.Set<Long> corruptedChunks = new java.util.HashSet<>();
 
         @SubscribeEvent
         public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
@@ -74,6 +83,13 @@ public class WastelandMod {
                 // One-time world initialization
                 if (!worldInitialized) {
                     long worldSeed = level.getSeed();
+                    BlockPos worldSpawn = level.getSharedSpawnPos();
+
+                    // Initialize organic difficulty system
+                    LOGGER.info("Initializing organic difficulty system...");
+                    AreaDifficultyManager.initialize(worldSeed, worldSpawn);
+                    LOGGER.info("  Noise-based difficulty active!");
+                    LOGGER.info("  Spawn protection: 200 blocks radius");
 
                     // Generate all dungeons across the world if they don't exist yet
                     if (com.wasteland.worldgen.DungeonManager.getAllDungeons().isEmpty()) {
@@ -122,6 +138,77 @@ public class WastelandMod {
             if (portal != null) {
                 // Player is standing on a portal! Try to use it
                 PortalManager.usePortal(level, belowPos, event.player);
+            }
+        }
+
+        @SubscribeEvent
+        public static void onEntitySpawn(EntityJoinLevelEvent event) {
+            // Only scale entities on server side
+            if (!(event.getLevel() instanceof ServerLevel level)) return;
+
+            // Only scale living entities (monsters, animals, etc.)
+            if (!(event.getEntity() instanceof LivingEntity entity)) return;
+
+            // Skip players
+            if (entity instanceof Player) return;
+
+            // Skip if AreaDifficultyManager not initialized yet
+            try {
+                if (AreaDifficultyManager.getInstance() == null) return;
+            } catch (IllegalStateException e) {
+                return; // Not initialized yet
+            }
+
+            // Apply monster scaling based on spawn location
+            BlockPos spawnPos = entity.blockPosition();
+            MonsterScalingSystem.scaleMonster(entity, spawnPos, level);
+
+            // Log scaling for debugging (only first few)
+            if (level.getRandom().nextFloat() < 0.1f) { // 10% sample rate
+                LOGGER.debug(MonsterScalingSystem.getStatBreakdown(entity));
+            }
+        }
+
+        @SubscribeEvent
+        public static void onChunkLoad(ChunkEvent.Load event) {
+            // Only apply corruption on server side
+            if (!(event.getLevel() instanceof ServerLevel level)) return;
+
+            // Skip if AreaDifficultyManager not initialized yet
+            try {
+                if (AreaDifficultyManager.getInstance() == null) return;
+            } catch (IllegalStateException e) {
+                return; // Not initialized yet
+            }
+
+            // Get chunk
+            LevelChunk chunk = (LevelChunk) event.getChunk();
+            long chunkKey = chunk.getPos().toLong();
+
+            // Skip if already corrupted
+            if (corruptedChunks.contains(chunkKey)) {
+                return;
+            }
+
+            // Get chunk center position
+            BlockPos chunkCenter = chunk.getPos().getMiddleBlockPosition(64);
+
+            // Calculate area difficulty
+            var biome = level.getBiome(chunkCenter).value();
+            int difficulty = AreaDifficultyManager.getInstance()
+                .calculateDifficultyWithSpawnProtection(chunkCenter, biome);
+
+            // Only apply corruption if dangerous enough (10+)
+            if (difficulty >= 10) {
+                VisualDangerCues.applyCorruption(level, chunkCenter, difficulty, 16);
+
+                // Mark chunk as corrupted
+                corruptedChunks.add(chunkKey);
+
+                // Log corruption for debugging
+                if (level.getRandom().nextFloat() < 0.05f) { // 5% sample rate
+                    LOGGER.debug("Applied level {} corruption to chunk at {}", difficulty, chunkCenter);
+                }
             }
         }
     }
