@@ -1,5 +1,6 @@
 package com.wasteland;
 
+import com.wasteland.entity.ModEntities;
 import com.wasteland.magic.Spells;
 import com.wasteland.religion.AltarManager;
 import com.wasteland.religion.GodAbilities;
@@ -8,6 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -21,8 +23,12 @@ public class WastelandMod {
     private static final Logger LOGGER = LogManager.getLogger();
 
     public WastelandMod() {
-        FMLJavaModLoadingContext.get().getModEventBus()
-            .addListener(this::setup);
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        // Register entities
+        ModEntities.register(modEventBus);
+
+        modEventBus.addListener(this::setup);
 
         LOGGER.info("═══════════════════════════════════════════════════════");
         LOGGER.info("  Wasteland Crawl - DCSS Integration Mod Loading...");

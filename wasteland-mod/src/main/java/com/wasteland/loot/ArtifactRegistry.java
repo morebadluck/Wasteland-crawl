@@ -119,6 +119,229 @@ public class ArtifactRegistry {
             .spawnWeight(0.4)
             .build());
 
+        // === FIREARMS ===
+
+        // The Last Ranger - Legendary revolver
+        register(new UniqueArtifact.Builder("last_ranger", "the Last Ranger", UniqueArtifact.ArtifactType.WEAPON)
+            .weaponType(WeaponType.DESERT_EAGLE)
+            .enchantment(8)
+            .property(ArtifactProperty.SLAYING, 6)
+            .property(ArtifactProperty.ACCURACY, 7)
+            .property(ArtifactProperty.CRITICAL_HIT, 2)
+            .property(ArtifactProperty.HEADSHOT_BONUS, 3)
+            .property(ArtifactProperty.DEXTERITY, 2)
+            .lore("The sidearm of the last Texas Ranger. Six shots, six kills. It never misses when it counts.")
+            .minDepth(8)
+            .spawnWeight(0.7)
+            .build());
+
+        // Vault-Tec Prototype - Experimental pistol
+        register(new UniqueArtifact.Builder("vault_tec_proto", "Vault-Tec Prototype", UniqueArtifact.ArtifactType.WEAPON)
+            .weaponType(WeaponType.PIPE_PISTOL)
+            .enchantment(5)
+            .property(ArtifactProperty.SLAYING, 3)
+            .property(ArtifactProperty.RAPID_FIRE, 1)
+            .property(ArtifactProperty.RESIST_ELECTRICITY, 1)
+            .property(ArtifactProperty.INTELLIGENCE, 2)
+            .property(ArtifactProperty.CURSE_MISFIRE, 1) // Experimental = unstable
+            .lore("A pre-war Vault-Tec experiment. Fires rapidly but sometimes jams. 'Trust in Vault-Tec!' - Now with 40% fewer explosions!")
+            .minDepth(3)
+            .spawnWeight(1.0)
+            .build());
+
+        // Liberty's Roar - Assault rifle
+        register(new UniqueArtifact.Builder("libertys_roar", "Liberty's Roar", UniqueArtifact.ArtifactType.WEAPON)
+            .weaponType(WeaponType.ASSAULT_RIFLE)
+            .enchantment(9)
+            .property(ArtifactProperty.SLAYING, 5)
+            .property(ArtifactProperty.BURST_FIRE, 1)
+            .property(ArtifactProperty.ARMOR_PIERCING, 2)
+            .property(ArtifactProperty.STRENGTH, 2)
+            .property(ArtifactProperty.CURSE_NOISE, 1) // Very loud
+            .lore("Carried by the last defenders of Washington DC. Its three-round burst echoes with the spirit of freedom.")
+            .minDepth(10)
+            .spawnWeight(0.6)
+            .build());
+
+        // Whisper - Silenced sniper
+        register(new UniqueArtifact.Builder("whisper", "Whisper", UniqueArtifact.ArtifactType.WEAPON)
+            .weaponType(WeaponType.HUNTING_RIFLE)
+            .enchantment(10)
+            .property(ArtifactProperty.SLAYING, 7)
+            .property(ArtifactProperty.ACCURACY, 9)
+            .property(ArtifactProperty.HEADSHOT_BONUS, 3)
+            .property(ArtifactProperty.STEALTH, 3)
+            .property(ArtifactProperty.SEE_INVISIBLE, 1)
+            .property(ArtifactProperty.DEXTERITY, 3)
+            .lore("The assassin's choice. One shot, one kill, no sound. Found in a unmarked grave with thirteen notches on the stock.")
+            .minDepth(12)
+            .spawnWeight(0.5)
+            .build());
+
+        // Thunderhead - Explosive shotgun
+        register(new UniqueArtifact.Builder("thunderhead", "Thunderhead", UniqueArtifact.ArtifactType.WEAPON)
+            .weaponType(WeaponType.COMBAT_SHOTGUN)
+            .enchantment(8)
+            .property(ArtifactProperty.SLAYING, 6)
+            .property(ArtifactProperty.EXPLOSIVE_ROUNDS, 1)
+            .property(ArtifactProperty.KNOCKBACK, 2)
+            .property(ArtifactProperty.RESIST_FIRE, 1)
+            .property(ArtifactProperty.CURSE_NOISE, 1)
+            .lore("Modified to fire explosive shells. The thunder of its blast can be heard for miles across the wasteland.")
+            .minDepth(9)
+            .spawnWeight(0.7)
+            .build());
+
+        // Infinity Edge - Energy pistol
+        register(new UniqueArtifact.Builder("infinity_edge", "Infinity Edge", UniqueArtifact.ArtifactType.WEAPON)
+            .weaponType(WeaponType.LASER_PISTOL)
+            .enchantment(11)
+            .property(ArtifactProperty.SLAYING, 5)
+            .property(ArtifactProperty.ACCURACY, 6)
+            .property(ArtifactProperty.INFINITE_AMMO, 1)
+            .property(ArtifactProperty.BRAND_ELECTRICITY, 1)
+            .property(ArtifactProperty.MANA_REGENERATION, 1)
+            .lore("A perpetual energy cell powers this laser pistol. It will never run dry, never fail. The ultimate wasteland sidearm.")
+            .minDepth(14)
+            .spawnWeight(0.4)
+            .build());
+
+        // Star Killer - Plasma rifle
+        register(new UniqueArtifact.Builder("star_killer", "Star Killer", UniqueArtifact.ArtifactType.WEAPON)
+            .weaponType(WeaponType.PLASMA_RIFLE)
+            .enchantment(13)
+            .property(ArtifactProperty.SLAYING, 9)
+            .property(ArtifactProperty.ACCURACY, 7)
+            .property(ArtifactProperty.OVERCHARGE, 2)
+            .property(ArtifactProperty.BRAND_FIRE, 1)
+            .property(ArtifactProperty.RESIST_FIRE, 2)
+            .property(ArtifactProperty.CURSE_OVERHEAT, 1) // Powerful but overheats
+            .lore("Military prototype from the Enclave's plasma weapons division. Burns hotter than a dying star, but needs frequent cooling.")
+            .minDepth(16)
+            .spawnWeight(0.3)
+            .build());
+
+        // Rail of Doom - Gauss rifle
+        register(new UniqueArtifact.Builder("rail_of_doom", "Rail of Doom", UniqueArtifact.ArtifactType.WEAPON)
+            .weaponType(WeaponType.GAUSS_RIFLE)
+            .enchantment(14)
+            .property(ArtifactProperty.SLAYING, 10)
+            .property(ArtifactProperty.ACCURACY, 10)
+            .property(ArtifactProperty.PIERCING_SHOT, 1)
+            .property(ArtifactProperty.ARMOR_PIERCING, 3)
+            .property(ArtifactProperty.BRAND_ELECTRICITY, 1)
+            .property(ArtifactProperty.INTELLIGENCE, 3)
+            .lore("Electromagnetic railgun from a classified military project. Accelerates projectiles to hypersonic speeds, piercing any armor.")
+            .minDepth(18)
+            .spawnWeight(0.2)
+            .build());
+
+        // Bloodletter - Cursed automatic pistol
+        register(new UniqueArtifact.Builder("bloodletter", "Bloodletter", UniqueArtifact.ArtifactType.WEAPON)
+            .weaponType(WeaponType.ASSAULT_RIFLE)
+            .enchantment(7)
+            .property(ArtifactProperty.SLAYING, 5)
+            .property(ArtifactProperty.RAPID_FIRE, 2)
+            .property(ArtifactProperty.BLEEDING, 1)
+            .property(ArtifactProperty.ATTACK_SPEED, 1)
+            .property(ArtifactProperty.STRENGTH, 2)
+            .property(ArtifactProperty.CURSE_DRAIN, 1) // Drains user slightly
+            .lore("This weapon thirsts for blood - yours and theirs. Fires with supernatural speed but feeds on life force.")
+            .minDepth(11)
+            .spawnWeight(0.6)
+            .build());
+
+        // === GOD-BLESSED FIREARMS ===
+
+        // The Shining Gun (TSO) - Holy revolver
+        register(new UniqueArtifact.Builder("shining_gun", "the Shining Gun", UniqueArtifact.ArtifactType.WEAPON)
+            .weaponType(WeaponType.DESERT_EAGLE)
+            .enchantment(12)
+            .property(ArtifactProperty.SLAYING, 8)
+            .property(ArtifactProperty.ACCURACY, 8)
+            .property(ArtifactProperty.POSITIVE_ENERGY, 3)
+            .property(ArtifactProperty.REGENERATION, 1)
+            .property(ArtifactProperty.RESIST_NEGATIVE, 2)
+            .property(ArtifactProperty.INTELLIGENCE, 2)
+            .lore("Blessed by The Shining One. Each shot purges the undead and burns with holy light. 'Let righteousness be your aim.'")
+            .minDepth(15)
+            .spawnWeight(0.3)
+            .build());
+
+        // Vehumet's Fury - Plasma caster
+        register(new UniqueArtifact.Builder("vehumets_fury", "Vehumet's Fury", UniqueArtifact.ArtifactType.WEAPON)
+            .weaponType(WeaponType.PLASMA_RIFLE)
+            .enchantment(13)
+            .property(ArtifactProperty.SLAYING, 9)
+            .property(ArtifactProperty.SPELL_POWER, 4)
+            .property(ArtifactProperty.OVERCHARGE, 2)
+            .property(ArtifactProperty.BRAND_FIRE, 1)
+            .property(ArtifactProperty.MANA_REGENERATION, 1)
+            .property(ArtifactProperty.INTELLIGENCE, 3)
+            .lore("Vehumet's gift to his most destructive followers. This plasma rifle channels raw magical energy into devastating blasts.")
+            .minDepth(17)
+            .spawnWeight(0.2)
+            .build());
+
+        // Kikubaaqudgha's Reaper - Necrotic rifle
+        register(new UniqueArtifact.Builder("kikubaaqudghas_reaper", "Kikubaaqudgha's Reaper", UniqueArtifact.ArtifactType.WEAPON)
+            .weaponType(WeaponType.HUNTING_RIFLE)
+            .enchantment(11)
+            .property(ArtifactProperty.SLAYING, 7)
+            .property(ArtifactProperty.ACCURACY, 7)
+            .property(ArtifactProperty.BRAND_DRAIN, 1)
+            .property(ArtifactProperty.BRAND_POISON, 1)
+            .property(ArtifactProperty.RESIST_NEGATIVE, 3)
+            .property(ArtifactProperty.SEE_INVISIBLE, 1)
+            .lore("Kikubaaqudgha's necrotic gift. Each shot drains life force and poisons the living. Death follows in its wake.")
+            .minDepth(14)
+            .spawnWeight(0.4)
+            .build());
+
+        // Okawaru's Warmonger - Combat rifle
+        register(new UniqueArtifact.Builder("okawarus_warmonger", "Okawaru's Warmonger", UniqueArtifact.ArtifactType.WEAPON)
+            .weaponType(WeaponType.ASSAULT_RIFLE)
+            .enchantment(10)
+            .property(ArtifactProperty.SLAYING, 7)
+            .property(ArtifactProperty.ACCURACY, 6)
+            .property(ArtifactProperty.ARMOR_PIERCING, 2)
+            .property(ArtifactProperty.BURST_FIRE, 1)
+            .property(ArtifactProperty.STRENGTH, 3)
+            .property(ArtifactProperty.DEXTERITY, 2)
+            .lore("Okawaru rewards skilled warriors. This rifle improves with each kill, growing deadlier in experienced hands.")
+            .minDepth(13)
+            .spawnWeight(0.5)
+            .build());
+
+        // Sif Muna's Intellect - Laser carbine
+        register(new UniqueArtifact.Builder("sif_munas_intellect", "Sif Muna's Intellect", UniqueArtifact.ArtifactType.WEAPON)
+            .weaponType(WeaponType.LASER_RIFLE)
+            .enchantment(11)
+            .property(ArtifactProperty.SLAYING, 6)
+            .property(ArtifactProperty.ACCURACY, 8)
+            .property(ArtifactProperty.MANA_REGENERATION, 1)
+            .property(ArtifactProperty.SPELL_POWER, 3)
+            .property(ArtifactProperty.INTELLIGENCE, 4)
+            .property(ArtifactProperty.CLARITY, 1)
+            .lore("A gift from Sif Muna, god of knowledge. This laser rifle channels magical energy and sharpens the mind of its wielder.")
+            .minDepth(14)
+            .spawnWeight(0.4)
+            .build());
+
+        // Gozag's Goldshot - Luxury pistol
+        register(new UniqueArtifact.Builder("gozags_goldshot", "Gozag's Goldshot", UniqueArtifact.ArtifactType.WEAPON)
+            .weaponType(WeaponType.DESERT_EAGLE)
+            .enchantment(9)
+            .property(ArtifactProperty.SLAYING, 6)
+            .property(ArtifactProperty.ACCURACY, 7)
+            .property(ArtifactProperty.CRITICAL_HIT, 2)
+            .property(ArtifactProperty.DEXTERITY, 2)
+            // Note: Gold bonus would need special handling
+            .lore("Gold-plated and gem-encrusted. Gozag's gift to the greedy. Enemies killed with this drop extra loot.")
+            .minDepth(12)
+            .spawnWeight(0.5)
+            .build());
+
         // === ARMOR ===
 
         // The Survivor's Carapace - Lightweight power armor

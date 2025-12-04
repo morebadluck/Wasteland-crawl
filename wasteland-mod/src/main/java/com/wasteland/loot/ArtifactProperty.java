@@ -49,6 +49,24 @@ public enum ArtifactProperty {
     BRAND_POISON("Venom Brand", "Weapon deals poison damage", 1, 1),
     BRAND_DRAIN("Draining Brand", "Weapon drains life", 1, 1),
 
+    // Gun-specific properties
+    ARMOR_PIERCING("AP", "Armor-piercing rounds", 1, 3),
+    CRITICAL_HIT("Crit", "Critical hit chance", 1, 3),
+    BURST_FIRE("Burst", "Burst fire mode", 1, 1),
+    EXPLOSIVE_ROUNDS("Explosive", "Explosive ammunition", 1, 1),
+    INFINITE_AMMO("∞Ammo", "Never needs reloading", 1, 1),
+    RAPID_FIRE("Rapid", "Increased fire rate", 1, 2),
+    PIERCING_SHOT("Pierce", "Shots pierce enemies", 1, 1),
+    HEADSHOT_BONUS("Headshot", "Bonus damage on headshots", 1, 3),
+
+    // Energy weapon properties
+    OVERCHARGE("Overcharge", "Energy weapon overcharge", 1, 2),
+    BEAM_SPREAD("Spread", "Wide beam spread", 1, 2),
+
+    // Special gun effects
+    BLEEDING("Bleed", "Causes bleeding", 1, 1),
+    KNOCKBACK("Knockback", "Knocks enemies back", 1, 2),
+
     // Special defensive properties
     POSITIVE_ENERGY("rN+", "Extra negative energy resistance", 1, 3),
     REFLECT("Reflect", "Reflects projectiles", 1, 1),
@@ -57,7 +75,9 @@ public enum ArtifactProperty {
     CURSE_DRAIN("*Drain", "Drains on hit", 1, 1),
     CURSE_NOISE("*Noise", "Makes noise", 1, 1),
     CURSE_SLOW("*Slow", "Slows movement", 1, 1),
-    CURSE_FRAGILE("*Fragile", "Reduced durability", 1, 1);
+    CURSE_FRAGILE("*Fragile", "Reduced durability", 1, 1),
+    CURSE_MISFIRE("*Misfire", "Chance to misfire", 1, 1),
+    CURSE_OVERHEAT("*Overheat", "Weapon overheats quickly", 1, 1);
 
     private final String abbreviation;
     private final String description;
@@ -131,13 +151,19 @@ public enum ArtifactProperty {
             case SEE_INVISIBLE, REGENERATION, CLARITY,
                  MANA_REGENERATION, SPELL_POWER, ATTACK_SPEED,
                  BRAND_FIRE, BRAND_COLD, BRAND_ELECTRICITY, BRAND_POISON, BRAND_DRAIN,
-                 POSITIVE_ENERGY -> 4;
+                 POSITIVE_ENERGY,
+                 BURST_FIRE, EXPLOSIVE_ROUNDS, PIERCING_SHOT, BLEEDING, OVERCHARGE -> 4;
 
             // Extremely rare (power 5)
-            case CAST_SUCCESS, RESIST_CORROSION, REFLECT -> 5;
+            case CAST_SUCCESS, RESIST_CORROSION, REFLECT,
+                 INFINITE_AMMO, BEAM_SPREAD -> 5;
+
+            // Uncommon gun properties (power 2)
+            case ARMOR_PIERCING, CRITICAL_HIT, RAPID_FIRE, HEADSHOT_BONUS, KNOCKBACK -> 2;
 
             // Curses (negative power)
-            case CURSE_DRAIN, CURSE_NOISE, CURSE_SLOW, CURSE_FRAGILE -> -1;
+            case CURSE_DRAIN, CURSE_NOISE, CURSE_SLOW, CURSE_FRAGILE,
+                 CURSE_MISFIRE, CURSE_OVERHEAT -> -1;
         };
     }
 }

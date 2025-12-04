@@ -2,13 +2,38 @@
 
 ## HIGH PRIORITY
 
-### Loot System Integration
-- [ ] **Update loot system to use new wasteland weapons**
-  - Current: `loot/WeaponType.java` uses old DCSS weapons (daggers, swords)
-  - Needed: Integrate `equipment/WeaponType.java` (40+ wasteland weapons + guns)
-  - Replace or merge the two WeaponType classes
-  - Update `LootGenerator.java` to spawn guns and wasteland weapons
-  - Add gun ammo to loot drops
+### Robot Enemy Types
+- [ ] **Create robot monster system**
+  - Robot base class/interface with shared behavior
+  - Armor/damage resistance mechanics (resistant to bleed/poison, vulnerable to EMP)
+  - Power source mechanics (can be shut down vs destroyed)
+  - Detect living/heat signature AI behavior
+
+- [ ] **Early Game Robots (Tier 1-2)**
+  - **Eyebot**: Floating surveillance drone, weak, calls for help
+  - **Protectron**: Basic security robot, slow, moderate damage
+  - **Mr. Handy**: Utility robot, multiple arms, fire damage
+  - **Damaged Sentry**: Malfunctioning heavy robot, erratic behavior
+
+- [ ] **Mid Game Robots (Tier 3-4)**
+  - **Security Bot**: Advanced protectron, faster, better armor
+  - **Sentry Bot**: Heavy combat robot, minigun/missile attacks
+  - **Assaultron**: Fast melee robot with laser head weapon
+  - **Gutsy (Mr. Gutsy)**: Military Mr. Handy with plasma weapons
+  - **Robobrain**: Brain in robot body, psionic/energy attacks
+
+- [ ] **Late Game Robots (Tier 5+)**
+  - **Annihilator Sentry Bot**: Upgraded sentry with dual miniguns
+  - **Quantum Assaultron**: Elite assaultron with stealth capabilities
+  - **Overlord (Robot Boss)**: Massive security mainframe robot
+  - **Experimental Bot**: Pre-war prototype with unknown weapons
+
+- [ ] **Robot Special Mechanics**
+  - EMP vulnerability (extra damage from electrical attacks)
+  - Self-repair protocols (regeneration over time)
+  - Alarm systems (summons other robots when damaged)
+  - Targeting systems (high accuracy vs low evasion targets)
+  - Overload/self-destruct on death (explosion damage)
 
 ### Artifact Weapons System
 - [ ] **Implement unique artifact guns**
@@ -120,3 +145,42 @@
 - [x] Status effect system for buffs/debuffs
 - [x] Divine ability invocation system
 - [x] Mutation effects integration
+- [x] **Loot system integration with wasteland weapons**
+  - Integrated equipment/WeaponType.java with loot system
+  - Updated LootGenerator with wasteland starting weapons
+  - Updated unique artifacts to use wasteland weapons
+  - All 40+ weapons now spawn in loot tables
+- [x] **Robot Enemy System (Complete - 12 Robot Types)**
+  - Base RobotEntity class with armor/resistance mechanics
+  - LIGHT armor: Eyebot, Mr. Handy (0% deflection, 25% physical resistance)
+  - MEDIUM armor: Protectron, Security Bot, Assaultron, Mr. Gusty, Robobrain (30% deflection, 35% resistance)
+  - HEAVY armor: Sentry Bot, Annihilator, Overlord (60% deflection, 50% resistance)
+  - Bullet deflection system (0-60% based on armor class)
+  - Self-destruct mechanics (Sentry Bots only)
+  - Electrical vulnerability (150-200% damage)
+  - Fire resistance (25% reduction)
+  - Tier 1-3: Eyebot, Protectron, Mr. Handy, Security Bot
+  - Tier 4-6: Assaultron, Mr. Gusty, Robobrain, Sentry Bot, Experimental Bot
+  - Tier 7-9: Annihilator Sentry Bot, Quantum Assaultron, Overlord Bot (Boss)
+- [x] **Robot Loot Tables**
+  - 6-tier loot system (LIGHT, MEDIUM, COMBAT, HEAVY, ELITE, BOSS)
+  - Scrap metal, energy cells, circuits for all robots
+  - Tier-specific drops: armor plating, power cores, quantum cores
+  - Boss loot: Nether stars, beacons, netherite, legendary schematics
+- [x] **Artifact Weapon System**
+  - 15 legendary firearms with unique abilities
+  - Gun-specific properties: Armor-Piercing, Burst Fire, Infinite Ammo, etc.
+  - Energy weapon properties: Overcharge, Beam Spread
+  - 9 regular legendary guns (Last Ranger, Liberty's Roar, Star Killer, etc.)
+  - 6 god-blessed firearms (Shining Gun, Vehumet's Fury, Okawaru's Warmonger, etc.)
+  - Depth-based spawning (tier 3-18)
+  - Curse mechanics for balanced artifacts
+- [x] **God-Weapon Piety System**
+  - Automatic piety tracking based on weapon usage
+  - Trog: +2 melee, -3 ranged/magic
+  - Okawaru: +1 all combat weapons
+  - Vehumet: +3 magic/energy, -1 physical
+  - TSO: +3 vs undead
+  - Kikubaaqudgha: +2 necrotic/poison
+  - Makhleb: +2 all kills
+  - Full integration with all 12 gods
