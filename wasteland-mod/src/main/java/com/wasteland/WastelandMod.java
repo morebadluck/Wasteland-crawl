@@ -1,5 +1,8 @@
 package com.wasteland;
 
+import com.wasteland.magic.Spells;
+import com.wasteland.religion.AltarManager;
+import com.wasteland.religion.GodAbilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
@@ -27,6 +30,12 @@ public class WastelandMod {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
+        // Register all spells
+        Spells.registerSpells();
+
+        // Register all divine abilities
+        GodAbilities.registerAbilities();
+
         LOGGER.info("Wasteland Crawl - Setup Complete!");
         LOGGER.info("  Version: 0.1.0 (Phase 2 - Proof of Concept)");
         LOGGER.info("  DCSS Backend: Ready for integration");
@@ -56,6 +65,12 @@ public class WastelandMod {
 
                 LOGGER.info("Placing initial dungeon entrance at: {}", groundPos);
                 DungeonEntrance.placeRandomEntrance(level, groundPos);
+
+                // Place test temple with altars for testing
+                BlockPos templePos = spawnPos.offset(-20, 0, 0);
+                BlockPos templeGroundPos = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, templePos);
+                LOGGER.info("Placing test temple at: {}", templeGroundPos);
+                AltarManager.placeTemple(level, templeGroundPos, 6);
             }
         }
 

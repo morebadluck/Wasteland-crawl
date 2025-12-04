@@ -1,5 +1,7 @@
 package com.wasteland.character;
 
+import com.wasteland.mutations.MutationEffects;
+import com.wasteland.statuseffects.StatusEffects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -106,16 +108,24 @@ public class PlayerCharacter {
         return totalXP;
     }
 
+    /**
+     * Get maximum HP (with mutation modifiers)
+     */
     public int getMaxHP() {
-        return maxHP;
+        double hpModifier = MutationEffects.getHPModifier(playerId);
+        return (int) (maxHP * hpModifier);
     }
 
     public int getCurrentHP() {
         return currentHP;
     }
 
+    /**
+     * Get maximum MP (with mutation modifiers)
+     */
     public int getMaxMP() {
-        return maxMP;
+        double mpModifier = MutationEffects.getMPModifier(playerId);
+        return (int) (maxMP * mpModifier);
     }
 
     public int getCurrentMP() {
@@ -139,24 +149,30 @@ public class PlayerCharacter {
     }
 
     /**
-     * Get total strength (base + race + equipment)
+     * Get total strength (base + race + equipment + mutations + status effects)
      */
     public int getStrength() {
-        return baseStrength + race.getStrengthModifier() + equipmentStrength;
+        return baseStrength + race.getStrengthModifier() + equipmentStrength
+               + MutationEffects.getStrengthModifier(playerId)
+               + StatusEffects.getStrengthModifier(playerId);
     }
 
     /**
-     * Get total dexterity (base + race + equipment)
+     * Get total dexterity (base + race + equipment + mutations + status effects)
      */
     public int getDexterity() {
-        return baseDexterity + race.getDexterityModifier() + equipmentDexterity;
+        return baseDexterity + race.getDexterityModifier() + equipmentDexterity
+               + MutationEffects.getDexterityModifier(playerId)
+               + StatusEffects.getDexterityModifier(playerId);
     }
 
     /**
-     * Get total intelligence (base + race + equipment)
+     * Get total intelligence (base + race + equipment + mutations + status effects)
      */
     public int getIntelligence() {
-        return baseIntelligence + race.getIntelligenceModifier() + equipmentIntelligence;
+        return baseIntelligence + race.getIntelligenceModifier() + equipmentIntelligence
+               + MutationEffects.getIntelligenceModifier(playerId)
+               + StatusEffects.getIntelligenceModifier(playerId);
     }
 
     /**
@@ -406,6 +422,13 @@ public class PlayerCharacter {
      */
     public void restoreMP(int amount) {
         currentMP = Math.min(currentMP + amount, maxMP);
+    }
+
+    /**
+     * Consume MP (for spellcasting)
+     */
+    public void consumeMP(int amount) {
+        currentMP = Math.max(0, currentMP - amount);
     }
 
     /**
