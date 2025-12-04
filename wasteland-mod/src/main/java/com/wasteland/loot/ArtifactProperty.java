@@ -42,6 +42,17 @@ public enum ArtifactProperty {
     // Speed
     ATTACK_SPEED("Attack Speed", "Faster attacks", 1, 2),
 
+    // Weapon brands (elemental damage)
+    BRAND_FIRE("Fire Brand", "Weapon deals fire damage", 1, 1),
+    BRAND_COLD("Ice Brand", "Weapon deals cold damage", 1, 1),
+    BRAND_ELECTRICITY("Shock Brand", "Weapon deals electric damage", 1, 1),
+    BRAND_POISON("Venom Brand", "Weapon deals poison damage", 1, 1),
+    BRAND_DRAIN("Draining Brand", "Weapon drains life", 1, 1),
+
+    // Special defensive properties
+    POSITIVE_ENERGY("rN+", "Extra negative energy resistance", 1, 3),
+    REFLECT("Reflect", "Reflects projectiles", 1, 1),
+
     // Negative properties (curses)
     CURSE_DRAIN("*Drain", "Drains on hit", 1, 1),
     CURSE_NOISE("*Noise", "Makes noise", 1, 1),
@@ -118,10 +129,12 @@ public enum ArtifactProperty {
 
             // Very rare properties (power 4)
             case SEE_INVISIBLE, REGENERATION, CLARITY,
-                 MANA_REGENERATION, SPELL_POWER, ATTACK_SPEED -> 4;
+                 MANA_REGENERATION, SPELL_POWER, ATTACK_SPEED,
+                 BRAND_FIRE, BRAND_COLD, BRAND_ELECTRICITY, BRAND_POISON, BRAND_DRAIN,
+                 POSITIVE_ENERGY -> 4;
 
             // Extremely rare (power 5)
-            case CAST_SUCCESS, RESIST_CORROSION -> 5;
+            case CAST_SUCCESS, RESIST_CORROSION, REFLECT -> 5;
 
             // Curses (negative power)
             case CURSE_DRAIN, CURSE_NOISE, CURSE_SLOW, CURSE_FRAGILE -> -1;

@@ -101,6 +101,19 @@ public class LootGenerator {
      * Generate a weapon with appropriate rarity for depth
      */
     private static ItemStack generateWeapon(int depth, LootTier tier) {
+        // Small chance for unique artifact (increases with depth)
+        double uniqueChance = Math.min(0.02 + (depth * 0.001), 0.08); // 2-8% chance
+        if (RANDOM.nextDouble() < uniqueChance) {
+            UniqueArtifact artifact = ArtifactRegistry.selectRandomArtifact(depth);
+            if (artifact != null && artifact.getType() == UniqueArtifact.ArtifactType.WEAPON) {
+                ItemStack itemStack = new ItemStack(Items.IRON_SWORD);
+                ItemStack uniqueItem = artifact.generate(itemStack);
+                ArtifactRegistry.markAsSpawned(artifact.getId());
+                LOGGER.info("Generated unique artifact weapon: {}", artifact.getDisplayName());
+                return uniqueItem;
+            }
+        }
+
         // Get base item (iron sword as placeholder)
         ItemStack itemStack = new ItemStack(Items.IRON_SWORD);
 
@@ -136,6 +149,19 @@ public class LootGenerator {
      * Generate armor with appropriate rarity for depth
      */
     private static ItemStack generateArmor(int depth, LootTier tier) {
+        // Small chance for unique artifact (increases with depth)
+        double uniqueChance = Math.min(0.02 + (depth * 0.001), 0.08); // 2-8% chance
+        if (RANDOM.nextDouble() < uniqueChance) {
+            UniqueArtifact artifact = ArtifactRegistry.selectRandomArtifact(depth);
+            if (artifact != null && artifact.getType() == UniqueArtifact.ArtifactType.ARMOR) {
+                ItemStack itemStack = new ItemStack(Items.IRON_CHESTPLATE);
+                ItemStack uniqueItem = artifact.generate(itemStack);
+                ArtifactRegistry.markAsSpawned(artifact.getId());
+                LOGGER.info("Generated unique artifact armor: {}", artifact.getDisplayName());
+                return uniqueItem;
+            }
+        }
+
         // Get base item (iron chestplate as placeholder)
         ItemStack itemStack = new ItemStack(Items.IRON_CHESTPLATE);
 
