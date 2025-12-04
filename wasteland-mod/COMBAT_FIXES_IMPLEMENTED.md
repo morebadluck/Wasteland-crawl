@@ -84,6 +84,45 @@ CombatScheduler.scheduleAfterDelay(() -> {
 
 ---
 
+## Second Pass Improvements (December 4, 2025 - Evening)
+
+### 4. **WorldFreezingHandler.java** (~75 lines)
+**Purpose**: Event-based world freezing (cleaner than NoAI approach)
+
+**Features Implemented**:
+- **Event Interception**: Listens to `LivingEvent.LivingTickEvent`
+- **Selective Freezing**: Only freezes non-combatant entities
+- **Clean State**: Doesn't modify entity AI flags or state
+- **Automatic Cleanup**: Zero velocity on frozen entities
+
+**How It Works**:
+```java
+@SubscribeEvent
+public static void onEntityTick(LivingEvent.LivingTickEvent event) {
+    if (!combatActive) return; // World not frozen
+
+    UUID entityUUID = event.getEntity().getUUID();
+
+    // Allow combatants to tick normally
+    if (combatantUUIDs.contains(entityUUID)) return;
+
+    // Freeze all non-combatants by cancelling their tick
+    event.setCanceled(true);
+
+    // Zero out any accumulated movement
+    entity.setDeltaMovement(Vec3.ZERO);
+}
+```
+
+**Advantages over NoAI approach**:
+- Doesn't modify entity state (cleaner)
+- More reliable (prevents ALL tick logic, not just AI)
+- Easier to debug (event-based)
+- No state restoration needed
+- Works on all LivingEntity types (not just Mobs)
+
+---
+
 ## Files Modified
 
 ### **CombatManager.java**
@@ -132,6 +171,58 @@ private void executeEnemyTurn(Combatant enemy) {
 - `CombatLog.addMessage()` for HP changes
 - Formatted attack messages
 
+#### 5. World Freezing Refactor (Second Pass - Line 33, 115-131)
+**Changed**:
+- Removed `frozenEntityVelocities` and `frozenEntityAI` maps
+- Simplified `freezeWorld()` to use `WorldFreezingHandler.freeze()`
+- Simplified `unfreezeWorld()` to use `WorldFreezingHandler.unfreeze()`
+- No more manual state tracking needed
+
+**Before** (60+ lines of state management):
+```java
+private final Map<UUID, Vec3> frozenEntityVelocities = new HashMap<>();
+private final Map<UUID, Boolean> frozenEntityAI = new HashMap<>();
+
+private void freezeWorld(Level level) {
+    frozenEntityVelocities.clear();
+    frozenEntityAI.clear();
+    // ...iterate all entities, store state, modify AI flags
+    level.getEntities(...).forEach(entity -> {
+        frozenEntityVelocities.put(...);
+        frozenEntityAI.put(...);
+        entity.setDeltaMovement(Vec3.ZERO);
+        mob.setNoAi(true);
+    });
+}
+
+private void unfreezeWorld(Level level) {
+    // ...iterate all entities, restore state
+    level.getEntities(...).forEach(entity -> {
+        entity.setDeltaMovement(frozenEntityVelocities.get(...));
+        mob.setNoAi(frozenEntityAI.get(...));
+    });
+    frozenEntityVelocities.clear();
+    frozenEntityAI.clear();
+}
+```
+
+**After** (10 lines total):
+```java
+// No state maps needed
+
+private void freezeWorld(Level level) {
+    Set<UUID> combatantUUIDs = new HashSet<>();
+    for (Combatant c : combatants) {
+        combatantUUIDs.add(c.getEntity().getUUID());
+    }
+    WorldFreezingHandler.freeze(combatantUUIDs);
+}
+
+private void unfreezeWorld(Level level) {
+    WorldFreezingHandler.unfreeze();
+}
+```
+
 ---
 
 ## What Now Works
@@ -159,6 +250,13 @@ private void executeEnemyTurn(Combatant enemy) {
 - Multiple tasks supported
 - Automatic cleanup
 - Cancel on combat end
+
+### ✅ World Freezing (Improved)
+- Event-based interception (cleaner than NoAI)
+- No entity state modification
+- Works on all LivingEntity types
+- Automatic velocity zeroing
+- No state restoration needed
 
 ---
 
@@ -246,12 +344,14 @@ Orc Warrior moves closer
 
 ## Remaining Issues (Known)
 
-### Not Fixed in This Pass
-1. **World Freezing**: Still uses NoAI (not ideal, but functional)
-2. **Hostile Detection**: Still primitive (hardcoded animal exclusions)
-3. **No Pathfinding**: Uses greedy algorithm (gets stuck on obstacles)
-4. **No Ranged Combat**: Only melee implemented
-5. **No Status Effects**: Not applied during combat
+### Fixed in Second Pass (December 4, 2025 - Evening)
+1. ✅ **World Freezing**: Now uses event interception instead of NoAI flags (clean implementation)
+
+### Not Fixed Yet
+1. **Hostile Detection**: Still primitive (hardcoded animal exclusions)
+2. **No Pathfinding**: Uses greedy algorithm (gets stuck on obstacles)
+3. **No Ranged Combat**: Only melee implemented
+4. **No Status Effects**: Not applied during combat
 
 ### Minor Issues
 - Enemy can't move around obstacles (simple pathfinding)
@@ -363,7 +463,9 @@ static int executeTurn(Combatant enemy, Player player,
 ---
 
 *Implementation completed: December 4, 2025*
+*Second pass completed: December 4, 2025 (Evening)*
 *Build status: SUCCESS*
-*Files created: 3*
-*Files modified: 1*
-*Lines of code added: ~270*
+*Files created: 4* (EnemyAI, CombatLog, CombatScheduler, WorldFreezingHandler)
+*Files modified: 1* (CombatManager)
+*Lines of code added: ~345*
+*Lines of code removed: ~50* (old world freezing)
