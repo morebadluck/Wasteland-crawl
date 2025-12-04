@@ -1,5 +1,6 @@
 package com.wasteland.loot;
 
+import com.wasteland.equipment.WeaponType;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.HashMap;

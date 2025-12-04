@@ -1,6 +1,7 @@
 package com.wasteland.loot;
 
 import net.minecraft.world.item.ItemStack;
+import com.wasteland.equipment.WeaponType;
 import java.util.*;
 
 /**
@@ -261,12 +262,11 @@ public class RandartGenerator {
      */
     public static WeaponType getRandomWeaponType() {
         List<WeaponType> weapons = new ArrayList<>(Arrays.asList(WeaponType.values()));
-        weapons.remove(WeaponType.UNARMED); // Don't generate unarmed weapons
 
         // Weight by inverse of base damage (weaker weapons more common)
         List<WeaponType> weightedList = new ArrayList<>();
         for (WeaponType type : weapons) {
-            int weight = Math.max(1, 20 - type.getBaseDamage()); // Higher damage = lower weight
+            int weight = Math.max(1, 40 - type.getBaseDamage()); // Higher damage = lower weight
             for (int i = 0; i < weight; i++) {
                 weightedList.add(type);
             }
