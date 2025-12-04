@@ -1,5 +1,6 @@
 package com.wasteland.loot;
 
+import com.wasteland.equipment.WeaponType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +31,7 @@ public class ArtifactRegistry {
 
         // The Scorching Blade - Early game fire weapon
         register(new UniqueArtifact.Builder("scorching_blade", "the Scorching Blade", UniqueArtifact.ArtifactType.WEAPON)
-            .weaponType(WeaponType.LONG_SWORD)
+            .weaponType(WeaponType.SCRAP_BLADE)
             .enchantment(6)
             .property(ArtifactProperty.SLAYING, 4)
             .property(ArtifactProperty.RESIST_FIRE, 2)
@@ -42,13 +43,13 @@ public class ArtifactRegistry {
 
         // Frostbite - Ice weapon
         register(new UniqueArtifact.Builder("frostbite", "Frostbite", UniqueArtifact.ArtifactType.WEAPON)
-            .weaponType(WeaponType.GREAT_SWORD)
+            .weaponType(WeaponType.RIPPER)
             .enchantment(7)
             .property(ArtifactProperty.SLAYING, 3)
             .property(ArtifactProperty.RESIST_COLD, 2)
             .property(ArtifactProperty.BRAND_COLD, 1)
             .property(ArtifactProperty.SEE_INVISIBLE, 1)
-            .lore("This blade was recovered from a frozen vault deep underground. It never melts.")
+            .lore("This motorized blade was recovered from a frozen vault deep underground. It never melts.")
             .minDepth(6)
             .spawnWeight(0.8)
             .build());
@@ -67,20 +68,20 @@ public class ArtifactRegistry {
 
         // Thunderstrike - Lightning axe
         register(new UniqueArtifact.Builder("thunderstrike", "Thunderstrike", UniqueArtifact.ArtifactType.WEAPON)
-            .weaponType(WeaponType.BATTLEAXE)
+            .weaponType(WeaponType.FIRE_AXE)
             .enchantment(8)
             .property(ArtifactProperty.SLAYING, 5)
             .property(ArtifactProperty.RESIST_ELECTRICITY, 2)
             .property(ArtifactProperty.BRAND_ELECTRICITY, 1)
             .property(ArtifactProperty.CURSE_NOISE, 1) // Makes noise when used
-            .lore("This axe crackles with barely-contained electrical energy. Every strike echoes like thunder.")
+            .lore("This fire axe crackles with barely-contained electrical energy. Every strike echoes like thunder.")
             .minDepth(8)
             .spawnWeight(0.7)
             .build());
 
         // Shadowfang - Stealth weapon
         register(new UniqueArtifact.Builder("shadowfang", "Shadowfang", UniqueArtifact.ArtifactType.WEAPON)
-            .weaponType(WeaponType.DAGGER)
+            .weaponType(WeaponType.COMBAT_KNIFE)
             .enchantment(9)
             .property(ArtifactProperty.SLAYING, 6)
             .property(ArtifactProperty.ACCURACY, 6)
@@ -94,7 +95,7 @@ public class ArtifactRegistry {
 
         // The Shattering Mace - Armor-breaking weapon
         register(new UniqueArtifact.Builder("shattering_mace", "the Shattering Mace", UniqueArtifact.ArtifactType.WEAPON)
-            .weaponType(WeaponType.GREAT_MACE)
+            .weaponType(WeaponType.SLEDGEHAMMER)
             .enchantment(10)
             .property(ArtifactProperty.SLAYING, 7)
             .property(ArtifactProperty.STRENGTH, 3)
@@ -106,7 +107,7 @@ public class ArtifactRegistry {
 
         // Radiant Dawn - Holy weapon
         register(new UniqueArtifact.Builder("radiant_dawn", "Radiant Dawn", UniqueArtifact.ArtifactType.WEAPON)
-            .weaponType(WeaponType.LONG_SWORD)
+            .weaponType(WeaponType.KATANA)
             .enchantment(12)
             .property(ArtifactProperty.SLAYING, 8)
             .property(ArtifactProperty.ACCURACY, 8)

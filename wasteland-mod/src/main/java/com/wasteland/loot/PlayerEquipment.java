@@ -1,5 +1,6 @@
 package com.wasteland.loot;
 
+import com.wasteland.equipment.WeaponType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;

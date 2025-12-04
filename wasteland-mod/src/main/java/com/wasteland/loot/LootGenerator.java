@@ -2,6 +2,7 @@ package com.wasteland.loot;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import com.wasteland.equipment.WeaponType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -356,44 +357,44 @@ public class LootGenerator {
     }
 
     /**
-     * Get starting weapon based on race
+     * Get starting weapon based on race (Wasteland theme)
      */
     private static WeaponType getStartingWeapon(com.wasteland.character.Race race) {
-        // Strong races prefer maces
+        // Strong races prefer heavy melee weapons
         if (race == com.wasteland.character.Race.MINOTAUR ||
             race == com.wasteland.character.Race.TROLL ||
             race == com.wasteland.character.Race.OGRE) {
-            return WeaponType.MACE;
+            return WeaponType.BASEBALL_BAT; // Heavy bludgeon
         }
 
         // Elves prefer finesse weapons
         if (race == com.wasteland.character.Race.DEEP_ELF) {
-            return WeaponType.RAPIER;
+            return WeaponType.COMBAT_KNIFE; // Fast, precise
         }
 
         // Dwarves prefer axes
         if (race == com.wasteland.character.Race.DEEP_DWARF) {
-            return WeaponType.HAND_AXE;
+            return WeaponType.HATCHET; // Wasteland axe
         }
 
-        // Small races use daggers
+        // Small races use light weapons
         if (race == com.wasteland.character.Race.SPRIGGAN ||
             race == com.wasteland.character.Race.KOBOLD) {
-            return WeaponType.DAGGER;
+            return WeaponType.SHIV; // Lightweight blade
         }
 
         // Reptilian races use polearms
         if (race == com.wasteland.character.Race.NAGA ||
             race == com.wasteland.character.Race.DRACONIAN) {
-            return WeaponType.SPEAR;
+            return WeaponType.SPEAR; // Wasteland spear
         }
 
-        // Centaurs get a spear (good ranged backup)
+        // Centaurs get a pipe pistol (ranged advantage)
         if (race == com.wasteland.character.Race.CENTAUR) {
-            return WeaponType.SPEAR;
+            return WeaponType.PIPE_PISTOL; // Basic gun
         }
 
-        // Default starting weapon
-        return WeaponType.SHORT_SWORD;
+        // Default: Wasteland survivor weapon
+        return WeaponType.PIPE; // Lead pipe - iconic wasteland melee
     }
 }

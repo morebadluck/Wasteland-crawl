@@ -2,6 +2,7 @@ package com.wasteland.loot;
 
 import net.minecraft.world.item.ItemStack;
 import com.wasteland.character.PlayerCharacter;
+import com.wasteland.equipment.WeaponType;
 
 /**
  * Weapon item with DCSS-style damage and speed stats.
