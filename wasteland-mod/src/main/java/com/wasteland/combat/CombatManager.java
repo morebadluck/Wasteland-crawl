@@ -420,19 +420,30 @@ public class CombatManager {
         com.wasteland.character.PlayerCharacter character =
             com.wasteland.character.CharacterManager.getCharacter(player.getUUID());
 
-        // Calculate damage based on strength and skills
-        int baseDamage = 3; // Base unarmed damage
+        // Check for equipped weapon
+        com.wasteland.loot.EquipmentManager equipmentManager = com.wasteland.loot.EquipmentManager.getInstance();
+        com.wasteland.loot.WastelandWeapon weapon = equipmentManager.getEquippedWeapon(player);
 
-        // Strength bonus: +1 damage per 2 STR above 8
-        int strength = character.getStrength();
-        int strBonus = Math.max(0, (strength - 8) / 2);
+        int totalDamage;
+        com.wasteland.character.Skill usedSkill;
+        String weaponName;
 
-        // Fighting skill bonus: +1 damage per 3 levels
-        int fightingSkill = character.getSkillLevel(com.wasteland.character.Skill.FIGHTING);
-        int skillBonus = fightingSkill / 3;
-
-        // TODO: Add weapon damage when weapon system is implemented
-        int totalDamage = baseDamage + strBonus + skillBonus;
+        if (weapon != null) {
+            // Use equipped weapon
+            totalDamage = weapon.calculateDamage(character);
+            usedSkill = weapon.getWeaponType().getSkill();
+            weaponName = weapon.getWeaponType().getDisplayName();
+        } else {
+            // Unarmed combat
+            int baseDamage = 3;
+            int strength = character.getStrength();
+            int strBonus = Math.max(0, (strength - 8) / 2);
+            int unarmedSkill = character.getSkillLevel(com.wasteland.character.Skill.UNARMED_COMBAT);
+            int skillBonus = unarmedSkill / 3;
+            totalDamage = baseDamage + strBonus + skillBonus;
+            usedSkill = com.wasteland.character.Skill.UNARMED_COMBAT;
+            weaponName = "Unarmed";
+        }
 
         // Add variance (80-120%)
         double variance = 0.8 + (Math.random() * 0.4);
@@ -444,17 +455,20 @@ public class CombatManager {
         targetEntity.hurt(player.level().damageSources().playerAttack(player), finalDamage);
         float newHP = targetEntity.getHealth();
 
-        System.out.println(String.format("You attack %s for %d damage! (STR: %d, Fighting: %d)",
-            target.getName(), finalDamage, strength, fightingSkill));
+        System.out.println(String.format("You attack %s with %s for %d damage!",
+            target.getName(), weaponName, finalDamage));
         System.out.println(target.getName() + ": " + oldHP + " -> " + newHP + " HP");
 
         // Check if target died
         if (!target.isAlive()) {
             System.out.println(target.getName() + " has been defeated!");
 
-            // Grant fighting skill XP for killing an enemy
+            // Grant weapon skill XP for killing an enemy
             int xpGain = 5 + ((int)targetEntity.getMaxHealth() / 2); // Scale with enemy HP
-            character.trainSkill(com.wasteland.character.Skill.FIGHTING, xpGain);
+            character.trainSkill(usedSkill, xpGain);
+
+            // Also grant fighting skill XP (half amount)
+            character.trainSkill(com.wasteland.character.Skill.FIGHTING, xpGain / 2);
 
             selectedTarget = null; // Clear dead target
 
