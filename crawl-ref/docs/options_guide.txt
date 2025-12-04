@@ -56,8 +56,9 @@ The contents of this text are:
 3-g     Command Enhancements.
                 auto_switch, easy_unequip, equip_unequip, jewellery_prompt,
                 easy_confirm, simple_targeting, force_spell_targeter,
-                force_ability_targeter, allow_self_target, ability_menu,
-                spell_menu, easy_floor_use, sort_menus, spell_slot, gear_slot,
+                force_ability_targeter, force_scroll_targeter,
+                show_invis_targeter allow_self_target, ability_menu, spell_menu,
+                easy_floor_use, sort_menus, spell_slot, gear_slot,
                 consumable_shortcut, ability_slot, autofight_stop,
                 autofight_warning, autofight_fires, autofight_nomove_fires,
                 autofight_fire_stop, autofight_caught, autofight_wait,
@@ -1211,6 +1212,18 @@ force_ability_targeter = sanctuary, cleansing flame, word of chaos, recite,
         the rest of the list (however constructed) will be ignored, and
         targeters will be shown with every ability.
 
+force_scroll_targeter = fear, silence, vulnerability, immolation, torment
+        Force showing a targeter for the listed scrolls when reading them
+        normally (since these are unaimed, this is generally to show success
+        chance or what targets might be affected). If "all" appears in the
+        options list, the rest of the list (however constructed) will be
+        ignored, and targeters will be shown for every scroll that has one.
+
+show_invis_targeter = true
+        Before turning invisible, show a targeter indicating what monsters in
+        view would actually lose sight of you (and prompt if all enemies in
+        line of sight have sInv).
+
 allow_self_target = prompt
         Allow targeting yourself with risky magic (e.g., the spell Stone Arrow
         or a wand of paralysis.) Values: (yes | no | prompt).
@@ -1568,7 +1581,7 @@ single_column_item_menus = true
         This option is only available on local tiles and console; on WebTiles
         all menus are single-column regardless of the value of this option.
 
-show_paged_inventory = false
+show_paged_inventory = true
         If set to true, the 'i' menu will divide the player's items into
         pages (gear, potions, scrolls, and evocable items) in the same way
         that the 'd'rop menu does.

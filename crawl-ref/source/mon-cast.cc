@@ -988,11 +988,11 @@ static const map<spell_type, mons_spell_logic> spell_to_logic = {
             const actor* foe = caster.get_foe();
             ASSERT(foe);
             return ai_action::good_or_impossible(foe->is_player() && could_harm_enemy(&caster, &you)
-                                                 && adjacent(caster.pos(), you.pos()));
+                                                 && grid_distance(caster.pos(), you.pos()) <= 3);
         },
         [](monster, mon_spell_slot, bolt&) {
             flash_tile(you.pos(), BLUE, 150, TILE_BOLT_OSTRACISE);
-            ostracise_player(random_range(10, 25));
+            ostracise_player(random_range(7, 18));
         }
     } },
     { SPELL_DOOMSAYING, {
@@ -6130,6 +6130,9 @@ static coord_def _mons_fragment_target(const monster &mon)
         return target;
     const monster *mons = &mon; // TODO: rewriteme
     const int pow = mons_spellpower(*mons, SPELL_LRD);
+    const actor* foe = mon.get_foe();
+    if (!foe)
+        return target;
 
     const int range = spell_range(SPELL_LRD, mons);
     int maxpower = 0;
@@ -6137,15 +6140,13 @@ static coord_def _mons_fragment_target(const monster &mon)
     {
         bool temp;
 
-        if (!cell_see_cell(mons->pos(), *di, LOS_SOLID))
+        if (!cell_see_cell(mons->pos(), *di, LOS_NO_TRANS))
             continue;
 
         bolt beam;
-        if (!setup_fragmentation_beam(beam, pow, mons, *di, true, nullptr,
-                                      temp))
-        {
+        const char *what = nullptr;
+        if (!setup_fragmentation_beam(beam, pow, mons, *di, true, &what, temp))
             continue;
-        }
 
         beam.range = range;
         targeting_tracer tracer;
@@ -6153,11 +6154,31 @@ static coord_def _mons_fragment_target(const monster &mon)
         if (!mons_should_fire(beam, tracer))
             continue;
 
-        if (tracer.foe_info.count > 0
-            && tracer.foe_info.power > maxpower)
+        if (tracer.foe_info.count > 0)
         {
-            maxpower = tracer.foe_info.power;
-            target = *di;
+            int power = tracer.foe_info.power;
+
+            // Make hitting our primary target more attractive than elsewhere.
+            if (grid_distance(foe->pos(), *di) <= beam.ex_size)
+                power += foe->get_experience_level() * 2;
+
+            // Make exploding an enemy directly more valuable, especially if
+            // they're out primary target.
+            if (!what)
+            {
+                const actor* explode = actor_at(*di);
+                if (!mons_aligned(mons, explode))
+                    power += explode->get_experience_level() * (explode == foe ? 6 : 2);
+            }
+
+            // Make higher-damage materials more desireable to explode.
+            power = power * max(beam.damage.num, 3);
+
+            if (power > maxpower)
+            {
+                maxpower = power;
+                target = *di;
+            }
         }
     }
 

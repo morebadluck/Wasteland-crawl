@@ -68,4 +68,29 @@ public class KeyBindings {
             GLFW.GLFW_KEY_C, // C for Combat mode
             CATEGORY
     );
+
+    // Targeting keybinds (for spells and combat)
+    public static final KeyMapping CYCLE_TARGET = new KeyMapping(
+            "key.wasteland.cycle_target",
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_TAB,
+            CATEGORY
+    );
+
+    public static final KeyMapping CONFIRM_TARGET = new KeyMapping(
+            "key.wasteland.confirm_target",
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_ENTER,
+            CATEGORY
+    );
+
+    public static final KeyMapping CANCEL_TARGET = new KeyMapping(
+            "key.wasteland.cancel_target",
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_ESCAPE,
+            CATEGORY
+    );
 }
