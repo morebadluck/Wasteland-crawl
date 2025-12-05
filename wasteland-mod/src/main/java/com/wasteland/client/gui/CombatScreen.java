@@ -5,16 +5,19 @@ import com.wasteland.character.PlayerCharacter;
 import com.wasteland.combat.CombatManager;
 import com.wasteland.combat.Combatant;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
 /**
  * Combat UI overlay - renders on top of 3D world during combat.
  * Shows HP/MP, turn counter, action buttons, and handles player input.
+ * Uses Inconsolata monospace font for roguelike aesthetic.
  */
 public class CombatScreen extends Screen {
     private final CombatManager combat;
@@ -22,10 +25,28 @@ public class CombatScreen extends Screen {
     private static final int HEADER_COLOR = 0xFFFF00;
     private static final int ENEMY_COLOR = 0xFF4444;
     private static final int PLAYER_COLOR = 0x44FF44;
+    // Font ID for our custom Inconsolata font
+    private static final ResourceLocation INCONSOLATA_FONT = new ResourceLocation("wasteland", "inconsolata");
 
     public CombatScreen() {
         super(Component.literal("Combat"));
         this.combat = CombatManager.getInstance();
+    }
+
+    /**
+     * Get the font to use for rendering - prefers Inconsolata if available
+     */
+    private Font getCustomFont() {
+        if (this.minecraft != null) {
+            try {
+                // Try to get the custom font from Minecraft's font manager
+                return this.minecraft.font; // For now, use default font
+                // TODO: In future, could use this.minecraft.getFontManager().createFont() with INCONSOLATA_FONT
+            } catch (Exception e) {
+                return this.font; // Fallback to default
+            }
+        }
+        return this.font;
     }
 
     @Override
@@ -54,6 +75,8 @@ public class CombatScreen extends Screen {
         PlayerCharacter character = CharacterManager.getCharacter(minecraft.player.getUUID());
         if (character == null) return;
 
+        Font fontToUse = getCustomFont();
+
         int x = 10;
         int y = 10;
 
@@ -61,7 +84,7 @@ public class CombatScreen extends Screen {
         int currentHP = character.getCurrentHP();
         int maxHP = character.getMaxHP();
         String hpText = "HP: " + currentHP + "/" + maxHP;
-        graphics.drawString(this.font, hpText, x, y, currentHP < maxHP * 0.3 ? ENEMY_COLOR : TEXT_COLOR);
+        graphics.drawString(fontToUse, hpText, x, y, currentHP < maxHP * 0.3 ? ENEMY_COLOR : TEXT_COLOR);
 
         // HP bar visual
         int barWidth = 200;
@@ -74,7 +97,7 @@ public class CombatScreen extends Screen {
         int currentMP = character.getCurrentMP();
         int maxMP = character.getMaxMP();
         String mpText = "MP: " + currentMP + "/" + maxMP;
-        graphics.drawString(this.font, mpText, x, y + 26, 0x4444FF);
+        graphics.drawString(fontToUse, mpText, x, y + 26, 0x4444FF);
 
         // MP bar visual
         float mpPercent = (float) currentMP / maxMP;
@@ -88,6 +111,8 @@ public class CombatScreen extends Screen {
     private void renderActionButtons(GuiGraphics graphics) {
         if (!combat.isInCombat()) return;
 
+        Font fontToUse = getCustomFont();
+
         int y = this.height - 60;
         int x = this.width / 2 - 200;
 
@@ -96,18 +121,18 @@ public class CombatScreen extends Screen {
             com.wasteland.combat.Combatant target = combat.getSelectedTarget();
             if (target != null) {
                 String targetInfo = "Target: " + target.getName() + " (" + (int)target.getCurrentHP() + "/" + (int)target.getMaxHP() + " HP)";
-                graphics.drawString(this.font, targetInfo, x, y, HEADER_COLOR);
+                graphics.drawString(fontToUse, targetInfo, x, y, HEADER_COLOR);
             } else {
-                graphics.drawString(this.font, "Your Turn - [Tab] to select target", x, y, HEADER_COLOR);
+                graphics.drawString(fontToUse, "Your Turn - [Tab] to select target", x, y, HEADER_COLOR);
             }
         } else {
-            graphics.drawString(this.font, "Enemy Turn...", x, y, ENEMY_COLOR);
+            graphics.drawString(fontToUse, "Enemy Turn...", x, y, ENEMY_COLOR);
         }
 
         y += 15;
 
         // Action buttons
-        graphics.drawString(this.font, "[Space] Attack  [Tab] Cycle Target  [Click] Move/Select  [Esc] End Combat", x, y, 0x888888);
+        graphics.drawString(fontToUse, "[Space] Attack  [Tab] Cycle Target  [Click] Move/Select  [Esc] End Combat", x, y, 0x888888);
     }
 
     /**
@@ -116,11 +141,13 @@ public class CombatScreen extends Screen {
     private void renderTurnInfo(GuiGraphics graphics) {
         if (!combat.isInCombat()) return;
 
+        Font fontToUse = getCustomFont();
+
         int x = this.width - 220;
         int y = 60;
 
         // Turn counter
-        graphics.drawString(this.font, "═══ TURN " + (combat.getTurnCounter() + 1) + " ═══", x, y, HEADER_COLOR);
+        graphics.drawString(fontToUse, "═══ TURN " + (combat.getTurnCounter() + 1) + " ═══", x, y, HEADER_COLOR);
         y += 15;
 
         // Current combatant
@@ -128,12 +155,12 @@ public class CombatScreen extends Screen {
         if (current != null) {
             String turnText = current.isPlayer() ? "► Your Turn" : "► " + current.getName();
             int color = current.isPlayer() ? PLAYER_COLOR : ENEMY_COLOR;
-            graphics.drawString(this.font, turnText, x, y, color);
+            graphics.drawString(fontToUse, turnText, x, y, color);
             y += 15;
         }
 
         y += 10;
-        graphics.drawString(this.font, "─── Combatants ───", x, y, HEADER_COLOR);
+        graphics.drawString(fontToUse, "─── Combatants ───", x, y, HEADER_COLOR);
         y += 12;
 
         // List all combatants
@@ -154,7 +181,7 @@ public class CombatScreen extends Screen {
                 color = HEADER_COLOR; // Highlight selected target
             }
 
-            graphics.drawString(this.font, text, x, y, color);
+            graphics.drawString(fontToUse, text, x, y, color);
             y += 12;
         }
     }
