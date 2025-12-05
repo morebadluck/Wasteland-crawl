@@ -137,6 +137,10 @@ func _process(_delta):
 
 func _input(event):
 	"""Handle turn-based input"""
+	# Don't process input if equipment screen is open
+	if equipment_screen.visible:
+		return
+
 	if event is InputEventKey and event.pressed:
 		var direction = Vector2i.ZERO
 
@@ -160,6 +164,8 @@ func _input(event):
 				direction = Vector2i(1, 1)
 			KEY_I:
 				equipment_screen.open(player)
+				get_viewport().set_input_as_handled()  # Prevent event propagation
+				return
 			KEY_M:
 				print("Skills screen - not yet implemented")
 			KEY_Z:

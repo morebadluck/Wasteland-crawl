@@ -34,12 +34,15 @@ var hovered_inventory_index: int = -1
 func _ready():
 	font = load("res://assets/fonts/IBMPlexMono-Regular.otf")
 	set_process_input(true)
+	mouse_filter = Control.MOUSE_FILTER_STOP  # Capture mouse events
+	focus_mode = Control.FOCUS_ALL  # Allow focus
 
 func open(p: Player):
 	"""Open equipment screen for player"""
 	player = p
 	show()
-	grab_focus()
+	set_process_input(true)
+	# Don't need grab_focus() with proper mouse_filter
 
 func _draw():
 	if not player:
