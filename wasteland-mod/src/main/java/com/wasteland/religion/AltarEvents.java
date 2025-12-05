@@ -14,8 +14,9 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Handles player interaction with altars
+ * TEMPORARILY DISABLED to debug right-click issue
  */
-@Mod.EventBusSubscriber(modid = WastelandMod.MOD_ID)
+//@Mod.EventBusSubscriber(modid = WastelandMod.MOD_ID)
 public class AltarEvents {
     private static final Logger LOGGER = LogManager.getLogger();
 

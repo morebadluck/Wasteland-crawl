@@ -25,6 +25,7 @@ public class WastelandArmor extends WastelandItem {
     public WastelandArmor(ItemStack itemStack, ArmorType armorType, ItemRarity rarity, int enchantmentLevel) {
         super(itemStack, rarity, enchantmentLevel);
         this.armorType = armorType;
+        // saveToNBT() is called by parent constructor, so we need to manually save armor-specific data
         saveArmorToNBT();
     }
 
@@ -48,6 +49,9 @@ public class WastelandArmor extends WastelandItem {
      * Save armor-specific properties to NBT
      */
     private void saveArmorToNBT() {
+        if (armorType == null) {
+            return; // Cannot save without armor type
+        }
         var tag = itemStack.getOrCreateTag();
         tag.putString("WastelandArmorType", armorType.name());
     }
@@ -60,6 +64,9 @@ public class WastelandArmor extends WastelandItem {
 
     @Override
     protected String getBaseItemName() {
+        if (armorType == null) {
+            return "Unknown Armor";
+        }
         return armorType.getDisplayName();
     }
 

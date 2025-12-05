@@ -2,7 +2,7 @@
   "providers": [
     {
       "type": "ttf",
-      "file": "wasteland:inconsolata-regular.ttf",
+      "file": "wasteland:ibm-plex-mono-regular.otf",
       "shift": [0.0, 0.0],
       "size": 9.0,
       "oversample": 2.0

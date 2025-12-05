@@ -71,7 +71,7 @@ This document lists weapon types and monster categories from Dungeon Crawl Stone
 - **Arbalest** - Heavy crossbow (base: 18)
 - **Triple Crossbow** - Rare, multi-shot (base: 22)
 
-#### Slings
+#### Slings - Maybe change to Guns? Need to expand these. Stones -> ammo. 
 - **Hunting Sling** - Basic ranged (base: 5)
 - **Fustibalus** - Heavy sling (base: 8)
 
@@ -79,7 +79,7 @@ This document lists weapon types and monster categories from Dungeon Crawl Stone
 - **Throwing Net** - Entangle enemies
 - **Boomerang** - Returns to thrower
 - **Javelin** - Heavy throwing spear
-- **Large Rock** - Giant ammunition
+- **Large Rock** - Giant ammunition -- See GUNS. 
 
 ### Unarmed Combat
 **Characteristics:** Scaling with skill and mutations
@@ -96,12 +96,19 @@ This document lists weapon types and monster categories from Dungeon Crawl Stone
 
 #### Humanoids
 - **Goblin** - Weak, often in groups
+    - Change to Thug?
 - **Hobgoblin** - Tougher goblin
+    - Change to Punk?
 - **Gnoll** - Pack hunters, hyena-like
+    - Change to Scavenger?
 - **Orc** - Basic warrior enemies
+    - Change to Possessed Private?
 - **Orc Warrior** - Armored orcs
+    -  Change to Possessed Sgt?
 - **Orc Priest** - Healing support
+    - Change to Possessed Priest?
 - **Orc Wizard** - Magic attacks
+    - Change to Possessed Occultist?
 - **Kobold** - Small, fast
 - **Kobold Demonologist** - Summons demons
 
@@ -255,34 +262,14 @@ This document lists weapon types and monster categories from Dungeon Crawl Stone
 
 ---
 
-## WASTELAND ADAPTATIONS (✅ IMPLEMENTED!)
+## WASTELAND ADAPTATIONS
 
-### Wasteland Weapons (✅ IN GAME)
-All wasteland-themed weapons are now implemented in WeaponType.java:
-
-**Makeshift/Melee:**
-- Shiv, Combat Knife, Machete (short blades)
-- Lead Pipe, Crowbar, Baseball Bat, Sledgehammer, Pneumatic Hammer (maces/flails)
-- Rusty Sword, Scrap Blade, Katana, Ripper (long blades)
-- Hatchet, Fire Axe, Super Sledge (axes)
-- Spear, Pitchfork, Halberd (polearms)
-
-**Guns (REPLACES SLINGS):**
-- **Tier 1 Pistols:** Pipe Pistol, 22 Pistol
-- **Tier 2 Pistols:** 9mm Pistol, 45 Pistol
-- **Tier 3 Pistols:** 44 Magnum, Desert Eagle
-- **Tier 4 Rifles:** Hunting Rifle, Varmint Rifle
-- **Tier 5 Combat Rifles:** Assault Rifle, Battle Rifle, Sniper Rifle
-- **Tier 6 Shotguns:** Sawed-Off Shotgun, Combat Shotgun
-- **Tier 7 Energy Weapons:** Laser Pistol, Laser Rifle, Plasma Rifle, Gauss Rifle
-
-**Ammunition (REPLACES STONES):**
-- 22LR, 9mm, 45 ACP, 5.56mm, 7.62mm, Shotgun Shells, Energy Cells
-- Grenades, Molotovs, Pipe Bombs
-
-**Skills Updated:**
-- SLINGS skill replaced with GUNS skill (Skill.java:22)
-- Kobold race has +2 aptitude for GUNS (formerly SLINGS)
+### Weapon Variants (Suggestions)
+- **Makeshift Weapons** - Pipe, crowbar, rebar club
+- **Scavenged Firearms** - Revolver, shotgun, rifle (limited ammo)
+- **Energy Weapons** - Laser pistol, plasma rifle (rare, powerful)
+- **Modified Tools** - Chainsaw, pneumatic hammer
+- **Pre-war Relics** - Combat knife, machete, baton
 
 ### Monster Variants (Suggestions)
 - **Mutated Animals** - Two-headed dogs, radscorpions, giant rats

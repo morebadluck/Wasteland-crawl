@@ -32,6 +32,7 @@ public class WastelandWeapon extends WastelandItem {
         this.weaponType = weaponType;
         this.bonusAccuracy = 0;
         this.bonusSlaying = 0;
+        // saveToNBT() is called by parent constructor, so we need to manually save weapon-specific data
         saveWeaponToNBT();
     }
 
@@ -63,6 +64,9 @@ public class WastelandWeapon extends WastelandItem {
      * Save weapon-specific properties to NBT
      */
     private void saveWeaponToNBT() {
+        if (weaponType == null) {
+            return; // Cannot save without weapon type
+        }
         var tag = itemStack.getOrCreateTag();
         tag.putString("WastelandWeaponType", weaponType.name());
         tag.putInt("WastelandBonusAccuracy", bonusAccuracy);
@@ -77,6 +81,9 @@ public class WastelandWeapon extends WastelandItem {
 
     @Override
     protected String getBaseItemName() {
+        if (weaponType == null) {
+            return "Unknown Weapon";
+        }
         return weaponType.getDisplayName();
     }
 

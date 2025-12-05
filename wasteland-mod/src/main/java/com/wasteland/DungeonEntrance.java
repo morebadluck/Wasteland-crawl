@@ -98,8 +98,8 @@ public class DungeonEntrance {
                             level.setBlock(buildPos, Blocks.GRAY_CONCRETE.defaultBlockState(), 3);
                         }
                     } else if (isCeiling) {
-                        // Partially destroyed ceiling - mossy stone bricks
-                        if (isWall || (x % 2 == 0 && z % 2 == 0)) {
+                        // Full ceiling for most dungeons (some holes for light)
+                        if (isWall || !((x == width/2 && z == depth/2) || (x == 3 && z == 3) || (x == width-4 && z == depth-4))) {
                             level.setBlock(buildPos, Blocks.MOSSY_STONE_BRICKS.defaultBlockState(), 3);
                         } else {
                             level.setBlock(buildPos, Blocks.AIR.defaultBlockState(), 3);

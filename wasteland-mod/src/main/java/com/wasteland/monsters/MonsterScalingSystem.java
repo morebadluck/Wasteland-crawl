@@ -206,7 +206,13 @@ public class MonsterScalingSystem {
     public static String getStatBreakdown(LivingEntity entity) {
         int level = entity.getPersistentData().getInt("AreaLevel");
         double hp = entity.getMaxHealth();
-        double damage = entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
+
+        // Some entities don't have attack_damage attribute (e.g., passive mobs)
+        double damage = 0.0;
+        if (entity.getAttribute(Attributes.ATTACK_DAMAGE) != null) {
+            damage = entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        }
+
         double armor = entity.getAttributeValue(Attributes.ARMOR);
         int variant = entity.getPersistentData().getInt("VisualVariant");
 
