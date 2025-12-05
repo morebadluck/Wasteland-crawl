@@ -22,10 +22,15 @@ public class EquipmentScreen extends Screen {
 
     private static final int SLOT_SIZE = 18;
     private static final int SLOT_SPACING = 20;
-    private static final int LEFT_PANEL_X = 20;
-    private static final int LEFT_PANEL_Y = 40;
-    private static final int RIGHT_PANEL_X = 200;
-    private static final int RIGHT_PANEL_Y = 40;
+    private static final int EQUIPMENT_COL1_X = 20;   // First column of equipment (Weapon, Body, Helmet, Cloak, Boots)
+    private static final int EQUIPMENT_COL2_X = 160;  // Second column of equipment (Offhand, Gloves, Amulet, Rings)
+    private static final int EQUIPMENT_Y = 40;
+    private static final int STATS_PANEL_X = 300;
+    private static final int STATS_PANEL_Y = 40;
+    private static final int INVENTORY_PANEL_X = 440;
+    private static final int INVENTORY_PANEL_Y = 40;
+    private static final int INVENTORY_COLS = 9;
+    private static final int INVENTORY_ROWS = 4; // Player inventory (not hotbar)
 
     private final Player player;
     private Map<EquipmentSlot, ItemStack> equippedItems;
@@ -54,38 +59,73 @@ public class EquipmentScreen extends Screen {
         // Left panel: Equipment slots
         renderEquipmentSlots(graphics, mouseX, mouseY);
 
-        // Right panel: Stats
+        // Middle panel: Stats
         renderStats(graphics);
+
+        // Right panel: Inventory
+        renderInventory(graphics, mouseX, mouseY);
     }
 
     /**
-     * Render all equipment slots
+     * Render all equipment slots in two columns
      */
     private void renderEquipmentSlots(GuiGraphics graphics, int mouseX, int mouseY) {
-        int x = LEFT_PANEL_X;
-        int y = LEFT_PANEL_Y;
+        // Column 1: Weapon, Body, Helmet, Cloak, Boots
+        EquipmentSlot[] column1 = {
+            EquipmentSlot.WEAPON,
+            EquipmentSlot.BODY,
+            EquipmentSlot.HELMET,
+            EquipmentSlot.CLOAK,
+            EquipmentSlot.BOOTS
+        };
 
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
-            // Draw slot background
-            renderSlotBackground(graphics, x, y);
+        // Column 2: Offhand, Gloves, Amulet, Left Ring, Right Ring
+        EquipmentSlot[] column2 = {
+            EquipmentSlot.OFFHAND,
+            EquipmentSlot.GLOVES,
+            EquipmentSlot.AMULET,
+            EquipmentSlot.LEFT_RING,
+            EquipmentSlot.RIGHT_RING
+        };
 
-            // Draw slot label
-            graphics.drawString(this.font, slot.getDisplayName() + " (" + slot.getSlotKey() + ")",
-                x + SLOT_SIZE + 4, y + 5, 0xFFFFFF, false);
-
-            // Draw equipped item if present
-            ItemStack equipped = equippedItems.getOrDefault(slot, ItemStack.EMPTY);
-            if (!equipped.isEmpty()) {
-                graphics.renderItem(equipped, x + 1, y + 1);
-                graphics.renderItemDecorations(this.font, equipped, x + 1, y + 1);
-
-                // Show tooltip on hover
-                if (isMouseOver(mouseX, mouseY, x, y, SLOT_SIZE, SLOT_SIZE)) {
-                    graphics.renderTooltip(this.font, equipped, mouseX, mouseY);
-                }
-            }
-
+        // Render column 1
+        int x = EQUIPMENT_COL1_X;
+        int y = EQUIPMENT_Y;
+        for (EquipmentSlot slot : column1) {
+            renderEquipmentSlot(graphics, slot, x, y, mouseX, mouseY);
             y += SLOT_SPACING;
+        }
+
+        // Render column 2
+        x = EQUIPMENT_COL2_X;
+        y = EQUIPMENT_Y;
+        for (EquipmentSlot slot : column2) {
+            renderEquipmentSlot(graphics, slot, x, y, mouseX, mouseY);
+            y += SLOT_SPACING;
+        }
+    }
+
+    /**
+     * Render a single equipment slot
+     */
+    private void renderEquipmentSlot(GuiGraphics graphics, EquipmentSlot slot, int x, int y, int mouseX, int mouseY) {
+        // Draw slot background
+        renderSlotBackground(graphics, x, y);
+
+        // Draw slot label
+        graphics.drawString(this.font, slot.getDisplayName() + " (" + slot.getSlotKey() + ")",
+            x + SLOT_SIZE + 4, y + 5, 0xFFFFFF, false);
+
+        // Draw equipped item if present
+        ItemStack equipped = equippedItems.getOrDefault(slot, ItemStack.EMPTY);
+        if (!equipped.isEmpty()) {
+            graphics.renderItem(equipped, x + 1, y + 1);
+            graphics.renderItemDecorations(this.font, equipped, x + 1, y + 1);
+
+            // Show tooltip on hover
+            if (isMouseOver(mouseX, mouseY, x, y, SLOT_SIZE, SLOT_SIZE)) {
+                graphics.renderTooltip(this.font, equipped, mouseX, mouseY);
+            }
         }
     }
 
@@ -93,8 +133,8 @@ public class EquipmentScreen extends Screen {
      * Render the stats panel
      */
     private void renderStats(GuiGraphics graphics) {
-        int x = RIGHT_PANEL_X;
-        int y = RIGHT_PANEL_Y;
+        int x = STATS_PANEL_X;
+        int y = STATS_PANEL_Y;
 
         graphics.drawString(this.font, "Character Stats", x, y, 0xFFFF00, false);
         y += 15;
@@ -151,6 +191,43 @@ public class EquipmentScreen extends Screen {
     }
 
     /**
+     * Render the player inventory
+     */
+    private void renderInventory(GuiGraphics graphics, int mouseX, int mouseY) {
+        int x = INVENTORY_PANEL_X;
+        int y = INVENTORY_PANEL_Y;
+
+        // Title
+        graphics.drawString(this.font, "Inventory", x, y - 12, 0xFFFF00, false);
+
+        // Render inventory slots (skip hotbar, show main inventory)
+        for (int row = 0; row < INVENTORY_ROWS; row++) {
+            for (int col = 0; col < INVENTORY_COLS; col++) {
+                int slotX = x + col * SLOT_SPACING;
+                int slotY = y + row * SLOT_SPACING;
+
+                // Draw slot background
+                renderSlotBackground(graphics, slotX, slotY);
+
+                // Get item in this slot (slots 9-35 are main inventory, skip 0-8 hotbar)
+                int slotIndex = 9 + (row * INVENTORY_COLS + col);
+                if (slotIndex < player.getInventory().getContainerSize()) {
+                    ItemStack stack = player.getInventory().getItem(slotIndex);
+                    if (!stack.isEmpty()) {
+                        graphics.renderItem(stack, slotX + 1, slotY + 1);
+                        graphics.renderItemDecorations(this.font, stack, slotX + 1, slotY + 1);
+
+                        // Show tooltip on hover
+                        if (isMouseOver(mouseX, mouseY, slotX, slotY, SLOT_SIZE, SLOT_SIZE)) {
+                            graphics.renderTooltip(this.font, stack, mouseX, mouseY);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Render a slot background (simple gray rectangle)
      */
     private void renderSlotBackground(GuiGraphics graphics, int x, int y) {
@@ -184,5 +261,151 @@ public class EquipmentScreen extends Screen {
     @Override
     public boolean isPauseScreen() {
         return false; // Don't pause the game when this screen is open
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        // Only handle left click
+        if (button != 0) {
+            return super.mouseClicked(mouseX, mouseY, button);
+        }
+
+        // Check equipment slots - Column 1
+        EquipmentSlot[] column1 = {
+            EquipmentSlot.WEAPON,
+            EquipmentSlot.BODY,
+            EquipmentSlot.HELMET,
+            EquipmentSlot.CLOAK,
+            EquipmentSlot.BOOTS
+        };
+        int x = EQUIPMENT_COL1_X;
+        int y = EQUIPMENT_Y;
+        for (EquipmentSlot slot : column1) {
+            if (isMouseOver((int)mouseX, (int)mouseY, x, y, SLOT_SIZE, SLOT_SIZE)) {
+                handleSlotClick(slot);
+                return true;
+            }
+            y += SLOT_SPACING;
+        }
+
+        // Check equipment slots - Column 2
+        EquipmentSlot[] column2 = {
+            EquipmentSlot.OFFHAND,
+            EquipmentSlot.GLOVES,
+            EquipmentSlot.AMULET,
+            EquipmentSlot.LEFT_RING,
+            EquipmentSlot.RIGHT_RING
+        };
+        x = EQUIPMENT_COL2_X;
+        y = EQUIPMENT_Y;
+        for (EquipmentSlot slot : column2) {
+            if (isMouseOver((int)mouseX, (int)mouseY, x, y, SLOT_SIZE, SLOT_SIZE)) {
+                handleSlotClick(slot);
+                return true;
+            }
+            y += SLOT_SPACING;
+        }
+
+        // Check inventory slots
+        for (int row = 0; row < INVENTORY_ROWS; row++) {
+            for (int col = 0; col < INVENTORY_COLS; col++) {
+                int slotX = INVENTORY_PANEL_X + col * SLOT_SPACING;
+                int slotY = INVENTORY_PANEL_Y + row * SLOT_SPACING;
+
+                if (isMouseOver((int)mouseX, (int)mouseY, slotX, slotY, SLOT_SIZE, SLOT_SIZE)) {
+                    int slotIndex = 9 + (row * INVENTORY_COLS + col);
+                    handleInventoryClick(slotIndex);
+                    return true;
+                }
+            }
+        }
+
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    /**
+     * Handle clicking on an equipment slot
+     */
+    private void handleSlotClick(EquipmentSlot slot) {
+        ItemStack equipped = equippedItems.getOrDefault(slot, ItemStack.EMPTY);
+        ItemStack carried = this.minecraft.player.containerMenu.getCarried();
+
+        if (!carried.isEmpty()) {
+            // Player is holding an item - try to equip it
+            if (canEquipToSlot(carried, slot)) {
+                // Swap: put carried item in slot, previous item goes to cursor
+                ItemStack previouslyEquipped = EquipmentManager.equip(player, slot, carried.copy());
+                this.minecraft.player.containerMenu.setCarried(previouslyEquipped);
+                // Refresh display
+                this.equippedItems = EquipmentManager.getAllEquipped(player);
+            }
+        } else if (!equipped.isEmpty()) {
+            // Player clicked on equipped item with empty hand - unequip it
+            ItemStack unequipped = EquipmentManager.unequip(player, slot);
+            this.minecraft.player.containerMenu.setCarried(unequipped);
+            // Refresh display
+            this.equippedItems = EquipmentManager.getAllEquipped(player);
+        }
+    }
+
+    /**
+     * Handle clicking on an inventory slot
+     */
+    private void handleInventoryClick(int slotIndex) {
+        ItemStack clickedStack = player.getInventory().getItem(slotIndex);
+        ItemStack carried = this.minecraft.player.containerMenu.getCarried();
+
+        if (!carried.isEmpty()) {
+            // Player is holding an item - put it in the inventory slot
+            player.getInventory().setItem(slotIndex, carried.copy());
+            this.minecraft.player.containerMenu.setCarried(ItemStack.EMPTY);
+        } else if (!clickedStack.isEmpty()) {
+            // Player clicked on an item - pick it up
+            player.getInventory().setItem(slotIndex, ItemStack.EMPTY);
+            this.minecraft.player.containerMenu.setCarried(clickedStack.copy());
+        }
+    }
+
+    /**
+     * Check if an item can be equipped to a specific slot
+     */
+    private boolean canEquipToSlot(ItemStack stack, EquipmentSlot slot) {
+        // Check if the item is a weapon or armor
+        boolean isWeapon = stack.getItem() instanceof com.wasteland.item.WastelandWeaponItem;
+        boolean isArmor = stack.getItem() instanceof com.wasteland.item.WastelandArmorItem;
+
+        // Weapon slots can only hold weapons
+        if (slot == EquipmentSlot.WEAPON || slot == EquipmentSlot.OFFHAND) {
+            return isWeapon;
+        }
+
+        // Armor slots can only hold armor, and must match the slot type
+        if (slot.canHoldArmor()) {
+            if (!isArmor) return false;
+
+            // Check armor matches the slot
+            com.wasteland.loot.WastelandArmor armor = com.wasteland.item.WastelandArmorItem.createArmor(stack);
+            if (armor == null) return false;
+
+            // Match armor type to slot
+            com.wasteland.loot.ArmorType armorType = armor.getArmorType();
+            return switch (slot) {
+                case BODY -> armorType == com.wasteland.loot.ArmorType.ROBE ||
+                            armorType == com.wasteland.loot.ArmorType.LEATHER_ARMOR ||
+                            armorType == com.wasteland.loot.ArmorType.RING_MAIL ||
+                            armorType == com.wasteland.loot.ArmorType.SCALE_MAIL ||
+                            armorType == com.wasteland.loot.ArmorType.CHAIN_MAIL ||
+                            armorType == com.wasteland.loot.ArmorType.PLATE_ARMOR;
+                case HELMET -> armorType == com.wasteland.loot.ArmorType.HELMET;
+                case CLOAK -> armorType == com.wasteland.loot.ArmorType.CLOAK;
+                case GLOVES -> armorType == com.wasteland.loot.ArmorType.GLOVES;
+                case BOOTS -> armorType == com.wasteland.loot.ArmorType.BOOTS;
+                default -> false;
+            };
+        }
+
+        // For jewelry slots (ring, amulet), allow any item for now
+        // TODO: Add jewelry items
+        return slot.canHoldJewelry();
     }
 }

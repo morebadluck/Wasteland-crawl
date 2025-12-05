@@ -71,6 +71,8 @@ public class WastelandMod {
         @SubscribeEvent
         public static void onCommandsRegister(RegisterCommandsEvent event) {
             StructureTestCommand.register(event.getDispatcher());
+            com.wasteland.commands.SpawnStructureCommand.register(event.getDispatcher());
+            com.wasteland.commands.StarterItemsCommand.register(event.getDispatcher());
             LOGGER.info("Registered structure test commands");
         }
 
@@ -83,10 +85,41 @@ public class WastelandMod {
                 // Initialize player progression (starts at depth 0 = surface)
                 DungeonProgression.setDepth(event.getEntity().getUUID(), 0);
 
-                // Give starter equipment to new players
+                // TEMPORARY FIX: Give starter equipment directly to player
+                // (Right-click interaction is broken, can't open chests)
                 if (!com.wasteland.player.StarterEquipment.hasReceivedStarterEquipment(event.getEntity())) {
-                    com.wasteland.player.StarterEquipment.giveStarterEquipment(event.getEntity());
-                    LOGGER.info("Gave starter equipment to new player");
+                    // Create starter weapon (Common Shiv)
+                    net.minecraft.world.item.ItemStack starterWeapon = new net.minecraft.world.item.ItemStack(
+                        com.wasteland.item.ModItems.SHIV.get()
+                    );
+                    com.wasteland.loot.WastelandWeapon weapon = new com.wasteland.loot.WastelandWeapon(
+                        starterWeapon,
+                        com.wasteland.equipment.WeaponType.SHIV,
+                        com.wasteland.loot.ItemRarity.COMMON,
+                        0
+                    );
+                    weapon.identify();
+                    weapon.saveToNBT();
+
+                    // Create starter armor (Common Robe)
+                    net.minecraft.world.item.ItemStack starterArmor = new net.minecraft.world.item.ItemStack(
+                        com.wasteland.item.ModItems.ROBE.get()
+                    );
+                    com.wasteland.loot.WastelandArmor armor = new com.wasteland.loot.WastelandArmor(
+                        starterArmor,
+                        com.wasteland.loot.ArmorType.ROBE,
+                        com.wasteland.loot.ItemRarity.COMMON,
+                        0
+                    );
+                    armor.identify();
+                    armor.saveToNBT();
+
+                    // Give items directly to player
+                    event.getEntity().addItem(starterWeapon);
+                    event.getEntity().addItem(starterArmor);
+
+                    com.wasteland.player.StarterEquipment.markStarterEquipmentReceived(event.getEntity());
+                    LOGGER.info("Player spawn - gave starter equipment directly (chest interaction broken)");
                 }
 
                 LOGGER.info("═══════════════════════════════════════════════════════");
@@ -105,7 +138,9 @@ public class WastelandMod {
                     LOGGER.info("  Noise-based difficulty active!");
                     LOGGER.info("  Spawn protection: 200 blocks radius");
 
-                    // Generate all dungeons across the world if they don't exist yet
+                    // TEMPORARILY DISABLED: Generate all dungeons across the world if they don't exist yet
+                    // This is disabled to test spawn structure without memory issues
+                    /*
                     if (com.wasteland.worldgen.DungeonManager.getAllDungeons().isEmpty()) {
                         LOGGER.info("Generating dungeons across the wasteland...");
                         com.wasteland.worldgen.DungeonManager.generateDungeons(level, worldSeed);
@@ -121,23 +156,38 @@ public class WastelandMod {
                         // Mark data as dirty to save the newly generated dungeons and structures
                         com.wasteland.worldgen.WastelandSavedData.markDirty(level);
                     }
+                    */
+                    LOGGER.info("World generation temporarily disabled for spawn structure testing");
 
                     worldInitialized = true;
                 }
 
-                // Find and teleport player to a safe spawn location
-                BlockPos currentPos = event.getEntity().blockPosition();
-                BlockPos safeSpawn = com.wasteland.worldgen.SafeSpawnFinder.findSafeSpawn(level, currentPos);
-                if (!safeSpawn.equals(currentPos)) {
-                    event.getEntity().teleportTo(safeSpawn.getX() + 0.5, safeSpawn.getY(), safeSpawn.getZ() + 0.5);
-                    LOGGER.info("Moved player to safe spawn: {}", safeSpawn);
-                }
+                // Always check if spawn structure exists, build if missing
+                BlockPos worldSpawn = level.getSharedSpawnPos();
 
-                // Place test temple with altars for testing (near spawn)
-                BlockPos templePos = safeSpawn.offset(-20, 0, 0);
-                BlockPos templeGroundPos = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, templePos);
-                LOGGER.info("Placing test temple at: {}", templeGroundPos);
-                AltarManager.placeTemple(level, templeGroundPos, 6);
+                // Calculate where the chest SHOULD be based on SpawnPointStructure logic
+                // groundPos = heightmap of worldSpawn
+                BlockPos groundPos = level.getHeightmapPos(
+                    net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE,
+                    worldSpawn
+                );
+                // shelterBase = groundPos.offset(-2, 0, -2) where shelterRadius = 5/2 = 2
+                // chestPos = shelterBase.offset(3, 1, 1) = groundPos.offset(1, 1, -1)
+                BlockPos expectedChestPos = groundPos.offset(1, 1, -1);
+
+                LOGGER.info("Checking for spawn structure chest at: {}", expectedChestPos);
+                if (level.getBlockState(expectedChestPos).getBlock() != net.minecraft.world.level.block.Blocks.CHEST) {
+                    LOGGER.info("Spawn structure missing, building at world spawn: {}", worldSpawn);
+                    com.wasteland.structures.SpawnPointStructure.generate(level, worldSpawn, level.getRandom());
+
+                    // Place test temple with altars for testing (near spawn)
+                    BlockPos templePos = worldSpawn.offset(-20, 0, 0);
+                    BlockPos templeGroundPos = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, templePos);
+                    LOGGER.info("Placing test temple at: {}", templeGroundPos);
+                    AltarManager.placeTemple(level, templeGroundPos, 6);
+                } else {
+                    LOGGER.info("Spawn structure already exists, skipping generation");
+                }
             }
         }
 

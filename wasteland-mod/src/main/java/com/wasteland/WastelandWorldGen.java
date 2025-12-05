@@ -37,9 +37,43 @@ public class WastelandWorldGen {
     private static final int SEVEN_ELEVEN_SPACING = 24; // Chunks between 7-11 stores (384 blocks)
     private static final double SEVEN_ELEVEN_CHANCE = 0.15; // 15% chance per valid chunk
 
+    private static final int MALL_SPACING = 64; // Chunks between malls (1024 blocks)
+    private static final double MALL_CHANCE = 0.10; // 10% chance per valid chunk
+
+    private static final int CHURCH_SPACING = 40; // Chunks between churches (640 blocks)
+    private static final double CHURCH_CHANCE = 0.12; // 12% chance per valid chunk
+
     /**
      * Generate wasteland features when chunks load
      * Uses USA region system to place biome-appropriate structures
+     */
+    // Queue of chunks waiting for structure generation
+    private static final java.util.Queue<PendingStructure> PENDING_STRUCTURES = new java.util.concurrent.ConcurrentLinkedQueue<>();
+
+    private static class PendingStructure {
+        final ServerLevel level;
+        final int chunkX;
+        final int chunkZ;
+        final StructureType type;
+
+        PendingStructure(ServerLevel level, int chunkX, int chunkZ, StructureType type) {
+            this.level = level;
+            this.chunkX = chunkX;
+            this.chunkZ = chunkZ;
+            this.type = type;
+        }
+    }
+
+    private enum StructureType {
+        DUNGEON_ENTRANCE,
+        SEVEN_ELEVEN,
+        MALL,
+        CHURCH,
+        DECORATION
+    }
+
+    /**
+     * Mark chunks that need structure generation (doesn't place blocks yet)
      */
     @SubscribeEvent
     public static void onChunkLoad(ChunkEvent.Load event) {
@@ -62,26 +96,85 @@ public class WastelandWorldGen {
         int blockX = (chunkX << 4) + 8;
         int blockZ = (chunkZ << 4) + 8;
 
-        // Get the USA region for this location
-        USARegion region = USARegion.getRegion(blockX, blockZ);
-
+        // Queue structures for later placement
         // Check for dungeon entrance spawning (grid-based)
         if (chunkX % DUNGEON_SPACING == 0 && chunkZ % DUNGEON_SPACING == 0) {
             if (RANDOM.nextDouble() < DUNGEON_CHANCE) {
-                generateDungeonEntrance(level, chunkX, chunkZ, region);
+                PENDING_STRUCTURES.add(new PendingStructure(level, chunkX, chunkZ, StructureType.DUNGEON_ENTRANCE));
             }
         }
 
         // Check for 7-11 store spawning (different grid)
         if ((chunkX + 12) % SEVEN_ELEVEN_SPACING == 0 && (chunkZ + 12) % SEVEN_ELEVEN_SPACING == 0) {
             if (RANDOM.nextDouble() < SEVEN_ELEVEN_CHANCE) {
-                generateSevenEleven(level, chunkX, chunkZ);
+                PENDING_STRUCTURES.add(new PendingStructure(level, chunkX, chunkZ, StructureType.SEVEN_ELEVEN));
+            }
+        }
+
+        // Check for mall spawning (different grid offset)
+        if ((chunkX + 24) % MALL_SPACING == 0 && (chunkZ + 24) % MALL_SPACING == 0) {
+            if (RANDOM.nextDouble() < MALL_CHANCE) {
+                PENDING_STRUCTURES.add(new PendingStructure(level, chunkX, chunkZ, StructureType.MALL));
+            }
+        }
+
+        // Check for church spawning (different grid offset)
+        if ((chunkX + 18) % CHURCH_SPACING == 0 && (chunkZ + 18) % CHURCH_SPACING == 0) {
+            if (RANDOM.nextDouble() < CHURCH_CHANCE) {
+                PENDING_STRUCTURES.add(new PendingStructure(level, chunkX, chunkZ, StructureType.CHURCH));
             }
         }
 
         // Small chance for wasteland decorations in any chunk
         if (RANDOM.nextDouble() < 0.03) { // 3% chance
-            generateWastelandDecoration(level, chunkX, chunkZ);
+            PENDING_STRUCTURES.add(new PendingStructure(level, chunkX, chunkZ, StructureType.DECORATION));
+        }
+    }
+
+    /**
+     * Process pending structures on server tick (deferred generation)
+     */
+    @SubscribeEvent
+    public static void onServerTick(net.minecraftforge.event.TickEvent.ServerTickEvent event) {
+        // Only process at end of tick
+        if (event.phase != net.minecraftforge.event.TickEvent.Phase.END) return;
+
+        // Process up to 5 structures per tick to avoid lag
+        int processed = 0;
+        while (processed < 5 && !PENDING_STRUCTURES.isEmpty()) {
+            PendingStructure pending = PENDING_STRUCTURES.poll();
+            if (pending != null) {
+                processStructure(pending);
+                processed++;
+            }
+        }
+    }
+
+    /**
+     * Actually place the structure blocks
+     */
+    private static void processStructure(PendingStructure pending) {
+        // Convert chunk coords to block coords (center of chunk)
+        int blockX = (pending.chunkX << 4) + 8;
+        int blockZ = (pending.chunkZ << 4) + 8;
+
+        switch (pending.type) {
+            case DUNGEON_ENTRANCE:
+                USARegion region = USARegion.getRegion(blockX, blockZ);
+                generateDungeonEntrance(pending.level, pending.chunkX, pending.chunkZ, region);
+                break;
+            case SEVEN_ELEVEN:
+                generateSevenEleven(pending.level, pending.chunkX, pending.chunkZ);
+                break;
+            case MALL:
+                generateMall(pending.level, pending.chunkX, pending.chunkZ);
+                break;
+            case CHURCH:
+                generateChurch(pending.level, pending.chunkX, pending.chunkZ);
+                break;
+            case DECORATION:
+                generateWastelandDecoration(pending.level, pending.chunkX, pending.chunkZ);
+                break;
         }
     }
 
@@ -293,10 +386,187 @@ public class WastelandWorldGen {
     }
 
     /**
+     * Generate a mall structure
+     */
+    private static void generateMall(ServerLevel level, int chunkX, int chunkZ) {
+        // Convert chunk coordinates to world coordinates
+        int worldX = (chunkX << 4) + RANDOM.nextInt(16);
+        int worldZ = (chunkZ << 4) + RANDOM.nextInt(16);
+
+        // Find ground level
+        BlockPos searchPos = new BlockPos(worldX, 64, worldZ);
+        BlockPos groundPos = level.getHeightmapPos(
+            net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE,
+            searchPos
+        );
+
+        // Don't place in water or extreme elevations
+        if (groundPos.getY() < 62 || groundPos.getY() > 100) {
+            return;
+        }
+
+        LOGGER.info("Generating mall at chunk ({}, {}) - world pos {}", chunkX, chunkZ, groundPos);
+
+        // Try to use MallStructure class
+        try {
+            com.wasteland.structures.MallStructure.generate(level, groundPos, RANDOM);
+        } catch (Exception e) {
+            // Fallback to simple structure
+            LOGGER.warn("Could not use MallStructure, using fallback: {}", e.getMessage());
+            placeMallFallback(level, groundPos);
+        }
+    }
+
+    /**
+     * Fallback mall structure (simple version)
+     */
+    private static void placeMallFallback(ServerLevel level, BlockPos pos) {
+        // Large 15x15 structure
+        // Floor
+        for (int x = -7; x <= 7; x++) {
+            for (int z = -7; z <= 7; z++) {
+                level.setBlock(pos.offset(x, -1, z),
+                    net.minecraft.world.level.block.Blocks.POLISHED_ANDESITE.defaultBlockState(), 3);
+            }
+        }
+
+        // Walls (brick)
+        for (int x = -7; x <= 7; x++) {
+            for (int y = 0; y < 5; y++) {
+                level.setBlock(pos.offset(x, y, -7),
+                    net.minecraft.world.level.block.Blocks.BRICKS.defaultBlockState(), 3);
+                level.setBlock(pos.offset(x, y, 7),
+                    net.minecraft.world.level.block.Blocks.BRICKS.defaultBlockState(), 3);
+            }
+        }
+
+        for (int z = -7; z <= 7; z++) {
+            for (int y = 0; y < 5; y++) {
+                level.setBlock(pos.offset(-7, y, z),
+                    net.minecraft.world.level.block.Blocks.BRICKS.defaultBlockState(), 3);
+                level.setBlock(pos.offset(7, y, z),
+                    net.minecraft.world.level.block.Blocks.BRICKS.defaultBlockState(), 3);
+            }
+        }
+
+        // Main entrance (south side)
+        for (int y = 0; y < 3; y++) {
+            level.setBlock(pos.offset(0, y, 7), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
+            level.setBlock(pos.offset(1, y, 7), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
+        }
+
+        // Roof
+        for (int x = -7; x <= 7; x++) {
+            for (int z = -7; z <= 7; z++) {
+                level.setBlock(pos.offset(x, 5, z),
+                    net.minecraft.world.level.block.Blocks.QUARTZ_BLOCK.defaultBlockState(), 3);
+            }
+        }
+
+        // Interior lighting
+        level.setBlock(pos.offset(0, 3, 0), net.minecraft.world.level.block.Blocks.GLOWSTONE.defaultBlockState(), 3);
+        level.setBlock(pos.offset(-4, 3, -4), net.minecraft.world.level.block.Blocks.GLOWSTONE.defaultBlockState(), 3);
+        level.setBlock(pos.offset(4, 3, 4), net.minecraft.world.level.block.Blocks.GLOWSTONE.defaultBlockState(), 3);
+
+        // Some loot chests
+        level.setBlock(pos.offset(-5, 0, -5), net.minecraft.world.level.block.Blocks.CHEST.defaultBlockState(), 3);
+        level.setBlock(pos.offset(5, 0, -5), net.minecraft.world.level.block.Blocks.CHEST.defaultBlockState(), 3);
+    }
+
+    /**
+     * Generate a church structure
+     */
+    private static void generateChurch(ServerLevel level, int chunkX, int chunkZ) {
+        // Convert chunk coordinates to world coordinates
+        int worldX = (chunkX << 4) + RANDOM.nextInt(16);
+        int worldZ = (chunkZ << 4) + RANDOM.nextInt(16);
+
+        // Find ground level
+        BlockPos searchPos = new BlockPos(worldX, 64, worldZ);
+        BlockPos groundPos = level.getHeightmapPos(
+            net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE,
+            searchPos
+        );
+
+        // Don't place in water or extreme elevations
+        if (groundPos.getY() < 62 || groundPos.getY() > 100) {
+            return;
+        }
+
+        LOGGER.info("Generating church at chunk ({}, {}) - world pos {}", chunkX, chunkZ, groundPos);
+
+        placeChurchStructure(level, groundPos);
+    }
+
+    /**
+     * Place church structure
+     */
+    private static void placeChurchStructure(ServerLevel level, BlockPos pos) {
+        // 11x11 church with steeple
+        // Floor
+        for (int x = -5; x <= 5; x++) {
+            for (int z = -5; z <= 5; z++) {
+                level.setBlock(pos.offset(x, -1, z),
+                    net.minecraft.world.level.block.Blocks.STONE_BRICKS.defaultBlockState(), 3);
+            }
+        }
+
+        // Walls (stone brick)
+        for (int x = -5; x <= 5; x++) {
+            for (int y = 0; y < 4; y++) {
+                level.setBlock(pos.offset(x, y, -5),
+                    net.minecraft.world.level.block.Blocks.STONE_BRICKS.defaultBlockState(), 3);
+                level.setBlock(pos.offset(x, y, 5),
+                    net.minecraft.world.level.block.Blocks.STONE_BRICKS.defaultBlockState(), 3);
+            }
+        }
+
+        for (int z = -5; z <= 5; z++) {
+            for (int y = 0; y < 4; y++) {
+                level.setBlock(pos.offset(-5, y, z),
+                    net.minecraft.world.level.block.Blocks.STONE_BRICKS.defaultBlockState(), 3);
+                level.setBlock(pos.offset(5, y, z),
+                    net.minecraft.world.level.block.Blocks.STONE_BRICKS.defaultBlockState(), 3);
+            }
+        }
+
+        // Main entrance (south)
+        level.setBlock(pos.offset(0, 0, 5), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
+        level.setBlock(pos.offset(0, 1, 5), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
+        level.setBlock(pos.offset(0, 2, 5), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
+
+        // Roof
+        for (int x = -5; x <= 5; x++) {
+            for (int z = -5; z <= 5; z++) {
+                level.setBlock(pos.offset(x, 4, z),
+                    net.minecraft.world.level.block.Blocks.DARK_OAK_PLANKS.defaultBlockState(), 3);
+            }
+        }
+
+        // Steeple (center tower)
+        for (int y = 5; y < 10; y++) {
+            level.setBlock(pos.offset(0, y, 0), net.minecraft.world.level.block.Blocks.STONE_BRICKS.defaultBlockState(), 3);
+        }
+        // Cross on top
+        level.setBlock(pos.offset(0, 10, 0), net.minecraft.world.level.block.Blocks.IRON_BARS.defaultBlockState(), 3);
+        level.setBlock(pos.offset(0, 11, 0), net.minecraft.world.level.block.Blocks.IRON_BARS.defaultBlockState(), 3);
+        level.setBlock(pos.offset(1, 11, 0), net.minecraft.world.level.block.Blocks.IRON_BARS.defaultBlockState(), 3);
+        level.setBlock(pos.offset(-1, 11, 0), net.minecraft.world.level.block.Blocks.IRON_BARS.defaultBlockState(), 3);
+
+        // Interior - altar and pews
+        level.setBlock(pos.offset(0, 0, -4), net.minecraft.world.level.block.Blocks.CHISELED_QUARTZ_BLOCK.defaultBlockState(), 3);
+        level.setBlock(pos.offset(0, 1, -4), net.minecraft.world.level.block.Blocks.CANDLE.defaultBlockState(), 3);
+
+        // Lighting
+        level.setBlock(pos.offset(0, 3, 0), net.minecraft.world.level.block.Blocks.GLOWSTONE.defaultBlockState(), 3);
+    }
+
+    /**
      * Clear cached chunks (for world reload)
      */
     public static void clearCache() {
         PROCESSED_CHUNKS.clear();
+        PENDING_STRUCTURES.clear();
         LOGGER.info("Cleared worldgen cache");
     }
 }

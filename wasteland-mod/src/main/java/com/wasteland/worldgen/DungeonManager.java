@@ -22,7 +22,7 @@ public class DungeonManager {
 
     // Configuration
     private static final int DUNGEON_SPACING = 500;  // Min blocks between dungeons
-    private static final int DUNGEONS_PER_REGION = 3;  // Average dungeons per USA region
+    private static final int DUNGEONS_PER_REGION = 0;  // Average dungeons per USA region (TEMPORARILY DISABLED FOR TESTING)
 
     /**
      * Register a new dungeon

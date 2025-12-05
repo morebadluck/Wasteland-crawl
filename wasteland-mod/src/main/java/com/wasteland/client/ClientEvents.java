@@ -104,6 +104,16 @@ public class ClientEvents {
         if (KeyBindings.TOGGLE_AUTO_COMBAT.consumeClick()) {
             CombatDetection.toggleAutoCombatMode();
         }
+
+        // TEMPORARY: U key to simulate right-click interaction
+        if (KeyBindings.USE_INTERACT.consumeClick()) {
+            // Simulate a right-click at the player's crosshair
+            if (mc.hitResult != null && mc.hitResult.getType() == net.minecraft.world.phys.HitResult.Type.BLOCK) {
+                net.minecraft.world.phys.BlockHitResult blockHit = (net.minecraft.world.phys.BlockHitResult) mc.hitResult;
+                // Send interaction packet to server
+                mc.gameMode.useItemOn(mc.player, net.minecraft.world.InteractionHand.MAIN_HAND, blockHit);
+            }
+        }
     }
 
     /**
@@ -124,6 +134,7 @@ public class ClientEvents {
             event.register(KeyBindings.CYCLE_TARGET);
             event.register(KeyBindings.CONFIRM_TARGET);
             event.register(KeyBindings.CANCEL_TARGET);
+            event.register(KeyBindings.USE_INTERACT);
         }
     }
 }

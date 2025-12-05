@@ -23,8 +23,8 @@ public class SafeSpawnFinder {
     public static BlockPos findSafeSpawn(ServerLevel level, BlockPos center) {
         LOGGER.info("Searching for safe spawn near {}", center);
 
-        // Start at world surface
-        BlockPos surfacePos = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, center);
+        // Start at world surface (ignore leaves/trees)
+        BlockPos surfacePos = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, center);
 
         // Check center first
         BlockPos safe = checkAndFindSafe(level, surfacePos);
@@ -41,7 +41,7 @@ public class SafeSpawnFinder {
                 int offsetZ = (int) (radius * Math.sin(rad));
 
                 BlockPos testPos = center.offset(offsetX, 0, offsetZ);
-                BlockPos testSurface = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, testPos);
+                BlockPos testSurface = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, testPos);
 
                 safe = checkAndFindSafe(level, testSurface);
                 if (safe != null) {

@@ -101,4 +101,13 @@ public class KeyBindings {
             GLFW.GLFW_KEY_ESCAPE,
             CATEGORY
     );
+
+    // TEMPORARY: Workaround for broken right-click
+    public static final KeyMapping USE_INTERACT = new KeyMapping(
+            "key.wasteland.use_interact",
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_U, // U for Use/Interact
+            CATEGORY
+    );
 }

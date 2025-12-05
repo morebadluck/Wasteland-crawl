@@ -8,26 +8,51 @@ import com.wasteland.loot.WastelandArmor;
 import com.wasteland.loot.WastelandWeapon;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Provides starter equipment for new players
  */
 public class StarterEquipment {
+    private static final Logger LOGGER = LogManager.getLogger();
 
     /**
      * Give starter equipment to a new player
      */
     public static void giveStarterEquipment(Player player) {
+        LOGGER.info("Creating starter equipment for player");
+
         // Give starter weapon (shiv - common, no enchantment)
         ItemStack starterWeapon = createStarterWeapon();
-        player.getInventory().add(starterWeapon);
+        LOGGER.info("Created starter weapon: {} (empty: {})", starterWeapon, starterWeapon.isEmpty());
+
+        boolean weaponAdded = player.getInventory().add(starterWeapon);
+        LOGGER.info("Weapon added to inventory: {}", weaponAdded);
+
+        if (!weaponAdded) {
+            // If inventory is full, drop it on the ground
+            LOGGER.info("Dropping weapon on ground");
+            player.drop(starterWeapon, false);
+        }
 
         // Give starter armor (robe - common, no enchantment)
         ItemStack starterArmor = createStarterArmor();
-        player.getInventory().add(starterArmor);
+        LOGGER.info("Created starter armor: {} (empty: {})", starterArmor, starterArmor.isEmpty());
+
+        boolean armorAdded = player.getInventory().add(starterArmor);
+        LOGGER.info("Armor added to inventory: {}", armorAdded);
+
+        if (!armorAdded) {
+            // If inventory is full, drop it on the ground
+            LOGGER.info("Dropping armor on ground");
+            player.drop(starterArmor, false);
+        }
 
         // Mark as received
         markStarterEquipmentReceived(player);
+
+        LOGGER.info("Inventory contents: {}", player.getInventory().items);
     }
 
     /**
@@ -70,7 +95,7 @@ public class StarterEquipment {
     /**
      * Mark that the player has received starter equipment
      */
-    private static void markStarterEquipmentReceived(Player player) {
+    public static void markStarterEquipmentReceived(Player player) {
         var data = player.getPersistentData();
         data.putBoolean("wasteland:received_starter_equipment", true);
     }
