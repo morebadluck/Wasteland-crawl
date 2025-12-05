@@ -32,7 +32,7 @@ func _ready():
 	_give_starter_equipment()
 
 	# Center camera on player
-	$Camera2D.position = grid.grid_to_world(spawn_pos) + Vector2(Grid.TILE_SIZE / 2, Grid.TILE_SIZE / 2)
+	$Camera2D.position = grid.grid_to_world(dungeon_data["player_pos"]) + Vector2(Grid.TILE_SIZE / 2, Grid.TILE_SIZE / 2)
 
 	# Setup equipment screen
 	equipment_screen.hide()
