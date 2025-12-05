@@ -1,5 +1,7 @@
 package com.wasteland.loot;
 
+import net.minecraft.ChatFormatting;
+
 /**
  * Item rarity levels (DCSS-style)
  */
@@ -89,6 +91,33 @@ public enum ItemRarity {
             case EPIC -> 2;
             case LEGENDARY -> 3;
             case ARTIFACT, RANDART -> 5; // 4-6 properties
+        };
+    }
+
+    /**
+     * Get ChatFormatting for name display
+     */
+    public ChatFormatting getChatFormatting() {
+        return switch (this) {
+            case COMMON -> ChatFormatting.WHITE;
+            case UNCOMMON -> ChatFormatting.GREEN;
+            case RARE -> ChatFormatting.BLUE;
+            case EPIC -> ChatFormatting.DARK_PURPLE;
+            case LEGENDARY -> ChatFormatting.GOLD;
+            case ARTIFACT -> ChatFormatting.RED;
+            case RANDART -> ChatFormatting.YELLOW;
+        };
+    }
+
+    /**
+     * Get Minecraft Rarity enum for item properties
+     */
+    public net.minecraft.world.item.Rarity getMinecraftRarity() {
+        return switch (this) {
+            case COMMON -> net.minecraft.world.item.Rarity.COMMON;
+            case UNCOMMON -> net.minecraft.world.item.Rarity.UNCOMMON;
+            case RARE, EPIC -> net.minecraft.world.item.Rarity.RARE;
+            case LEGENDARY, ARTIFACT, RANDART -> net.minecraft.world.item.Rarity.EPIC;
         };
     }
 }

@@ -83,6 +83,12 @@ public class WastelandMod {
                 // Initialize player progression (starts at depth 0 = surface)
                 DungeonProgression.setDepth(event.getEntity().getUUID(), 0);
 
+                // Give starter equipment to new players
+                if (!com.wasteland.player.StarterEquipment.hasReceivedStarterEquipment(event.getEntity())) {
+                    com.wasteland.player.StarterEquipment.giveStarterEquipment(event.getEntity());
+                    LOGGER.info("Gave starter equipment to new player");
+                }
+
                 LOGGER.info("═══════════════════════════════════════════════════════");
                 LOGGER.info("  Wasteland Crawl - Player Spawned in Overworld");
                 LOGGER.info("  Find a dungeon entrance to begin your adventure!");
@@ -104,11 +110,15 @@ public class WastelandMod {
                         LOGGER.info("Generating dungeons across the wasteland...");
                         com.wasteland.worldgen.DungeonManager.generateDungeons(level, worldSeed);
 
+                        // Generate surface structures across the world
+                        LOGGER.info("Generating surface structures...");
+                        com.wasteland.worldgen.StructureManager.generateStructures(level, worldSeed);
+
                         // Generate roads between nearby dungeons
                         LOGGER.info("Generating wasteland roads...");
                         com.wasteland.worldgen.RoadGenerator.generateRoads(level, worldSeed);
 
-                        // Mark data as dirty to save the newly generated dungeons
+                        // Mark data as dirty to save the newly generated dungeons and structures
                         com.wasteland.worldgen.WastelandSavedData.markDirty(level);
                     }
 

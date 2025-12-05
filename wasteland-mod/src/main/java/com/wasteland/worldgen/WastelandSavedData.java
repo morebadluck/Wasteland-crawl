@@ -41,6 +41,11 @@ public class WastelandSavedData extends SavedData {
             DungeonManager.load(tag.getCompound("Dungeons"));
         }
 
+        // Load structure data
+        if (tag.contains("Structures")) {
+            StructureManager.load(tag.getCompound("Structures"));
+        }
+
         // Load player rune data
         if (tag.contains("PlayerRunes")) {
             RuneInventory.load(tag.getCompound("PlayerRunes"));
@@ -64,6 +69,11 @@ public class WastelandSavedData extends SavedData {
         CompoundTag dungeonsTag = new CompoundTag();
         DungeonManager.save(dungeonsTag);
         tag.put("Dungeons", dungeonsTag);
+
+        // Save structure data
+        CompoundTag structuresTag = new CompoundTag();
+        StructureManager.save(structuresTag);
+        tag.put("Structures", structuresTag);
 
         // Save player rune data
         CompoundTag runesTag = new CompoundTag();

@@ -1,6 +1,8 @@
 package com.wasteland.item;
 
 import com.wasteland.WastelandMod;
+import com.wasteland.equipment.WeaponType;
+import com.wasteland.loot.ArmorType;
 import com.wasteland.worldgen.RuneType;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -53,6 +55,48 @@ public class ModItems {
 
     public static final RegistryObject<Item> RUSTED_RUNE = ITEMS.register("rusted_rune",
         () -> new RuneItem(RuneType.RUSTED));
+
+    // === WEAPONS ===
+    // Starter weapons for early game
+
+    public static final RegistryObject<Item> SHIV = ITEMS.register("shiv",
+        () -> new WastelandWeaponItem(WeaponType.SHIV));
+
+    public static final RegistryObject<Item> PIPE = ITEMS.register("pipe",
+        () -> new WastelandWeaponItem(WeaponType.PIPE));
+
+    public static final RegistryObject<Item> WOODEN_STAFF = ITEMS.register("wooden_staff",
+        () -> new WastelandWeaponItem(WeaponType.WOODEN_STAFF));
+
+    public static final RegistryObject<Item> HATCHET = ITEMS.register("hatchet",
+        () -> new WastelandWeaponItem(WeaponType.HATCHET));
+
+    public static final RegistryObject<Item> RUSTY_SWORD = ITEMS.register("rusty_sword",
+        () -> new WastelandWeaponItem(WeaponType.RUSTY_SWORD));
+
+    public static final RegistryObject<Item> COMBAT_KNIFE = ITEMS.register("combat_knife",
+        () -> new WastelandWeaponItem(WeaponType.COMBAT_KNIFE));
+
+    public static final RegistryObject<Item> CROWBAR = ITEMS.register("crowbar",
+        () -> new WastelandWeaponItem(WeaponType.CROWBAR));
+
+    public static final RegistryObject<Item> BASEBALL_BAT = ITEMS.register("baseball_bat",
+        () -> new WastelandWeaponItem(WeaponType.BASEBALL_BAT));
+
+    // === ARMOR ===
+    // Starter armor for early game
+
+    public static final RegistryObject<Item> ROBE = ITEMS.register("robe",
+        () -> new WastelandArmorItem(ArmorType.ROBE));
+
+    public static final RegistryObject<Item> LEATHER_ARMOR = ITEMS.register("leather_armor",
+        () -> new WastelandArmorItem(ArmorType.LEATHER_ARMOR));
+
+    public static final RegistryObject<Item> RING_MAIL = ITEMS.register("ring_mail",
+        () -> new WastelandArmorItem(ArmorType.RING_MAIL));
+
+    public static final RegistryObject<Item> SCALE_MAIL = ITEMS.register("scale_mail",
+        () -> new WastelandArmorItem(ArmorType.SCALE_MAIL));
 
     /**
      * Get the rune item for a specific rune type

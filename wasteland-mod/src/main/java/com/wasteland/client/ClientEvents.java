@@ -4,6 +4,7 @@ import com.wasteland.WastelandMod;
 import com.wasteland.character.CharacterManager;
 import com.wasteland.character.PlayerCharacter;
 import com.wasteland.client.gui.CharacterSheetScreen;
+import com.wasteland.client.gui.EquipmentScreen;
 import com.wasteland.client.gui.RaceSelectionScreen;
 import com.wasteland.client.gui.SkillsScreen;
 import com.wasteland.client.gui.SpellsScreen;
@@ -53,6 +54,11 @@ public class ClientEvents {
         if (character == null) {
             // Race not selected yet, don't process keybinds
             return;
+        }
+
+        // Check for 'i' key (equipment screen) - doesn't require character selection
+        if (KeyBindings.EQUIPMENT_SCREEN.consumeClick()) {
+            mc.setScreen(new EquipmentScreen(mc.player));
         }
 
         // Check for @ key (character sheet) - using Shift+2
@@ -108,6 +114,7 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
             event.register(KeyBindings.CHARACTER_SHEET);
+            event.register(KeyBindings.EQUIPMENT_SCREEN);
             event.register(KeyBindings.SKILLS_SCREEN);
             event.register(KeyBindings.SPELL_MEMORIZE);
             event.register(KeyBindings.SPELL_CAST);

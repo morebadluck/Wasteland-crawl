@@ -60,6 +60,14 @@ public class KeyBindings {
             CATEGORY
     );
 
+    public static final KeyMapping EQUIPMENT_SCREEN = new KeyMapping(
+            "key.wasteland.equipment",
+            KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_I, // I for Inventory/Equipment
+            CATEGORY
+    );
+
     // Combat keybinds
     public static final KeyMapping TOGGLE_AUTO_COMBAT = new KeyMapping(
             "key.wasteland.toggle_auto_combat",
