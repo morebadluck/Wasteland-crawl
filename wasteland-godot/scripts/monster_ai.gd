@@ -208,15 +208,15 @@ static func flee_from_target(monster: Monster, target: Node2D, all_combatants: A
 		return 0.5
 
 ## Find best move position using greedy algorithm (from EnemyAI.java findBestMovePosition)
-static func find_best_move(monster: Monster, current: Vector2, target: Vector2, all_combatants: Array, game_manager) -> Vector2:
+static func find_best_move(monster: Monster, current: Vector2i, target: Vector2i, all_combatants: Array, game_manager) -> Vector2i:
 	var best_pos = null
 	var best_distance = INF
 
 	# Check all 8 adjacent positions
 	var directions = [
-		Vector2(-1, -1), Vector2(0, -1), Vector2(1, -1),
-		Vector2(-1, 0),                   Vector2(1, 0),
-		Vector2(-1, 1),  Vector2(0, 1),  Vector2(1, 1)
+		Vector2i(-1, -1), Vector2i(0, -1), Vector2i(1, -1),
+		Vector2i(-1, 0),                   Vector2i(1, 0),
+		Vector2i(-1, 1),  Vector2i(0, 1),  Vector2i(1, 1)
 	]
 
 	for dir in directions:
@@ -227,7 +227,7 @@ static func find_best_move(monster: Monster, current: Vector2, target: Vector2, 
 			continue
 
 		# Calculate distance to target
-		var distance = candidate.distance_to(target)
+		var distance = Vector2(candidate).distance_to(Vector2(target))
 
 		# Pick closest to target
 		if distance < best_distance:
@@ -237,15 +237,15 @@ static func find_best_move(monster: Monster, current: Vector2, target: Vector2, 
 	return best_pos if best_pos else current
 
 ## Find flee position (opposite of find_best_move)
-static func find_flee_position(monster: Monster, current: Vector2, threat: Vector2, all_combatants: Array, game_manager) -> Vector2:
+static func find_flee_position(monster: Monster, current: Vector2i, threat: Vector2i, all_combatants: Array, game_manager) -> Vector2i:
 	var best_pos = null
 	var best_distance = 0.0
 
 	# Check all 8 adjacent positions
 	var directions = [
-		Vector2(-1, -1), Vector2(0, -1), Vector2(1, -1),
-		Vector2(-1, 0),                   Vector2(1, 0),
-		Vector2(-1, 1),  Vector2(0, 1),  Vector2(1, 1)
+		Vector2i(-1, -1), Vector2i(0, -1), Vector2i(1, -1),
+		Vector2i(-1, 0),                   Vector2i(1, 0),
+		Vector2i(-1, 1),  Vector2i(0, 1),  Vector2i(1, 1)
 	]
 
 	for dir in directions:
@@ -256,7 +256,7 @@ static func find_flee_position(monster: Monster, current: Vector2, threat: Vecto
 			continue
 
 		# Calculate distance from threat
-		var distance = candidate.distance_to(threat)
+		var distance = Vector2(candidate).distance_to(Vector2(threat))
 
 		# Pick farthest from threat
 		if distance > best_distance:
@@ -266,15 +266,13 @@ static func find_flee_position(monster: Monster, current: Vector2, threat: Vecto
 	return best_pos if best_pos else current
 
 ## Check if position is valid for movement (from EnemyAI.java isValidPosition)
-static func is_valid_position(monster: Monster, pos: Vector2, all_combatants: Array, game_manager) -> bool:
-	var pos_vec = Vector2i(int(pos.x), int(pos.y))
-
+static func is_valid_position(monster: Monster, pos: Vector2i, all_combatants: Array, game_manager) -> bool:
 	# Check if walkable
-	if not monster.grid or not monster.grid.is_walkable(pos_vec):
+	if not monster.grid or not monster.grid.is_walkable(pos):
 		return false
 
 	# Check if occupied by another combatant
-	var entity_at_pos = monster.grid.get_entity(pos_vec)
+	var entity_at_pos = monster.grid.get_entity(pos)
 	if entity_at_pos and entity_at_pos != monster:
 		return false
 
