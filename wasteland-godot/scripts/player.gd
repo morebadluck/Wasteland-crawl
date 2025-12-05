@@ -79,9 +79,26 @@ func try_move(direction: Vector2i) -> bool:
 	return true
 
 func attack_entity(entity):
-	"""Attack an entity (placeholder for combat system)"""
-	print("Player attacks: ", entity.name if entity.has("name") else "Unknown")
-	# TODO: Implement combat system
+	"""Attack an entity with DCSS-style combat"""
+	var target_name = entity.monster_name if entity.has("monster_name") else "Unknown"
+
+	# Get equipped weapon
+	var weapon = get_equipped(EquipSlot.WEAPON)
+	var base_damage = 3  # Unarmed damage
+
+	if weapon and weapon is WastelandWeapon:
+		base_damage = weapon.calculate_damage(self)
+
+	# Add randomness (80-120%)
+	var variance = 0.8 + (randf() * 0.4)
+	var final_damage = max(1, base_damage * variance)
+
+	# Apply damage to target
+	if entity.has_method("take_damage"):
+		var damage_dealt = entity.take_damage(final_damage, "physical")
+		print("You hit %s for %.1f damage!" % [target_name, damage_dealt])
+	else:
+		print("You attack %s!" % target_name)
 
 func take_damage(amount: int):
 	"""Take damage"""

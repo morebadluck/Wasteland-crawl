@@ -5,10 +5,19 @@ class_name Monster
 ## Implements DCSS-style monster mechanics with turn-based combat
 ## Ported from Minecraft Wasteland mod's MonsterScalingSystem and EnemyAI
 
+signal died(monster: Monster)
+signal took_damage(amount: float)
+
+# Grid positioning
+var grid_position: Vector2i = Vector2i(0, 0)
+var grid: Grid = null
+
 # Monster identity
 var monster_id: String = ""
 var monster_name: String = ""
 var monster_tier: int = 1  # 1-9 DCSS difficulty tier
+var display_char: String = "M"  # Character to display in ASCII mode
+var display_color: Color = Color.RED
 
 # Core stats (DCSS-style)
 var max_hp: float = 10.0
@@ -110,6 +119,10 @@ func apply_base_stats(stats: Dictionary):
 	armor_class = stats.get("ac", 0)
 	evasion = stats.get("ev", 5)
 	movement_speed = stats.get("speed", 1.0)
+
+	# Display settings
+	display_char = stats.get("char", "M")
+	display_color = stats.get("color", Color.RED)
 
 	# AI settings
 	ai_type = stats.get("ai_type", AIType.MELEE)
@@ -264,7 +277,7 @@ func explode():
 	var explosion_damage = 15.0
 
 	if game_manager and game_manager.has_method("create_explosion"):
-		game_manager.create_explosion(grid_x, grid_y, explosion_radius, explosion_damage)
+		game_manager.create_explosion(grid_position.x, grid_position.y, explosion_radius, explosion_damage)
 
 ## Drop loot based on monster tier
 func drop_loot():
@@ -283,7 +296,7 @@ func drop_loot():
 			elif monster_tier >= 4:
 				loot_tier = "uncommon"
 
-		game_manager.spawn_loot(grid_x, grid_y, loot_tier)
+		game_manager.spawn_loot(grid_position.x, grid_position.y, loot_tier)
 
 ## Attack a target (melee)
 func attack_target(target: Node2D) -> bool:
@@ -339,20 +352,24 @@ func get_stat_breakdown() -> String:
 		attack_damage, armor_class, evasion, visual_variant
 	]
 
-## Move to grid position
-func move_to_grid(x: int, y: int):
-	grid_x = x
-	grid_y = y
-	# Update visual position (assuming 32x32 tiles)
-	position = Vector2(x * 32, y * 32)
+## Spawn monster at grid position
+func spawn_at(pos: Vector2i, new_grid: Grid):
+	grid_position = pos
+	grid = new_grid
+	position = grid.grid_to_world(pos)
+	grid.add_entity(pos, self)
 
-## Check if can move to position
-func can_move_to(x: int, y: int) -> bool:
-	if not game_manager:
+## Move to grid position
+func move_to(new_pos: Vector2i) -> bool:
+	if not grid or not grid.is_walkable(new_pos):
 		return false
 
-	# Check if tile is walkable
-	if game_manager.has_method("is_tile_walkable"):
-		return game_manager.is_tile_walkable(x, y)
-
+	var old_pos = grid_position
+	grid.move_entity(grid_position, new_pos)
+	grid_position = new_pos
+	position = grid.grid_to_world(new_pos)
 	return true
+
+## Try to move in direction
+func try_move(direction: Vector2i) -> bool:
+	return move_to(grid_position + direction)

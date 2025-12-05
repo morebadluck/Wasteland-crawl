@@ -28,7 +28,9 @@ static func init_monsters():
 		"speed": 1.2,
 		"ai_type": Monster.AIType.MELEE,
 		"attack_range": 1,
-		"flee_hp_percent": 0.3
+		"flee_hp_percent": 0.3,
+		"char": "r",
+		"color": Color.DARK_GRAY
 	}
 
 	MONSTERS["giant_rat"] = {
@@ -40,7 +42,9 @@ static func init_monsters():
 		"ev": 9,
 		"speed": 1.1,
 		"ai_type": Monster.AIType.MELEE,
-		"attack_range": 1
+		"attack_range": 1,
+		"char": "r",
+		"color": Color.BROWN
 	}
 
 	MONSTERS["bat"] = {
@@ -53,7 +57,9 @@ static func init_monsters():
 		"speed": 1.5,
 		"ai_type": Monster.AIType.MELEE,
 		"attack_range": 1,
-		"flee_hp_percent": 0.5
+		"flee_hp_percent": 0.5,
+		"char": "b",
+		"color": Color.DARK_GRAY
 	}
 
 	MONSTERS["jackal"] = {
@@ -65,7 +71,9 @@ static func init_monsters():
 		"ev": 11,
 		"speed": 1.3,
 		"ai_type": Monster.AIType.MELEE,
-		"attack_range": 1
+		"attack_range": 1,
+		"char": "h",
+		"color": Color.SANDY_BROWN
 	}
 
 	MONSTERS["hound"] = {
@@ -105,7 +113,9 @@ static func init_monsters():
 		"ai_type": Monster.AIType.MELEE,
 		"attack_range": 1,
 		"resist_poison": 1.0,
-		"resist_cold": 0.5
+		"resist_cold": 0.5,
+		"char": "Z",
+		"color": Color.DARK_GREEN
 	}
 
 	MONSTERS["skeleton"] = {
@@ -232,7 +242,9 @@ static func init_monsters():
 		"ev": 12,
 		"speed": 1.2,
 		"ai_type": Monster.AIType.MELEE,
-		"attack_range": 1
+		"attack_range": 1,
+		"char": "K",
+		"color": Color.ORANGE_RED
 	}
 
 	# ========================================

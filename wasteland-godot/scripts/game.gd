@@ -8,6 +8,7 @@ extends Node2D
 @onready var equipment_screen: EquipmentScreen = $EquipmentScreen
 
 var font: Font
+var monsters: Array[Monster] = []
 
 func _ready():
 	# Load IBM Plex Mono font
@@ -16,12 +17,16 @@ func _ready():
 	# Initialize game
 	grid.initialize_map()
 
-	# Generate dungeon
-	var spawn_pos = DungeonGenerator.generate(grid, 10)
+	# Generate dungeon with monsters
+	var dungeon_data = DungeonGenerator.generate(grid, 10, self)
 
 	# Spawn player
 	player.set_grid(grid)
-	player.spawn_at(spawn_pos)
+	player.spawn_at(dungeon_data["player_pos"])
+
+	# Store monsters
+	monsters = dungeon_data["monsters"]
+	print("Spawned %d monsters" % monsters.size())
 
 	# Give player starter equipment
 	_give_starter_equipment()
@@ -101,6 +106,14 @@ func _draw():
 			# Draw tile character
 			if font:
 				draw_string(font, world_pos + Vector2(8, 24), character, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, color)
+
+	# Draw monsters
+	for monster in monsters:
+		if monster and is_instance_valid(monster):
+			var monster_world_pos = grid.grid_to_world(monster.grid_position)
+			if font:
+				draw_string(font, monster_world_pos + Vector2(8, 24), monster.display_char,
+							HORIZONTAL_ALIGNMENT_LEFT, -1, 20, monster.display_color)
 
 	# Draw player
 	var player_world_pos = grid.grid_to_world(player.grid_position)
