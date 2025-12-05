@@ -127,6 +127,7 @@ static func _spawn_monster(grid: Grid, pos: Vector2i, dungeon_level: int, game_n
 	# Create monster instance
 	var monster = Monster.new()
 	monster.initialize(monster_id, dungeon_level)
+	monster.game_manager = game_node  # Set game manager reference
 	monster.spawn_at(pos, grid)
 
 	# Add to scene tree

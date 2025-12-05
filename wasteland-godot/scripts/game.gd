@@ -25,7 +25,8 @@ func _ready():
 	player.spawn_at(dungeon_data["player_pos"])
 
 	# Store monsters
-	monsters = dungeon_data["monsters"]
+	var monster_array = dungeon_data["monsters"]
+	monsters.assign(monster_array)
 	print("Spawned %d monsters" % monsters.size())
 
 	# Give player starter equipment
@@ -36,6 +37,9 @@ func _ready():
 
 	# Setup equipment screen
 	equipment_screen.hide()
+
+	# Connect player turn signal
+	player.turn_ended.connect(_on_player_turn_ended)
 
 	print("Wasteland Crawl - Godot Edition")
 	print("Use arrow keys or numpad to move")
@@ -144,6 +148,17 @@ func _draw_hud():
 		# Race
 		var race_text = "Race: %s" % player.race
 		draw_string(font, Vector2(hud_x + 450, hud_y), race_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.WHITE)
+
+func _on_player_turn_ended():
+	"""Process monster turns after player turn"""
+	# Process each monster's turn
+	for monster in monsters:
+		if monster and is_instance_valid(monster):
+			# Monster takes its turn
+			monster.take_turn(player, monsters)
+
+	# Remove dead monsters
+	monsters = monsters.filter(func(m): return m and is_instance_valid(m))
 
 func _process(_delta):
 	queue_redraw()  # Redraw every frame

@@ -12,7 +12,7 @@ static func execute_turn(monster: Monster, player: Node2D, all_combatants: Array
 		return 1.0
 
 	# Calculate distance to player
-	var distance = calculate_distance(monster.grid_x, monster.grid_y, player.grid_x, player.grid_y)
+	var distance = calculate_distance(monster.grid_position.x, monster.grid_position.y, player.grid_position.x, player.grid_position.y)
 
 	# Decide action based on AI type and situation
 	match monster.ai_type:
@@ -164,15 +164,15 @@ static func heal_ally(monster: Monster, ally: Monster, game_manager) -> float:
 
 ## Move toward target (from EnemyAI.java moveTowardPlayer)
 static func move_toward_target(monster: Monster, target: Node2D, all_combatants: Array, game_manager) -> float:
-	var current_pos = Vector2(monster.grid_x, monster.grid_y)
-	var target_pos = Vector2(target.grid_x, target.grid_y)
+	var current_pos = Vector2i(monster.grid_position.x, monster.grid_position.y)
+	var target_pos = Vector2i(target.grid_position.x, target.grid_position.y)
 
 	# Find best move using pathfinding
 	var best_move = find_best_move(monster, current_pos, target_pos, all_combatants, game_manager)
 
 	if best_move and best_move != current_pos:
 		# Move to new position
-		monster.move_to_grid(int(best_move.x), int(best_move.y))
+		monster.move_to(best_move)
 
 		if game_manager and game_manager.has_method("log_combat"):
 			game_manager.log_combat("%s moves closer" % monster.monster_name)
@@ -187,14 +187,14 @@ static func move_toward_target(monster: Monster, target: Node2D, all_combatants:
 
 ## Flee from target
 static func flee_from_target(monster: Monster, target: Node2D, all_combatants: Array, game_manager) -> float:
-	var current_pos = Vector2(monster.grid_x, monster.grid_y)
-	var target_pos = Vector2(target.grid_x, target.grid_y)
+	var current_pos = Vector2i(monster.grid_position.x, monster.grid_position.y)
+	var target_pos = Vector2i(target.grid_position.x, target.grid_position.y)
 
 	# Find position farthest from target
 	var best_move = find_flee_position(monster, current_pos, target_pos, all_combatants, game_manager)
 
 	if best_move and best_move != current_pos:
-		monster.move_to_grid(int(best_move.x), int(best_move.y))
+		monster.move_to(best_move)
 
 		if game_manager and game_manager.has_method("log_combat"):
 			game_manager.log_combat("%s flees!" % monster.monster_name)
@@ -202,7 +202,7 @@ static func flee_from_target(monster: Monster, target: Node2D, all_combatants: A
 		return 0.5
 	else:
 		# Trapped - attack in desperation
-		if calculate_distance(monster.grid_x, monster.grid_y, target.grid_x, target.grid_y) <= 1.5:
+		if calculate_distance(monster.grid_position.x, monster.grid_position.y, target.grid_position.x, target.grid_position.y) <= 1.5:
 			return attack_target(monster, target, game_manager)
 
 		return 0.5
@@ -267,20 +267,16 @@ static func find_flee_position(monster: Monster, current: Vector2, threat: Vecto
 
 ## Check if position is valid for movement (from EnemyAI.java isValidPosition)
 static func is_valid_position(monster: Monster, pos: Vector2, all_combatants: Array, game_manager) -> bool:
-	var x = int(pos.x)
-	var y = int(pos.y)
+	var pos_vec = Vector2i(int(pos.x), int(pos.y))
 
 	# Check if walkable
-	if not monster.can_move_to(x, y):
+	if not monster.grid or not monster.grid.is_walkable(pos_vec):
 		return false
 
 	# Check if occupied by another combatant
-	for combatant in all_combatants:
-		if combatant == monster:
-			continue
-
-		if combatant.grid_x == x and combatant.grid_y == y:
-			return false
+	var entity_at_pos = monster.grid.get_entity(pos_vec)
+	if entity_at_pos and entity_at_pos != monster:
+		return false
 
 	return true
 
@@ -327,8 +323,9 @@ static func get_enemies_in_range(monster: Monster, all_combatants: Array, range:
 			continue
 
 		var distance = calculate_distance(
-			monster.grid_x, monster.grid_y,
-			combatant.grid_x, combatant.grid_y
+			monster.grid_position.x, monster.grid_position.y,
+			combatant.grid_position.x if combatant.has("grid_position") else 0,
+			combatant.grid_position.y if combatant.has("grid_position") else 0
 		)
 
 		if distance <= range:
@@ -349,9 +346,11 @@ static func evaluate_threat(monster: Monster, target: Node2D) -> float:
 		threat += target.current_hp * 0.1
 
 	# Distance factor - closer = more threatening
+	var target_pos_x = target.grid_position.x if target.has("grid_position") else 0
+	var target_pos_y = target.grid_position.y if target.has("grid_position") else 0
 	var distance = calculate_distance(
-		monster.grid_x, monster.grid_y,
-		target.grid_x, target.grid_y
+		monster.grid_position.x, monster.grid_position.y,
+		target_pos_x, target_pos_y
 	)
 	threat += (10.0 - distance) * 2.0
 
