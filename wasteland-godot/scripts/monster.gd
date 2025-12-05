@@ -68,10 +68,6 @@ var stun_duration: int = 0
 var area_level: int = 1  # Difficulty level of spawn area
 var visual_variant: int = 0  # 0-5 visual tier
 
-# Grid position
-var grid_x: int = 0
-var grid_y: int = 0
-
 # References
 var game_manager = null
 
@@ -80,6 +76,22 @@ const HP_PER_LEVEL = 2.0
 const DAMAGE_PER_LEVEL = 0.5
 const ARMOR_PER_LEVEL = 0.3
 const SPEED_PER_LEVEL = 0.002
+
+## Initialize monster from type ID
+func initialize(type_id: String, level: int = 1):
+	monster_id = type_id
+	area_level = level
+
+	# Load base stats from database
+	var base_stats = MonsterTypes.get_monster_stats(type_id)
+	if base_stats:
+		apply_base_stats(base_stats)
+
+	# Apply area scaling
+	apply_area_scaling(area_level)
+
+	# Full HP on spawn
+	current_hp = max_hp
 
 # Robot armor constants (from RobotEntity.java)
 const ROBOT_ARMOR = {
