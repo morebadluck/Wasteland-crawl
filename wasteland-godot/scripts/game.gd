@@ -5,6 +5,7 @@ extends Node2D
 
 @onready var grid: Grid = $Grid
 @onready var player: Player = $Player
+@onready var equipment_screen: EquipmentScreen = $EquipmentScreen
 
 var font: Font
 
@@ -22,12 +23,40 @@ func _ready():
 	player.set_grid(grid)
 	player.spawn_at(spawn_pos)
 
+	# Give player starter equipment
+	_give_starter_equipment()
+
 	# Center camera on player
 	$Camera2D.position = grid.grid_to_world(spawn_pos) + Vector2(Grid.TILE_SIZE / 2, Grid.TILE_SIZE / 2)
 
+	# Setup equipment screen
+	equipment_screen.hide()
+
 	print("Wasteland Crawl - Godot Edition")
 	print("Use arrow keys or numpad to move")
-	print("Press 'i' for equipment (not yet implemented)")
+	print("Press 'I' for equipment screen")
+
+func _give_starter_equipment():
+	"""Give player starting equipment"""
+	# Starter weapon
+	var shiv = WastelandWeapon.new(WastelandWeapon.WeaponType.SHIV, WastelandItem.ItemRarity.COMMON, 0)
+	player.add_to_inventory(shiv)
+
+	# Starter armor
+	var robe = WastelandArmor.new(WastelandArmor.ArmorType.ROBE, WastelandItem.ItemRarity.COMMON, 0)
+	player.add_to_inventory(robe)
+
+	# Some extra items to test with
+	var knife = WastelandWeapon.new(WastelandWeapon.WeaponType.COMBAT_KNIFE, WastelandItem.ItemRarity.UNCOMMON, 1)
+	player.add_to_inventory(knife)
+
+	var leather = WastelandArmor.new(WastelandArmor.ArmorType.LEATHER_ARMOR, WastelandItem.ItemRarity.COMMON, 0)
+	player.add_to_inventory(leather)
+
+	var helmet = WastelandArmor.new(WastelandArmor.ArmorType.HELMET, WastelandItem.ItemRarity.COMMON, 0)
+	player.add_to_inventory(helmet)
+
+	print("Starter equipment added to inventory")
 
 func _draw():
 	"""Render the dungeon and entities"""
@@ -130,7 +159,7 @@ func _input(event):
 			KEY_KP_3:  # Diagonal down-right
 				direction = Vector2i(1, 1)
 			KEY_I:
-				print("Equipment screen - not yet implemented")
+				equipment_screen.open(player)
 			KEY_M:
 				print("Skills screen - not yet implemented")
 			KEY_Z:

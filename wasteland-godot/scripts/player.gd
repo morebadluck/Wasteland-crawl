@@ -34,7 +34,9 @@ enum EquipSlot {
 	RIGHT_RING
 }
 
-var equipment: Dictionary = {}  # EquipSlot -> Item
+var equipment: Dictionary = {}  # EquipSlot -> WastelandItem
+var inventory: Array[WastelandItem] = []  # Player inventory (52 slots like DCSS)
+const MAX_INVENTORY = 52
 
 func _ready():
 	# Position will be set by dungeon generator
@@ -116,3 +118,35 @@ func unequip_item(slot: EquipSlot):
 func get_equipped(slot: EquipSlot):
 	"""Get item in equipment slot"""
 	return equipment.get(slot, null)
+
+func add_to_inventory(item: WastelandItem) -> bool:
+	"""Add item to inventory. Returns true if successful"""
+	if inventory.size() >= MAX_INVENTORY:
+		return false
+	inventory.append(item)
+	return true
+
+func remove_from_inventory(item: WastelandItem) -> bool:
+	"""Remove item from inventory. Returns true if found and removed"""
+	var index = inventory.find(item)
+	if index >= 0:
+		inventory.remove_at(index)
+		return true
+	return false
+
+func get_inventory_item(index: int):
+	"""Get item at inventory index"""
+	if index >= 0 and index < inventory.size():
+		return inventory[index]
+	return null
+
+func can_equip_to_slot(item: WastelandItem, slot: EquipSlot) -> bool:
+	"""Check if item can be equipped to a specific slot"""
+	if item is WastelandWeapon:
+		# Weapons can go in weapon or offhand
+		return slot == EquipSlot.WEAPON or slot == EquipSlot.OFFHAND
+	elif item is WastelandArmor:
+		var armor = item as WastelandArmor
+		# Armor must match the slot
+		return WastelandArmor.get_slot(armor.armor_type) == slot
+	return false
