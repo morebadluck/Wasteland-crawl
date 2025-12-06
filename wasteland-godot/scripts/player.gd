@@ -4,8 +4,12 @@ class_name Player
 ## Player character with turn-based movement
 ## Matches DCSS player mechanics
 
+const InventoryClass = preload("res://scripts/inventory.gd")
+
 signal player_moved(from: Vector2i, to: Vector2i)
 signal turn_ended
+signal hp_changed(new_hp: float, max_hp: float)
+signal mp_changed(new_mp: float, max_mp: float)
 
 var grid_position: Vector2i = Vector2i(0, 0)
 var grid: Grid
@@ -42,7 +46,7 @@ enum EquipSlot {
 }
 
 var equipment: Dictionary = {}  # EquipSlot -> WastelandItem
-var inventory: Array[WastelandItem] = []  # Player inventory (52 slots like DCSS)
+var inventory = InventoryClass.new()  # Player inventory (52 slots like DCSS)
 const MAX_INVENTORY = 52
 
 func _ready():
@@ -148,6 +152,7 @@ func take_damage(amount: float, damage_type: String = "physical") -> float:
 	if current_hp <= 0:
 		current_hp = 0
 		die()
+	hp_changed.emit(float(current_hp), float(max_hp))
 	return amount
 
 func die():
@@ -158,10 +163,12 @@ func die():
 func heal(amount: int):
 	"""Restore HP"""
 	current_hp = min(current_hp + amount, max_hp)
+	hp_changed.emit(float(current_hp), float(max_hp))
 
 func restore_mp(amount: int):
 	"""Restore MP"""
 	current_mp = min(current_mp + amount, max_mp)
+	mp_changed.emit(float(current_mp), float(max_mp))
 
 func equip_item(slot: EquipSlot, item):
 	"""Equip an item to a slot"""
@@ -196,9 +203,7 @@ func remove_from_inventory(item: WastelandItem) -> bool:
 
 func get_inventory_item(index: int):
 	"""Get item at inventory index"""
-	if index >= 0 and index < inventory.size():
-		return inventory[index]
-	return null
+	return inventory.get_item(index)
 
 func can_equip_to_slot(item: WastelandItem, slot: EquipSlot) -> bool:
 	"""Check if item can be equipped to a specific slot"""

@@ -1,5 +1,3 @@
-res://scripts/game.gd
-res://scripts/grid.gd
-res://scripts/monster.gd
-res://scripts/player.gd
-res://scripts/loot_generator.gd
+res://scripts/monster_3d.gd
+res://scripts/monster_list.gd
+res://scripts/dungeon_manager_3d.gd
