@@ -1,0 +1,244 @@
+extends Node2D
+
+## Main game controller
+## Manages turn-based gameplay, rendering, and input
+
+@onready var grid: Grid = $Grid
+@onready var player: Player = $Player
+@onready var equipment_screen: EquipmentScreen = $UILayer/EquipmentScreen
+
+var font: Font
+var monsters: Array[Monster] = []
+var loot_entities: Array[LootEntity] = []
+
+func _ready():
+	# Load IBM Plex Mono font
+	font = load("res://assets/fonts/IBMPlexMono-Regular.otf")
+
+	# Initialize game
+	grid.initialize_map()
+
+	# Generate dungeon with monsters
+	var dungeon_data = DungeonGenerator.generate(grid, 10, self)
+
+	# Spawn player
+	player.set_grid(grid)
+	player.spawn_at(dungeon_data["player_pos"])
+
+	# Store monsters
+	var monster_array = dungeon_data["monsters"]
+	monsters.assign(monster_array)
+	print("Spawned %d monsters" % monsters.size())
+
+	# Give player starter equipment
+	_give_starter_equipment()
+
+	# Center camera on player
+	$Camera2D.position = grid.grid_to_world(dungeon_data["player_pos"]) + Vector2(Grid.TILE_SIZE / 2, Grid.TILE_SIZE / 2)
+
+	# Setup equipment screen
+	equipment_screen.hide()
+	print("Equipment screen node: ", equipment_screen)
+	print("Equipment screen visible: ", equipment_screen.visible)
+
+	# Connect player turn signal
+	player.turn_ended.connect(_on_player_turn_ended)
+
+	print("Wasteland Crawl - Godot Edition")
+	print("Use arrow keys or numpad to move")
+	print("Press 'I' for equipment screen")
+
+func _give_starter_equipment():
+	"""Give player starting equipment"""
+	# Starter weapon
+	var shiv = WastelandWeapon.new(WastelandWeapon.WeaponType.SHIV, WastelandItem.ItemRarity.COMMON, 0)
+	player.add_to_inventory(shiv)
+
+	# Starter armor
+	var robe = WastelandArmor.new(WastelandArmor.ArmorType.ROBE, WastelandItem.ItemRarity.COMMON, 0)
+	player.add_to_inventory(robe)
+
+	# Some extra items to test with
+	var knife = WastelandWeapon.new(WastelandWeapon.WeaponType.COMBAT_KNIFE, WastelandItem.ItemRarity.UNCOMMON, 1)
+	player.add_to_inventory(knife)
+
+	var leather = WastelandArmor.new(WastelandArmor.ArmorType.LEATHER_ARMOR, WastelandItem.ItemRarity.COMMON, 0)
+	player.add_to_inventory(leather)
+
+	var helmet = WastelandArmor.new(WastelandArmor.ArmorType.HELMET, WastelandItem.ItemRarity.COMMON, 0)
+	player.add_to_inventory(helmet)
+
+	print("Starter equipment added to inventory")
+
+func _draw():
+	"""Render the dungeon and entities"""
+	# Draw tiles
+	for y in range(grid.MAP_HEIGHT):
+		for x in range(grid.MAP_WIDTH):
+			var pos = Vector2i(x, y)
+			var world_pos = grid.grid_to_world(pos)
+			var tile_type = grid.get_tile(pos)
+
+			# Choose color and character based on tile type
+			var color = Color.WHITE
+			var character = " "
+
+			match tile_type:
+				Grid.TileType.FLOOR:
+					color = Color.DIM_GRAY
+					character = "."
+				Grid.TileType.WALL:
+					color = Color.GRAY
+					character = "#"
+				Grid.TileType.WATER:
+					color = Color.BLUE
+					character = "~"
+				Grid.TileType.DOOR_CLOSED:
+					color = Color.SADDLE_BROWN
+					character = "+"
+				Grid.TileType.DOOR_OPEN:
+					color = Color.SADDLE_BROWN
+					character = "-"
+				Grid.TileType.STAIRS_DOWN:
+					color = Color.YELLOW
+					character = ">"
+				Grid.TileType.STAIRS_UP:
+					color = Color.YELLOW
+					character = "<"
+
+			# Draw tile background
+			if tile_type == Grid.TileType.FLOOR:
+				draw_rect(Rect2(world_pos, Vector2(Grid.TILE_SIZE, Grid.TILE_SIZE)), Color(0.1, 0.1, 0.1))
+
+			# Draw tile character
+			if font:
+				draw_string(font, world_pos + Vector2(8, 24), character, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, color)
+
+	# Draw monsters
+	for monster in monsters:
+		if monster and is_instance_valid(monster):
+			var monster_world_pos = grid.grid_to_world(monster.grid_position)
+			if font:
+				draw_string(font, monster_world_pos + Vector2(8, 24), monster.display_char,
+							HORIZONTAL_ALIGNMENT_LEFT, -1, 20, monster.display_color)
+
+	# Draw loot
+	for loot in loot_entities:
+		if loot and is_instance_valid(loot):
+			var loot_world_pos = grid.grid_to_world(loot.grid_position)
+			if font:
+				draw_string(font, loot_world_pos + Vector2(8, 24), loot.display_char,
+						HORIZONTAL_ALIGNMENT_LEFT, -1, 20, loot.display_color)
+
+	# Draw player
+	var player_world_pos = grid.grid_to_world(player.grid_position)
+	if font:
+		draw_string(font, player_world_pos + Vector2(8, 24), "@", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color.WHITE)
+
+	# Draw HUD
+	_draw_hud()
+
+func _draw_hud():
+	"""Draw UI overlay with player stats"""
+	var hud_x = 10
+	var hud_y = grid.MAP_HEIGHT * Grid.TILE_SIZE + 20
+
+	if font:
+		# HP bar
+		var hp_text = "HP: %d / %d" % [player.current_hp, player.max_hp]
+		draw_string(font, Vector2(hud_x, hud_y), hp_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.RED)
+
+		# MP bar
+		var mp_text = "MP: %d / %d" % [player.current_mp, player.max_mp]
+		draw_string(font, Vector2(hud_x + 150, hud_y), mp_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.CYAN)
+
+		# Level
+		var level_text = "Level: %d" % player.level
+		draw_string(font, Vector2(hud_x + 300, hud_y), level_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.YELLOW)
+
+		# XP
+		var xp_needed = player.get_xp_needed()
+		var xp_text = "XP: %d/%d" % [player.experience, player.experience + xp_needed]
+		draw_string(font, Vector2(hud_x + 420, hud_y), xp_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.LIGHT_GREEN)
+
+		# Race
+		var race_text = "Race: %s" % player.race
+		draw_string(font, Vector2(hud_x + 600, hud_y), race_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.WHITE)
+
+func _on_player_turn_ended():
+	"""Process monster turns after player turn"""
+	# Process each monster's turn
+	for monster in monsters:
+		if monster and is_instance_valid(monster):
+			# Monster takes its turn
+			monster.take_turn(player, monsters)
+
+	# Remove dead monsters
+	monsters = monsters.filter(func(m): return m and is_instance_valid(m))
+
+	# Clean up invalid loot
+	loot_entities = loot_entities.filter(func(l): return l and is_instance_valid(l))
+
+func _process(_delta):
+	queue_redraw()  # Redraw every frame
+
+func _input(event):
+	"""Handle turn-based input"""
+	if event is InputEventKey and event.pressed:
+		print("Game _input received key: ", event.keycode, " (KEY_I=", KEY_I, ")")
+		var direction = Vector2i.ZERO
+
+		# Arrow keys and numpad movement
+		match event.keycode:
+			KEY_UP, KEY_KP_8:
+				direction = Vector2i(0, -1)
+			KEY_DOWN, KEY_KP_2:
+				direction = Vector2i(0, 1)
+			KEY_LEFT, KEY_KP_4:
+				direction = Vector2i(-1, 0)
+			KEY_RIGHT, KEY_KP_6:
+				direction = Vector2i(1, 0)
+			KEY_KP_7:  # Diagonal up-left
+				direction = Vector2i(-1, -1)
+			KEY_KP_9:  # Diagonal up-right
+				direction = Vector2i(1, -1)
+			KEY_KP_1:  # Diagonal down-left
+				direction = Vector2i(-1, 1)
+			KEY_KP_3:  # Diagonal down-right
+				direction = Vector2i(1, 1)
+			KEY_I:
+				print(">>> KEY_I case matched! equipment_screen.visible=", equipment_screen.visible)
+				# Toggle equipment screen
+				if equipment_screen.visible:
+					print(">>> Closing equipment screen")
+					equipment_screen.close()
+				else:
+					print(">>> Opening equipment screen")
+					equipment_screen.open(player)
+					print(">>> After open, visible=", equipment_screen.visible)
+				get_viewport().set_input_as_handled()
+				return
+			KEY_M:
+				print("Skills screen - not yet implemented")
+			KEY_Z:
+				print("Cast spell - not yet implemented")
+			KEY_ESCAPE:
+				get_tree().quit()
+
+		# Don't allow movement if equipment screen is open
+		if direction != Vector2i.ZERO and not equipment_screen.visible:
+			if player.try_move(direction):
+				# Center camera on player
+				$Camera2D.position = grid.grid_to_world(player.grid_position) + Vector2(Grid.TILE_SIZE / 2, Grid.TILE_SIZE / 2)
+
+func spawn_loot(pos: Vector2i, item: WastelandItem):
+	"""Spawn loot entity at position"""
+	var loot = LootEntity.new()
+	add_child(loot)
+	loot.spawn_at(pos, grid, item)
+	loot_entities.append(loot)
+	print("Loot spawned at %s: %s" % [pos, item.item_name])
+
+func grant_experience(amount: int):
+	"""Grant XP to player"""
+	player.gain_experience(amount)
