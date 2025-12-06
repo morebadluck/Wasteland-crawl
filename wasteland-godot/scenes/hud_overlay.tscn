@@ -1,0 +1,110 @@
+[gd_scene load_steps=7 format=3 uid="uid://hud_overlay_scene"]
+
+[ext_resource type="Script" path="res://scripts/hud_overlay.gd" id="1_hud"]
+[ext_resource type="Script" path="res://scripts/minimap.gd" id="2_minimap"]
+[ext_resource type="Script" path="res://scripts/message_log.gd" id="3_message_log"]
+[ext_resource type="Script" path="res://scripts/inventory_panel.gd" id="4_inventory"]
+[ext_resource type="Script" path="res://scripts/monster_list.gd" id="5_monster_list"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp"]
+bg_color = Color(0.8, 0.2, 0.2, 1)
+
+[node name="HUDOverlay" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="Minimap" type="Control" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -250.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 90.0
+grow_horizontal = 0
+script = ExtResource("2_minimap")
+
+[node name="StatsPanel" type="VBoxContainer" parent="."]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 310.0
+offset_bottom = 110.0
+
+[node name="HPLabel" type="Label" parent="StatsPanel"]
+text = "HP:"
+custom_colors/font_color = Color(1, 0.5, 0.5, 1)
+
+[node name="HPBar" type="ProgressBar" parent="StatsPanel"]
+custom_minimum_size = Vector2(250, 20)
+max_value = 100.0
+value = 100.0
+show_percentage = false
+theme_override_styles/fill = SubResource("StyleBoxFlat_hp")
+
+[node name="MPLabel" type="Label" parent="StatsPanel"]
+text = "MP:"
+custom_colors/font_color = Color(0.5, 0.5, 1, 1)
+
+[node name="MPBar" type="ProgressBar" parent="StatsPanel"]
+custom_minimum_size = Vector2(250, 20)
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="XPLabel" type="Label" parent="StatsPanel"]
+text = "XP:"
+
+[node name="MessageLog" type="VBoxContainer" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -130.0
+offset_right = 610.0
+offset_bottom = -10.0
+grow_vertical = 0
+script = ExtResource("3_message_log")
+
+[node name="InventoryPanel" type="PanelContainer" parent="."]
+visible = false
+anchor_left = 0.3
+anchor_top = 0.1
+anchor_right = 0.7
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_inventory")
+
+[node name="MarginContainer" type="MarginContainer" parent="InventoryPanel"]
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InventoryPanel/MarginContainer"]
+
+[node name="TitleLabel" type="Label" parent="InventoryPanel/MarginContainer/VBoxContainer"]
+text = "INVENTORY - Press 'i' to close"
+horizontal_alignment = 1
+
+[node name="ItemList" type="VBoxContainer" parent="InventoryPanel/MarginContainer/VBoxContainer"]
+
+[node name="MonsterList" type="VBoxContainer" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -260.0
+offset_top = 100.0
+offset_right = -10.0
+offset_bottom = 400.0
+grow_horizontal = 0
+script = ExtResource("5_monster_list")
+
+[node name="TitleLabel" type="Label" parent="MonsterList"]
+text = "MONSTERS DETECTED"
+horizontal_alignment = 1
+
+[node name="MonsterContainer" type="VBoxContainer" parent="MonsterList"]
+
+[node name="StatusEffects" type="HBoxContainer" parent="."]
+offset_left = 320.0
+offset_top = 10.0
+offset_right = 620.0
+offset_bottom = 50.0

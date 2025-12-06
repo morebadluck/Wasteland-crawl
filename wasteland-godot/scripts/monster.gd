@@ -7,6 +7,7 @@ class_name Monster
 
 signal died(monster: Monster)
 signal took_damage(amount: float)
+signal monster_moved(from: Vector2i, to: Vector2i)
 
 # Grid positioning
 var grid_position: Vector2i = Vector2i(0, 0)
@@ -390,6 +391,7 @@ func move_to(new_pos: Vector2i) -> bool:
 	grid.move_entity(grid_position, new_pos)
 	grid_position = new_pos
 	position = grid.grid_to_world(new_pos)
+	monster_moved.emit(old_pos, new_pos)
 	return true
 
 ## Try to move in direction

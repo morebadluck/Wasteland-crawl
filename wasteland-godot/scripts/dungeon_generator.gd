@@ -59,9 +59,17 @@ static func generate(grid: Grid, num_rooms: int = 8, game_node: Node = null) -> 
 
 			rooms.append(new_room)
 
-	# Spawn monsters in rooms (skip first room - player spawns there)
+	# Place downstairs in the last room (farthest from player spawn)
+	var stairs_pos = Vector2i(-1, -1)
+	if rooms.size() > 1:
+		var last_room = rooms[-1]  # Last room generated
+		stairs_pos = last_room.center()
+		grid.set_tile(stairs_pos, Grid.TileType.STAIRS_DOWN)
+		print("Placed downstairs at %s (room %d)" % [stairs_pos, rooms.size() - 1])
+
+	# Spawn monsters in rooms (skip first and last room)
 	var monsters = []
-	for i in range(1, rooms.size()):
+	for i in range(1, rooms.size() - 1):  # Skip last room (has stairs)
 		var room = rooms[i]
 		var num_monsters = randi_range(1, 3)  # 1-3 monsters per room
 
@@ -75,7 +83,8 @@ static func generate(grid: Grid, num_rooms: int = 8, game_node: Node = null) -> 
 	# Return spawn data
 	var result = {
 		"player_pos": rooms[0].center() if rooms.size() > 0 else Vector2i(grid.MAP_WIDTH / 2, grid.MAP_HEIGHT / 2),
-		"monsters": monsters
+		"monsters": monsters,
+		"stairs_down": stairs_pos
 	}
 	return result
 

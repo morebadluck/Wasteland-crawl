@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://dungeon_3d_scene"]
+
+[ext_resource type="Script" path="res://scripts/dungeon_manager_3d.gd" id="1_manager"]
+[ext_resource type="Script" path="res://scripts/grid.gd" id="2_grid"]
+[ext_resource type="Script" path="res://scripts/player_controller_3d.gd" id="3_player"]
+[ext_resource type="PackedScene" uid="uid://hud_overlay_scene" path="res://scenes/hud_overlay.tscn" id="4_hud"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 0.3
+height = 1.6
+
+[node name="DungeonManager3D" type="Node3D"]
+script = ExtResource("1_manager")
+
+[node name="GridMap" type="GridMap" parent="."]
+
+[node name="Grid" type="Node2D" parent="."]
+script = ExtResource("2_grid")
+
+[node name="PlayerController3D" type="CharacterBody3D" parent="."]
+script = ExtResource("3_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerController3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="Camera3D" type="Camera3D" parent="PlayerController3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 5, 5)
+light_energy = 0.3
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+
+[node name="Environment" type="Environment" parent="WorldEnvironment"]
+ambient_light_color = Color(0.2, 0.2, 0.25, 1)
+ambient_light_energy = 0.5
+
+[node name="HUDOverlay" parent="." instance=ExtResource("4_hud")]
