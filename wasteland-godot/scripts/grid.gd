@@ -21,8 +21,11 @@ enum TileType {
 # 2D array of tile types
 var tiles: Array[Array] = []
 
-# Entities on the grid (player, monsters, items)
+# Entities on the grid (player, monsters)
 var entities: Dictionary = {}  # Key: Vector2i position, Value: Entity
+
+# Loot on the ground (doesn't block movement)
+var loot: Dictionary = {}  # Key: Vector2i position, Value: LootEntity
 
 func _ready():
 	initialize_map()
@@ -52,7 +55,15 @@ func is_walkable(pos: Vector2i) -> bool:
 	var tile = get_tile(pos)
 	match tile:
 		TileType.FLOOR, TileType.DOOR_OPEN, TileType.STAIRS_DOWN, TileType.STAIRS_UP:
-			return not entities.has(pos)  # Also check no entity blocking
+			# Check for valid entity blocking (ignore freed objects)
+			if entities.has(pos):
+				var entity = entities[pos]
+				if entity and is_instance_valid(entity):
+					return false  # Valid entity blocking
+				else:
+					# Clean up freed object
+					entities.erase(pos)
+			return true
 		_:
 			return false
 
@@ -75,7 +86,12 @@ func move_entity(from: Vector2i, to: Vector2i):
 
 func get_entity(pos: Vector2i):
 	"""Get entity at position"""
-	return entities.get(pos, null)
+	var entity = entities.get(pos, null)
+	# Clean up freed objects automatically
+	if entity and not is_instance_valid(entity):
+		entities.erase(pos)
+		return null
+	return entity
 
 func world_to_grid(world_pos: Vector2) -> Vector2i:
 	"""Convert world coordinates to grid coordinates"""
@@ -90,3 +106,15 @@ func grid_to_world(grid_pos: Vector2i) -> Vector2:
 		grid_pos.x * TILE_SIZE,
 		grid_pos.y * TILE_SIZE
 	)
+
+func add_loot(pos: Vector2i, loot_entity):
+	"""Add loot to grid (doesn't block movement)"""
+	loot[pos] = loot_entity
+
+func remove_loot(pos: Vector2i):
+	"""Remove loot from grid"""
+	loot.erase(pos)
+
+func get_loot(pos: Vector2i):
+	"""Get loot at position"""
+	return loot.get(pos, null)

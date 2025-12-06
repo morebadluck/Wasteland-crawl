@@ -39,17 +39,29 @@ func _ready():
 
 func open(p: Player):
 	"""Open equipment screen for player"""
+	print("=== EquipmentScreen.open() called ===")
 	player = p
+
+	print("  Before show(): visible=", visible)
 	show()
+	print("  After show(): visible=", visible, " is_visible_in_tree=", is_visible_in_tree())
 	set_process_input(true)
-	# Don't need grab_focus() with proper mouse_filter
+	queue_redraw()
+	print("  queue_redraw() called")
 
 func _draw():
+	print("=== EquipmentScreen._draw() called, player=", player, " visible=", visible)
+	print("  size=", size, " position=", position)
+	print("  viewport_size=", get_viewport_rect().size)
+	print("  is_visible_in_tree=", is_visible_in_tree())
+
 	if not player:
+		print("  _draw() returning: no player")
 		return
 
-	# Dark background
-	draw_rect(Rect2(0, 0, get_viewport_rect().size.x, get_viewport_rect().size.y), Color(0.1, 0.1, 0.1))
+	# Dark background - use control's size, not viewport
+	print("  Drawing background rect of size:", size)
+	draw_rect(Rect2(0, 0, size.x, size.y), Color(0.1, 0.1, 0.1))
 
 	# Title
 	draw_string(font, Vector2(300, 30), "EQUIPMENT (Press I to close)", HORIZONTAL_ALIGNMENT_LEFT, -1, 24, Color.YELLOW)
@@ -248,11 +260,11 @@ func _input(event):
 	if not is_visible_in_tree():
 		return
 
-	# Close on I or Escape
+	# Close on Escape only (game.gd handles I for both open and close)
 	if event is InputEventKey and event.pressed:
-		if event.keycode == KEY_I or event.keycode == KEY_ESCAPE:
+		if event.keycode == KEY_ESCAPE:
 			close()
-			accept_event()
+			get_viewport().set_input_as_handled()
 
 	# Mouse hover and click
 	if event is InputEventMouse:
@@ -356,6 +368,7 @@ func close():
 		held_item = null
 	hide()
 
-func _process(_delta):
-	if is_visible_in_tree():
-		queue_redraw()
+# Removed _process - we only redraw when needed:
+# - When opening (open() calls queue_redraw())
+# - When mouse moves (hover updates call queue_redraw())
+# - When clicking (click handlers call queue_redraw())

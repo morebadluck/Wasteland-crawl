@@ -5,10 +5,11 @@ extends Node2D
 
 @onready var grid: Grid = $Grid
 @onready var player: Player = $Player
-@onready var equipment_screen: EquipmentScreen = $EquipmentScreen
+@onready var equipment_screen: EquipmentScreen = $UILayer/EquipmentScreen
 
 var font: Font
 var monsters: Array[Monster] = []
+var loot_entities: Array[LootEntity] = []
 
 func _ready():
 	# Load IBM Plex Mono font
@@ -37,6 +38,8 @@ func _ready():
 
 	# Setup equipment screen
 	equipment_screen.hide()
+	print("Equipment screen node: ", equipment_screen)
+	print("Equipment screen visible: ", equipment_screen.visible)
 
 	# Connect player turn signal
 	player.turn_ended.connect(_on_player_turn_ended)
@@ -119,6 +122,14 @@ func _draw():
 				draw_string(font, monster_world_pos + Vector2(8, 24), monster.display_char,
 							HORIZONTAL_ALIGNMENT_LEFT, -1, 20, monster.display_color)
 
+	# Draw loot
+	for loot in loot_entities:
+		if loot and is_instance_valid(loot):
+			var loot_world_pos = grid.grid_to_world(loot.grid_position)
+			if font:
+				draw_string(font, loot_world_pos + Vector2(8, 24), loot.display_char,
+						HORIZONTAL_ALIGNMENT_LEFT, -1, 20, loot.display_color)
+
 	# Draw player
 	var player_world_pos = grid.grid_to_world(player.grid_position)
 	if font:
@@ -145,9 +156,14 @@ func _draw_hud():
 		var level_text = "Level: %d" % player.level
 		draw_string(font, Vector2(hud_x + 300, hud_y), level_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.YELLOW)
 
+		# XP
+		var xp_needed = player.get_xp_needed()
+		var xp_text = "XP: %d/%d" % [player.experience, player.experience + xp_needed]
+		draw_string(font, Vector2(hud_x + 420, hud_y), xp_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.LIGHT_GREEN)
+
 		# Race
 		var race_text = "Race: %s" % player.race
-		draw_string(font, Vector2(hud_x + 450, hud_y), race_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.WHITE)
+		draw_string(font, Vector2(hud_x + 600, hud_y), race_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.WHITE)
 
 func _on_player_turn_ended():
 	"""Process monster turns after player turn"""
@@ -160,16 +176,16 @@ func _on_player_turn_ended():
 	# Remove dead monsters
 	monsters = monsters.filter(func(m): return m and is_instance_valid(m))
 
+	# Clean up invalid loot
+	loot_entities = loot_entities.filter(func(l): return l and is_instance_valid(l))
+
 func _process(_delta):
 	queue_redraw()  # Redraw every frame
 
 func _input(event):
 	"""Handle turn-based input"""
-	# Don't process input if equipment screen is open
-	if equipment_screen.visible:
-		return
-
 	if event is InputEventKey and event.pressed:
+		print("Game _input received key: ", event.keycode, " (KEY_I=", KEY_I, ")")
 		var direction = Vector2i.ZERO
 
 		# Arrow keys and numpad movement
@@ -191,8 +207,16 @@ func _input(event):
 			KEY_KP_3:  # Diagonal down-right
 				direction = Vector2i(1, 1)
 			KEY_I:
-				equipment_screen.open(player)
-				get_viewport().set_input_as_handled()  # Prevent event propagation
+				print(">>> KEY_I case matched! equipment_screen.visible=", equipment_screen.visible)
+				# Toggle equipment screen
+				if equipment_screen.visible:
+					print(">>> Closing equipment screen")
+					equipment_screen.close()
+				else:
+					print(">>> Opening equipment screen")
+					equipment_screen.open(player)
+					print(">>> After open, visible=", equipment_screen.visible)
+				get_viewport().set_input_as_handled()
 				return
 			KEY_M:
 				print("Skills screen - not yet implemented")
@@ -201,7 +225,20 @@ func _input(event):
 			KEY_ESCAPE:
 				get_tree().quit()
 
-		if direction != Vector2i.ZERO:
+		# Don't allow movement if equipment screen is open
+		if direction != Vector2i.ZERO and not equipment_screen.visible:
 			if player.try_move(direction):
 				# Center camera on player
 				$Camera2D.position = grid.grid_to_world(player.grid_position) + Vector2(Grid.TILE_SIZE / 2, Grid.TILE_SIZE / 2)
+
+func spawn_loot(pos: Vector2i, item: WastelandItem):
+	"""Spawn loot entity at position"""
+	var loot = LootEntity.new()
+	add_child(loot)
+	loot.spawn_at(pos, grid, item)
+	loot_entities.append(loot)
+	print("Loot spawned at %s: %s" % [pos, item.item_name])
+
+func grant_experience(amount: int):
+	"""Grant XP to player"""
+	player.gain_experience(amount)

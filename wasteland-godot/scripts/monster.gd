@@ -215,6 +215,7 @@ func process_status_effects():
 
 ## Take damage with resistances and armor (from RobotEntity.java hurt())
 func take_damage(amount: float, damage_type: String = "physical") -> float:
+	print(">>> Monster %s taking %.1f %s damage (HP: %.1f/%.1f)" % [monster_name, amount, damage_type, current_hp, max_hp])
 	var modified_damage = amount
 
 	# Apply resistance modifiers
@@ -262,6 +263,8 @@ func take_damage(amount: float, damage_type: String = "physical") -> float:
 
 ## Monster death
 func die():
+	print("Monster %s died at position %s" % [monster_name, grid_position])
+
 	# Self-destruct explosion for certain robots
 	if is_robot and can_self_destruct:
 		explode()
@@ -273,6 +276,14 @@ func die():
 	if game_manager and game_manager.has_method("grant_experience"):
 		var xp = get_experience_value()
 		game_manager.grant_experience(xp)
+
+	# Remove from grid BEFORE removing from scene
+	if grid:
+		grid.remove_entity(grid_position)
+		print("  Removed from grid at %s" % grid_position)
+
+	# Emit died signal
+	died.emit(self)
 
 	# Remove from game
 	queue_free()
@@ -293,22 +304,21 @@ func explode():
 
 ## Drop loot based on monster tier
 func drop_loot():
-	if game_manager and game_manager.has_method("spawn_loot"):
-		var loot_tier = "common"
-		if is_robot:
-			# Robot loot tiers
-			if robot_armor_class == "HEAVY":
-				loot_tier = "rare"
-			elif robot_armor_class == "MEDIUM":
-				loot_tier = "uncommon"
-		else:
-			# Monster loot tiers
-			if monster_tier >= 7:
-				loot_tier = "rare"
-			elif monster_tier >= 4:
-				loot_tier = "uncommon"
+	"""Drop loot at monster position"""
 
-		game_manager.spawn_loot(grid_position.x, grid_position.y, loot_tier)
+	# 50% chance to drop loot (higher tier monsters drop more often)
+	var drop_chance = 0.5 + (monster_tier * 0.05)  # +5% per tier
+
+	if randf() > drop_chance:
+		print("  No loot dropped")
+		return
+
+	# Generate loot based on monster tier and area level
+	var item = LootGenerator.generate_monster_loot(monster_tier, area_level, is_robot)
+
+	if item and game_manager and game_manager.has_method("spawn_loot"):
+		game_manager.spawn_loot(grid_position, item)
+		print("  Dropped: %s" % item.item_name)
 
 ## Attack a target (melee)
 func attack_target(target: Node2D) -> bool:

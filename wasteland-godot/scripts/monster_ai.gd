@@ -170,6 +170,7 @@ static func move_toward_target(monster: Monster, target: Node2D, all_combatants:
 	# Find best move using pathfinding
 	var best_move = find_best_move(monster, current_pos, target_pos, all_combatants, game_manager)
 
+
 	if best_move and best_move != current_pos:
 		# Move to new position
 		monster.move_to(best_move)
